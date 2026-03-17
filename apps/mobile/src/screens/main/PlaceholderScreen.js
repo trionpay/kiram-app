@@ -16,7 +16,7 @@ export function PlaceholderScreen({ title, subtitle }) {
 }
 
 const styles = StyleSheet.create({
-  center: { flex: 1, alignItems: 'center', justifyContent: 'center', padding: spacing.xl },
+  center: { flex: 1, alignItems: 'center', justifyContent: 'center', padding: spacing.xl, paddingBottom: 130 },
   badge: { backgroundColor: colors.surface, borderRadius: 20, paddingVertical: spacing.xs, paddingHorizontal: spacing.md, marginBottom: spacing.lg },
   badgeText: { ...typography.caption, color: colors.accent },
   title: { ...typography.h2, color: colors.textPrimary, marginBottom: spacing.sm, textAlign: 'center' },

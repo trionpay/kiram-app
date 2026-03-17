@@ -67,7 +67,7 @@ export function DashboardScreen({ navigation }) {
 }
 
 const styles = StyleSheet.create({
-  content: { paddingHorizontal: screenPaddingHorizontal, paddingTop: spacing.md, paddingBottom: 100 },
+  content: { paddingHorizontal: screenPaddingHorizontal, paddingTop: spacing.md, paddingBottom: 130 },
   topRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: spacing.xl },
   greeting: { ...typography.bodySmall, color: colors.textSecondary },
   name: { ...typography.h3, color: colors.textPrimary },
