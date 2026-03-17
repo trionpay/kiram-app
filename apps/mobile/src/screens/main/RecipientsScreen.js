@@ -115,7 +115,7 @@ export function RecipientsScreen({ navigation }) {
             <View style={styles.cardActions}>
               <TouchableOpacity
                 style={styles.payBtn}
-                onPress={() => navigation.navigate('Payment')}
+                onPress={() => navigation.navigate('Payment', { screen: 'PaymentAmount' })}
               >
                 <Text style={styles.payBtnText}>Öde</Text>
               </TouchableOpacity>
