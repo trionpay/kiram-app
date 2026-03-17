@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { TrionPayLogo } from '../../components/TrionPayLogo';
 import { colors, typography, spacing, screenPaddingHorizontal } from '../../theme';
 
 const MOCK_TXS = [
@@ -11,8 +12,8 @@ const MOCK_TXS = [
 
 const QUICK_ACTIONS = [
   { icon: '↗', label: 'Gönder', screen: 'Payment' },
-  { icon: '◎', label: 'Alıcılar', screen: 'Recipients' },
-  { icon: '↻', label: 'Geçmiş', screen: 'History' },
+  { icon: '📋', label: 'Alıcılar', screen: 'Recipients' },
+  { icon: '🗂', label: 'Geçmiş', screen: 'History' },
   { icon: '⚡', label: 'Fatura', screen: 'Payment' },
 ];
 
@@ -34,9 +35,15 @@ export function DashboardScreen({ navigation }) {
           </View>
         </View>
 
-        {/* Hero kart — sade */}
+        {/* Hero kart */}
         <View style={styles.heroCard}>
-          <Text style={styles.heroSubtitle}>Kart → IBAN transferi</Text>
+          <View style={styles.heroTop}>
+            <View>
+              <Text style={styles.heroTitle}>Hızlı ve güvenli</Text>
+              <Text style={styles.heroTitle}>para transferi</Text>
+            </View>
+            <TrionPayLogo width={65} color="#FFFFFF" accentColor="#5FE00B" />
+          </View>
           <TouchableOpacity
             style={styles.heroBtn}
             onPress={() => navigation.navigate('Payment')}
@@ -136,12 +143,17 @@ const styles = StyleSheet.create({
     paddingTop: spacing.xl,
     paddingBottom: spacing.xl,
     marginBottom: spacing.xl,
-    gap: spacing.xl,
+    gap: spacing.lg,
   },
-  heroSubtitle: {
-    ...typography.bodySmall,
-    color: 'rgba(255,255,255,0.45)',
-    letterSpacing: 0.3,
+  heroTop: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'flex-start',
+  },
+  heroTitle: {
+    ...typography.h2,
+    color: colors.textInverse,
+    lineHeight: 28,
   },
   heroBtn: {
     flexDirection: 'row',
