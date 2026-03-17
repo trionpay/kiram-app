@@ -29,7 +29,7 @@ export function SplashScreen({ navigation }) {
       <View style={styles.content}>
         {/* Logo */}
         <View style={styles.logoWrapper}>
-          <TrionPayLogo width={SCREEN_W * 0.62} color="#FFFFFF" accentColor="#5FE00B" />
+          <TrionPayLogo width={SCREEN_W * 0.48} color="#FFFFFF" accentColor="#5FE00B" />
         </View>
 
         {/* Alt bilgi */}

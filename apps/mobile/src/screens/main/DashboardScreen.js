@@ -2,6 +2,7 @@ import React from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Button } from '../../components/Button';
+import { TrionPayLogo } from '../../components/TrionPayLogo';
 import { colors, typography, spacing, screenPaddingHorizontal } from '../../theme';
 
 const MOCK_TXS = [
@@ -23,7 +24,9 @@ export function DashboardScreen({ navigation }) {
         </View>
 
         <View style={styles.heroCard}>
-          <View style={styles.accentBar} />
+          <View style={styles.heroTop}>
+            <TrionPayLogo width={100} color="#FFFFFF" accentColor="#5FE00B" />
+          </View>
           <Text style={styles.heroLabel}>Yeni ödeme</Text>
           <Text style={styles.heroTitle}>Hızlı ve güvenli{'\n'}para transferi</Text>
           <Button title="Ödeme Başlat" onPress={() => navigation.navigate('Payment')} style={styles.heroBtn} />
@@ -71,7 +74,7 @@ const styles = StyleSheet.create({
   avatar: { width: 40, height: 40, borderRadius: 20, backgroundColor: colors.primary, alignItems: 'center', justifyContent: 'center' },
   avatarTxt: { ...typography.label, color: colors.textInverse },
   heroCard: { backgroundColor: colors.primary, borderRadius: 20, padding: spacing.xl, marginBottom: spacing.xl },
-  accentBar: { width: 28, height: 3, backgroundColor: colors.accent, borderRadius: 2, marginBottom: spacing.md },
+  heroTop: { marginBottom: spacing.lg },
   heroLabel: { ...typography.caption, color: colors.accent, marginBottom: spacing.xs },
   heroTitle: { ...typography.h2, color: colors.textInverse, marginBottom: spacing.xl },
   heroBtn: { alignSelf: 'flex-start', paddingHorizontal: spacing.xl },
