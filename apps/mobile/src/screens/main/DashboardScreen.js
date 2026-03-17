@@ -1,13 +1,14 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { TrionPayLogo } from '../../components/TrionPayLogo';
+import { TransactionDetailModal } from '../../components/TransactionDetailModal';
 import { colors, typography, spacing, screenPaddingHorizontal } from '../../theme';
 
 const MOCK_TXS = [
-  { id: '1', name: 'Apartman Yönetimi', amount: '2.500,00', status: 'success', date: 'Bugün, 10:32' },
-  { id: '2', name: 'Elektrik Faturası', amount: '480,00', status: 'success', date: 'Dün, 14:15' },
-  { id: '3', name: 'Kira Ödemesi', amount: '12.000,00', status: 'failed', date: '15 Mar' },
+  { id: 'TRP10293847', name: 'Apartman Yönetimi', iban: 'TR33 0006 1005 1978 6457 8413 26', amount: 2500, fee: 37.5, total: 2537.5, status: 'success', date: '17 Mart 2026', time: '10:32', description: 'Nisan 2026 kirası' },
+  { id: 'TRP10293612', name: 'Elektrik Faturası', iban: 'TR52 0001 0017 4523 1850 3000 01', amount: 480, fee: 7.2, total: 487.2, status: 'success', date: 'Dün', time: '14:15', description: '' },
+  { id: 'TRP10293401', name: 'Kira Ödemesi', iban: 'TR62 0013 4000 0147 4012 8100 09', amount: 12000, fee: 180, total: 12180, status: 'failed', date: '15 Mar', time: '', description: 'Mart 2026 kirası' },
 ];
 
 const QUICK_ACTIONS = [
@@ -17,7 +18,11 @@ const QUICK_ACTIONS = [
   { icon: '⚡', label: 'Fatura', screen: 'Payment' },
 ];
 
+const fmt = (n) => (n || 0).toFixed(2).replace('.', ',');
+
 export function DashboardScreen({ navigation }) {
+  const [selectedTx, setSelectedTx] = useState(null);
+
   return (
     <SafeAreaView style={styles.safe} edges={['top']}>
       <ScrollView
@@ -80,7 +85,12 @@ export function DashboardScreen({ navigation }) {
         </View>
 
         {MOCK_TXS.map((tx) => (
-          <TouchableOpacity key={tx.id} style={styles.txRow} activeOpacity={0.7}>
+          <TouchableOpacity
+            key={tx.id}
+            style={styles.txRow}
+            activeOpacity={0.7}
+            onPress={() => setSelectedTx(tx)}
+          >
             <View style={[
               styles.txIconWrap,
               { backgroundColor: tx.status === 'success' ? '#EFF6FF' : '#FEF2F2' },
@@ -95,14 +105,17 @@ export function DashboardScreen({ navigation }) {
             </View>
             <View style={styles.txRight}>
               <Text style={[styles.txAmount, tx.status === 'failed' && { color: colors.error }]}>
-                ₺{tx.amount}
+                ₺{fmt(tx.amount)}
               </Text>
-              <View style={[styles.dot, {
-                backgroundColor: tx.status === 'success' ? colors.success : colors.error,
-              }]} />
+              <Text style={{ fontSize: 16, color: colors.textTertiary }}>›</Text>
             </View>
           </TouchableOpacity>
         ))}
+
+        <TransactionDetailModal
+          transaction={selectedTx}
+          onClose={() => setSelectedTx(null)}
+        />
       </ScrollView>
     </SafeAreaView>
   );
