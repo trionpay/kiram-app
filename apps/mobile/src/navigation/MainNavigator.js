@@ -2,6 +2,7 @@ import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { DashboardScreen } from '../screens/main/DashboardScreen';
 import { PlaceholderScreen } from '../screens/main/PlaceholderScreen';
+import { RecipientsScreen } from '../screens/main/RecipientsScreen';
 import { PaymentNavigator } from './PaymentNavigator';
 import { FloatingTabBar } from '../components/FloatingTabBar';
 
@@ -14,9 +15,7 @@ export function MainNavigator() {
       screenOptions={{ headerShown: false }}
     >
       <Tab.Screen name="Dashboard" component={DashboardScreen} />
-      <Tab.Screen name="Recipients">
-        {() => <PlaceholderScreen title="Alıcılar" subtitle="Alıcı yönetimi yakında eklenecek." />}
-      </Tab.Screen>
+      <Tab.Screen name="Recipients" component={RecipientsScreen} />
       <Tab.Screen name="Payment" component={PaymentNavigator} />
       <Tab.Screen name="History">
         {() => <PlaceholderScreen title="İşlem Geçmişi" subtitle="İşlem listesi yakında eklenecek." />}
