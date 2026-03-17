@@ -1,8 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Button } from '../../components/Button';
-import { TrionPayLogo } from '../../components/TrionPayLogo';
 import { colors, typography, spacing, screenPaddingHorizontal } from '../../theme';
 
 const MOCK_TXS = [
@@ -11,52 +9,81 @@ const MOCK_TXS = [
   { id: '3', name: 'Kira Ödemesi', amount: '12.000,00', status: 'failed', date: '15 Mar' },
 ];
 
+const QUICK_ACTIONS = [
+  { icon: '↗', label: 'Gönder', screen: 'Payment' },
+  { icon: '◎', label: 'Alıcılar', screen: 'Recipients' },
+  { icon: '↻', label: 'Geçmiş', screen: 'History' },
+  { icon: '⚡', label: 'Fatura', screen: 'Payment' },
+];
+
 export function DashboardScreen({ navigation }) {
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: colors.background }} edges={['top']}>
-      <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
+    <SafeAreaView style={styles.safe} edges={['top']}>
+      <ScrollView
+        contentContainerStyle={styles.content}
+        showsVerticalScrollIndicator={false}
+      >
+        {/* Üst başlık */}
         <View style={styles.topRow}>
           <View>
             <Text style={styles.greeting}>Merhaba 👋</Text>
             <Text style={styles.name}>Kullanıcı</Text>
           </View>
-          <View style={styles.avatar}><Text style={styles.avatarTxt}>K</Text></View>
-        </View>
-
-        <View style={styles.heroCard}>
-          <View style={styles.heroTopRow}>
-            <Text style={styles.heroLabel}>Yeni ödeme</Text>
-            <TrionPayLogo width={68} color="#FFFFFF" accentColor="#5FE00B" />
+          <View style={styles.avatar}>
+            <Text style={styles.avatarTxt}>K</Text>
           </View>
-          <Text style={styles.heroTitle}>Hızlı ve güvenli{'\n'}para transferi</Text>
-          <Button title="Ödeme Başlat" onPress={() => navigation.navigate('Payment')} style={styles.heroBtn} />
         </View>
 
+        {/* Ana CTA */}
+        <TouchableOpacity
+          style={styles.ctaBtn}
+          onPress={() => navigation.navigate('Payment')}
+          activeOpacity={0.88}
+        >
+          <Text style={styles.ctaIcon}>↗</Text>
+          <Text style={styles.ctaText}>Ödeme Başlat</Text>
+        </TouchableOpacity>
+
+        {/* Hızlı aksiyonlar */}
         <View style={styles.quickRow}>
-          {[{ icon: '↗', label: 'Gönder' }, { icon: '📋', label: 'Alıcılar' }, { icon: '🗂', label: 'Geçmiş' }, { icon: '⚡', label: 'Fatura' }].map(item => (
-            <TouchableOpacity key={item.label} style={styles.quickItem}>
-              <View style={styles.quickIcon}><Text style={{ fontSize: 20 }}>{item.icon}</Text></View>
+          {QUICK_ACTIONS.map((item) => (
+            <TouchableOpacity
+              key={item.label}
+              style={styles.quickItem}
+              onPress={() => navigation.navigate(item.screen)}
+              activeOpacity={0.7}
+            >
+              <View style={styles.quickIcon}>
+                <Text style={styles.quickIconText}>{item.icon}</Text>
+              </View>
               <Text style={styles.quickLabel}>{item.label}</Text>
             </TouchableOpacity>
           ))}
         </View>
 
+        {/* Son işlemler */}
         <View style={styles.sectionHeader}>
           <Text style={styles.sectionTitle}>Son İşlemler</Text>
-          <TouchableOpacity><Text style={styles.seeAll}>Tümü</Text></TouchableOpacity>
+          <TouchableOpacity onPress={() => navigation.navigate('History')}>
+            <Text style={styles.seeAll}>Tümü</Text>
+          </TouchableOpacity>
         </View>
 
-        {MOCK_TXS.map(tx => (
-          <TouchableOpacity key={tx.id} style={styles.txRow}>
-            <View style={styles.txLeft}>
-              <View style={styles.txIcon}><Text style={{ fontSize: 16 }}>{tx.status === 'success' ? '↗' : '✕'}</Text></View>
-              <View>
-                <Text style={styles.txName}>{tx.name}</Text>
-                <Text style={styles.txDate}>{tx.date}</Text>
-              </View>
+        {MOCK_TXS.map((tx) => (
+          <TouchableOpacity key={tx.id} style={styles.txRow} activeOpacity={0.7}>
+            <View style={[styles.txIconWrap, { backgroundColor: tx.status === 'success' ? '#EFF6FF' : '#FEF2F2' }]}>
+              <Text style={styles.txIconText}>
+                {tx.status === 'success' ? '↗' : '✕'}
+              </Text>
+            </View>
+            <View style={styles.txMid}>
+              <Text style={styles.txName}>{tx.name}</Text>
+              <Text style={styles.txDate}>{tx.date}</Text>
             </View>
             <View style={styles.txRight}>
-              <Text style={[styles.txAmount, tx.status === 'failed' && { color: colors.error }]}>₺{tx.amount}</Text>
+              <Text style={[styles.txAmount, tx.status === 'failed' && { color: colors.error }]}>
+                ₺{tx.amount}
+              </Text>
               <View style={[styles.dot, { backgroundColor: tx.status === 'success' ? colors.success : colors.error }]} />
             </View>
           </TouchableOpacity>
@@ -67,30 +94,101 @@ export function DashboardScreen({ navigation }) {
 }
 
 const styles = StyleSheet.create({
-  content: { paddingHorizontal: screenPaddingHorizontal, paddingTop: spacing.md, paddingBottom: 130 },
-  topRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: spacing.xl },
+  safe: { flex: 1, backgroundColor: colors.background },
+  content: {
+    paddingHorizontal: screenPaddingHorizontal,
+    paddingTop: spacing.md,
+    paddingBottom: 130,
+  },
+
+  /* Üst */
+  topRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: spacing.xl,
+  },
   greeting: { ...typography.bodySmall, color: colors.textSecondary },
-  name: { ...typography.h3, color: colors.textPrimary },
-  avatar: { width: 40, height: 40, borderRadius: 20, backgroundColor: colors.primary, alignItems: 'center', justifyContent: 'center' },
+  name: { ...typography.h2, color: colors.textPrimary, marginTop: 2 },
+  avatar: {
+    width: 42,
+    height: 42,
+    borderRadius: 21,
+    backgroundColor: colors.primary,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   avatarTxt: { ...typography.label, color: colors.textInverse },
-  heroCard: { backgroundColor: colors.primary, borderRadius: 20, padding: spacing.xl, marginBottom: spacing.xl },
-  heroTopRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: spacing.md },
-  heroLabel: { ...typography.caption, color: colors.accent },
-  heroTitle: { ...typography.h2, color: colors.textInverse, marginBottom: spacing.xl },
-  heroBtn: { alignSelf: 'flex-start', paddingHorizontal: spacing.xl },
-  quickRow: { flexDirection: 'row', justifyContent: 'space-between', marginBottom: spacing.xl },
-  quickItem: { alignItems: 'center', gap: spacing.xs },
-  quickIcon: { width: 52, height: 52, borderRadius: 16, backgroundColor: colors.backgroundElevated, borderWidth: 1, borderColor: colors.border, alignItems: 'center', justifyContent: 'center' },
+
+  /* Ana CTA butonu */
+  ctaBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: colors.accent,
+    borderRadius: 16,
+    height: 56,
+    marginBottom: spacing.xl,
+    gap: spacing.sm,
+    shadowColor: colors.accent,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 12,
+    elevation: 6,
+  },
+  ctaIcon: { fontSize: 20, color: colors.textInverse },
+  ctaText: { ...typography.label, fontSize: 17, color: colors.textInverse },
+
+  /* Hızlı aksiyonlar */
+  quickRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: spacing.xxl,
+  },
+  quickItem: { alignItems: 'center', gap: 6 },
+  quickIcon: {
+    width: 56,
+    height: 56,
+    borderRadius: 18,
+    backgroundColor: colors.backgroundElevated,
+    borderWidth: 1,
+    borderColor: colors.border,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  quickIconText: { fontSize: 22 },
   quickLabel: { ...typography.caption, color: colors.textSecondary },
-  sectionHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: spacing.sm },
+
+  /* Son işlemler */
+  sectionHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: spacing.md,
+  },
   sectionTitle: { ...typography.h3, color: colors.textPrimary },
   seeAll: { ...typography.label, color: colors.accent },
-  txRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', backgroundColor: colors.backgroundElevated, borderRadius: 14, padding: spacing.md, borderWidth: 1, borderColor: colors.borderLight, marginBottom: spacing.xs },
-  txLeft: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm, flex: 1 },
-  txIcon: { width: 40, height: 40, borderRadius: 12, backgroundColor: colors.surface, alignItems: 'center', justifyContent: 'center' },
+
+  txRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: spacing.md,
+    borderBottomWidth: 1,
+    borderBottomColor: colors.borderLight,
+    gap: spacing.md,
+  },
+  txIconWrap: {
+    width: 42,
+    height: 42,
+    borderRadius: 13,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  txIconText: { fontSize: 16 },
+  txMid: { flex: 1 },
   txName: { ...typography.label, color: colors.textPrimary },
   txDate: { ...typography.caption, color: colors.textTertiary, marginTop: 2 },
   txRight: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm },
   txAmount: { ...typography.label, color: colors.textPrimary },
-  dot: { width: 8, height: 8, borderRadius: 4 },
+  dot: { width: 7, height: 7, borderRadius: 4 },
 });
