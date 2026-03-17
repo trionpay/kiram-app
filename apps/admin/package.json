@@ -1,0 +1,6 @@
+{
+  "name": "admin",
+  "version": "0.0.1",
+  "private": true,
+  "description": "Trion Pay — Yönetim paneli (Blueprint §8). İleride Next.js ile geliştirilecek."
+}
