@@ -33,7 +33,8 @@ function getCardType(num) {
 }
 
 export function CardInputScreen({ route, navigation }) {
-  const { amount, fee, total, recipient } = route.params;
+  const { amount, fee, total, recipient, description } = route.params;
+  const [cardHolder, setCardHolder] = useState('');
   const [cardNumber, setCardNumber] = useState('');
   const [expiry, setExpiry] = useState('');
   const [cvv, setCvv] = useState('');
@@ -47,7 +48,8 @@ export function CardInputScreen({ route, navigation }) {
   const isCardValid = rawCard.length >= 15 && luhnCheck(rawCard);
   const isExpiryValid = expiry.length === 5;
   const isCvvValid = cvv.length >= 3;
-  const isValid = isCardValid && isExpiryValid && isCvvValid;
+  const isHolderValid = cardHolder.trim().length > 3;
+  const isValid = isCardValid && isExpiryValid && isCvvValid && isHolderValid;
 
   const formatCardNumber = (text) => {
     const clean = text.replace(/\D/g, '').slice(0, 16);
@@ -67,7 +69,7 @@ export function CardInputScreen({ route, navigation }) {
   };
 
   const handlePay = () => {
-    navigation.navigate('ThreeDSecure', { amount, fee, total, recipient });
+    navigation.navigate('ThreeDSecure', { amount, fee, total, recipient, description });
   };
 
   return (
@@ -90,12 +92,31 @@ export function CardInputScreen({ route, navigation }) {
             </Text>
             <View style={styles.cardBottom}>
               <View>
+                <Text style={styles.cardPreviewLabel}>Kart Sahibi</Text>
+                <Text style={styles.cardPreviewValue}>
+                  {cardHolder.trim().toUpperCase() || 'AD SOYAD'}
+                </Text>
+              </View>
+              <View style={{ alignItems: 'flex-end' }}>
                 <Text style={styles.cardPreviewLabel}>Son Kullanma</Text>
                 <Text style={styles.cardPreviewValue}>{expiry || 'AA/YY'}</Text>
               </View>
-              <Text style={styles.cardTypeText}>{cardType}</Text>
             </View>
             {isCardValid && <View style={styles.validBadge}><Text style={styles.validBadgeText}>✓</Text></View>}
+          </View>
+
+          {/* Kart sahibi */}
+          <View style={styles.field}>
+            <Text style={styles.fieldLabel}>Kart Üzerindeki Ad Soyad</Text>
+            <TextInput
+              style={styles.input}
+              value={cardHolder}
+              onChangeText={setCardHolder}
+              placeholder="AD SOYAD"
+              placeholderTextColor={colors.textTertiary}
+              autoCapitalize="characters"
+              returnKeyType="next"
+            />
           </View>
 
           {/* Kart numarası */}

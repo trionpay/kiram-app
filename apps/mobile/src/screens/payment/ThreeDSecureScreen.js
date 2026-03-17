@@ -72,6 +72,18 @@ export function ThreeDSecureScreen({ route, navigation }) {
           Ödeme API entegrasyonu sonrası bu ekran bankanın 3DS sayfasını in-app olarak gösterecek.
         </Text>
 
+        {/* Test butonları (mock — gerçek API bağlandığında kaldırılacak) */}
+        {step === 'waiting' && (
+          <View style={styles.testRow}>
+            <TouchableOpacity
+              style={styles.testFail}
+              onPress={() => navigation.replace('PaymentResult', { success: false, amount, fee, total, recipient, description })}
+            >
+              <Text style={styles.testFailText}>Ödemeyi Reddet (Test)</Text>
+            </TouchableOpacity>
+          </View>
+        )}
+
         {/* İptal */}
         {step !== 'approved' && (
           <TouchableOpacity style={styles.cancelBtn} onPress={() => navigation.goBack()}>
@@ -135,4 +147,14 @@ const styles = StyleSheet.create({
 
   cancelBtn: { paddingVertical: spacing.sm },
   cancelText: { ...typography.label, color: colors.error },
+
+  testRow: { marginBottom: spacing.md, alignItems: 'center' },
+  testFail: {
+    borderWidth: 1,
+    borderColor: colors.error,
+    borderRadius: 10,
+    paddingVertical: spacing.xs,
+    paddingHorizontal: spacing.md,
+  },
+  testFailText: { ...typography.caption, color: colors.error },
 });
