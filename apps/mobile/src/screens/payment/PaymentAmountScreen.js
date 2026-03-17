@@ -67,7 +67,7 @@ export function PaymentAmountScreen({ navigation }) {
           </TouchableOpacity>
 
           <Text style={styles.title}>Yeni Ödeme</Text>
-          <Text style={styles.subtitle}>Tutar ve alıcı bilgilerini girin.</Text>
+          <Text style={styles.subtitle}>Kredi kartınla kira, aidat ve fatura öde.</Text>
 
           {/* Tutar */}
           <View style={styles.section}>
@@ -254,7 +254,7 @@ const styles = StyleSheet.create({
 
   footer: {
     paddingHorizontal: screenPaddingHorizontal,
-    paddingBottom: Platform.OS === 'ios' ? spacing.lg : spacing.xl,
+    paddingBottom: 100,
     paddingTop: spacing.md,
   },
 });

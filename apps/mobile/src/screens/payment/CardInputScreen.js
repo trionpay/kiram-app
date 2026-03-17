@@ -250,7 +250,7 @@ const styles = StyleSheet.create({
 
   footer: {
     paddingHorizontal: screenPaddingHorizontal,
-    paddingBottom: Platform.OS === 'ios' ? spacing.lg : spacing.xl,
+    paddingBottom: 100,
     paddingTop: spacing.md,
   },
 });
