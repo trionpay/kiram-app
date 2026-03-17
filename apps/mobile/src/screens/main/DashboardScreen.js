@@ -39,7 +39,7 @@ export function DashboardScreen({ navigation }) {
         <View style={styles.heroCard}>
           <View style={styles.heroTop}>
             <View>
-              <Text style={styles.heroTitle}>Kira, aidat, fatura —</Text>
+              <Text style={styles.heroTitle}>Kira, aidat, fatura</Text>
               <Text style={styles.heroTitle}>tek yerden öde.</Text>
             </View>
             <TrionPayLogo width={65} color="#FFFFFF" accentColor="#5FE00B" />
