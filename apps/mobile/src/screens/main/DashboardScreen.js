@@ -24,10 +24,10 @@ export function DashboardScreen({ navigation }) {
         </View>
 
         <View style={styles.heroCard}>
-          <View style={styles.heroTop}>
-            <TrionPayLogo width={100} color="#FFFFFF" accentColor="#5FE00B" />
+          <View style={styles.heroTopRow}>
+            <Text style={styles.heroLabel}>Yeni ödeme</Text>
+            <TrionPayLogo width={68} color="#FFFFFF" accentColor="#5FE00B" />
           </View>
-          <Text style={styles.heroLabel}>Yeni ödeme</Text>
           <Text style={styles.heroTitle}>Hızlı ve güvenli{'\n'}para transferi</Text>
           <Button title="Ödeme Başlat" onPress={() => navigation.navigate('Payment')} style={styles.heroBtn} />
         </View>
@@ -74,8 +74,8 @@ const styles = StyleSheet.create({
   avatar: { width: 40, height: 40, borderRadius: 20, backgroundColor: colors.primary, alignItems: 'center', justifyContent: 'center' },
   avatarTxt: { ...typography.label, color: colors.textInverse },
   heroCard: { backgroundColor: colors.primary, borderRadius: 20, padding: spacing.xl, marginBottom: spacing.xl },
-  heroTop: { marginBottom: spacing.lg },
-  heroLabel: { ...typography.caption, color: colors.accent, marginBottom: spacing.xs },
+  heroTopRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: spacing.md },
+  heroLabel: { ...typography.caption, color: colors.accent },
   heroTitle: { ...typography.h2, color: colors.textInverse, marginBottom: spacing.xl },
   heroBtn: { alignSelf: 'flex-start', paddingHorizontal: spacing.xl },
   quickRow: { flexDirection: 'row', justifyContent: 'space-between', marginBottom: spacing.xl },
