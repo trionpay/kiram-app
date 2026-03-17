@@ -34,15 +34,18 @@ export function DashboardScreen({ navigation }) {
           </View>
         </View>
 
-        {/* Ana CTA */}
-        <TouchableOpacity
-          style={styles.ctaBtn}
-          onPress={() => navigation.navigate('Payment')}
-          activeOpacity={0.88}
-        >
-          <Text style={styles.ctaIcon}>↗</Text>
-          <Text style={styles.ctaText}>Ödeme Başlat</Text>
-        </TouchableOpacity>
+        {/* Hero kart — sade */}
+        <View style={styles.heroCard}>
+          <Text style={styles.heroSubtitle}>Kart → IBAN transferi</Text>
+          <TouchableOpacity
+            style={styles.heroBtn}
+            onPress={() => navigation.navigate('Payment')}
+            activeOpacity={0.88}
+          >
+            <Text style={styles.heroBtnText}>Ödeme Başlat</Text>
+            <Text style={styles.heroBtnIcon}>→</Text>
+          </TouchableOpacity>
+        </View>
 
         {/* Hızlı aksiyonlar */}
         <View style={styles.quickRow}>
@@ -71,7 +74,10 @@ export function DashboardScreen({ navigation }) {
 
         {MOCK_TXS.map((tx) => (
           <TouchableOpacity key={tx.id} style={styles.txRow} activeOpacity={0.7}>
-            <View style={[styles.txIconWrap, { backgroundColor: tx.status === 'success' ? '#EFF6FF' : '#FEF2F2' }]}>
+            <View style={[
+              styles.txIconWrap,
+              { backgroundColor: tx.status === 'success' ? '#EFF6FF' : '#FEF2F2' },
+            ]}>
               <Text style={styles.txIconText}>
                 {tx.status === 'success' ? '↗' : '✕'}
               </Text>
@@ -84,7 +90,9 @@ export function DashboardScreen({ navigation }) {
               <Text style={[styles.txAmount, tx.status === 'failed' && { color: colors.error }]}>
                 ₺{tx.amount}
               </Text>
-              <View style={[styles.dot, { backgroundColor: tx.status === 'success' ? colors.success : colors.error }]} />
+              <View style={[styles.dot, {
+                backgroundColor: tx.status === 'success' ? colors.success : colors.error,
+              }]} />
             </View>
           </TouchableOpacity>
         ))}
@@ -120,24 +128,40 @@ const styles = StyleSheet.create({
   },
   avatarTxt: { ...typography.label, color: colors.textInverse },
 
-  /* Ana CTA butonu */
-  ctaBtn: {
+  /* Hero kart */
+  heroCard: {
+    backgroundColor: colors.primary,
+    borderRadius: 20,
+    paddingHorizontal: spacing.xl,
+    paddingTop: spacing.xl,
+    paddingBottom: spacing.xl,
+    marginBottom: spacing.xl,
+    gap: spacing.xl,
+  },
+  heroSubtitle: {
+    ...typography.bodySmall,
+    color: 'rgba(255,255,255,0.45)',
+    letterSpacing: 0.3,
+  },
+  heroBtn: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'space-between',
     backgroundColor: colors.accent,
-    borderRadius: 16,
-    height: 56,
-    marginBottom: spacing.xl,
-    gap: spacing.sm,
-    shadowColor: colors.accent,
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.3,
-    shadowRadius: 12,
-    elevation: 6,
+    borderRadius: 14,
+    paddingHorizontal: spacing.xl,
+    paddingVertical: spacing.md,
   },
-  ctaIcon: { fontSize: 20, color: colors.textInverse },
-  ctaText: { ...typography.label, fontSize: 17, color: colors.textInverse },
+  heroBtnText: {
+    ...typography.label,
+    fontSize: 16,
+    color: colors.textInverse,
+  },
+  heroBtnIcon: {
+    fontSize: 18,
+    color: colors.textInverse,
+    fontWeight: '600',
+  },
 
   /* Hızlı aksiyonlar */
   quickRow: {
@@ -156,7 +180,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  quickIconText: { fontSize: 22 },
+  quickIconText: { fontSize: 20 },
   quickLabel: { ...typography.caption, color: colors.textSecondary },
 
   /* Son işlemler */
