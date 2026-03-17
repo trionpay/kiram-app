@@ -77,10 +77,10 @@ function SummaryBar({ transactions }) {
         <Text style={styles.summaryLabel}>Başarılı</Text>
       </View>
       <View style={styles.summaryDivider} />
-      <View style={styles.summaryItem}>
-        <Text style={[styles.summaryValue, { color: colors.accent }]}>₺{fmt(total)}</Text>
-        <Text style={styles.summaryLabel}>Toplam</Text>
-      </View>
+        <View style={styles.summaryItem}>
+          <Text style={[styles.summaryValue, { color: colors.accentLight }]}>₺{fmt(total)}</Text>
+          <Text style={styles.summaryLabel}>Toplam</Text>
+        </View>
     </View>
   );
 }
@@ -110,39 +110,45 @@ export function HistoryScreen() {
         <Text style={styles.title}>İşlem Geçmişi</Text>
       </View>
 
-      {/* Tarih filtresi */}
+      {/* Filtreler — tek hava dar satır */}
       <ScrollView
         horizontal
         showsHorizontalScrollIndicator={false}
-        contentContainerStyle={styles.dateFilterRow}
+        contentContainerStyle={styles.filterRow}
       >
+        {/* Tarih */}
         {DATE_FILTERS.map(f => (
           <TouchableOpacity
-            key={f}
-            style={[styles.dateChip, dateFilter === f && styles.dateChipActive]}
+            key={'d-' + f}
+            style={[styles.chip, dateFilter === f && styles.chipActive]}
             onPress={() => setDateFilter(f)}
           >
-            <Text style={[styles.dateChipText, dateFilter === f && styles.dateChipTextActive]}>
-              {f}
-            </Text>
+            <Text style={[styles.chipText, dateFilter === f && styles.chipTextActive]}>{f}</Text>
           </TouchableOpacity>
         ))}
-      </ScrollView>
 
-      {/* Durum filtresi */}
-      <View style={styles.statusFilterRow}>
-        {STATUS_FILTERS.map(f => (
-          <TouchableOpacity
-            key={f}
-            style={[styles.statusBtn, statusFilter === f && styles.statusBtnActive]}
-            onPress={() => setStatusFilter(f)}
-          >
-            <Text style={[styles.statusBtnText, statusFilter === f && styles.statusBtnTextActive]}>
-              {f}
-            </Text>
-          </TouchableOpacity>
-        ))}
-      </View>
+        <View style={styles.chipSep} />
+
+        {/* Durum */}
+        {STATUS_FILTERS.filter(f => f !== 'Tümü').map(f => {
+          const isSuccess = f === 'Başarılı';
+          const isActive = statusFilter === f;
+          return (
+            <TouchableOpacity
+              key={'s-' + f}
+              style={[
+                styles.chip,
+                isActive && (isSuccess ? styles.chipSuccess : styles.chipFail),
+              ]}
+              onPress={() => setStatusFilter(isActive ? 'Tümü' : f)}
+            >
+              <Text style={[styles.chipText, isActive && styles.chipTextActive]}>
+                {isSuccess ? '✓ ' : '✕ '}{f}
+              </Text>
+            </TouchableOpacity>
+          );
+        })}
+      </ScrollView>
 
       {/* Özet bar */}
       <SummaryBar transactions={filtered} />
@@ -208,56 +214,40 @@ const styles = StyleSheet.create({
   },
   title: { ...typography.h1, color: colors.textPrimary },
 
-  dateFilterRow: {
+  filterRow: {
     paddingHorizontal: screenPaddingHorizontal,
     gap: spacing.sm,
-    paddingBottom: spacing.sm,
+    paddingBottom: spacing.md,
+    alignItems: 'center',
   },
-  dateChip: {
-    paddingVertical: spacing.xs,
+  chip: {
+    paddingVertical: 7,
     paddingHorizontal: spacing.md,
     borderRadius: 20,
     backgroundColor: colors.surface,
     borderWidth: 1,
     borderColor: colors.borderLight,
   },
-  dateChipActive: { backgroundColor: colors.primary, borderColor: colors.primary },
-  dateChipText: { ...typography.label, color: colors.textSecondary },
-  dateChipTextActive: { color: colors.textInverse },
-
-  statusFilterRow: {
-    flexDirection: 'row',
-    paddingHorizontal: screenPaddingHorizontal,
-    gap: spacing.sm,
-    marginBottom: spacing.sm,
-  },
-  statusBtn: {
-    flex: 1,
-    alignItems: 'center',
-    paddingVertical: spacing.xs,
-    borderRadius: 10,
-    borderWidth: 1,
-    borderColor: colors.border,
-    backgroundColor: colors.backgroundElevated,
-  },
-  statusBtnActive: { backgroundColor: colors.accent, borderColor: colors.accent },
-  statusBtnText: { ...typography.label, color: colors.textSecondary },
-  statusBtnTextActive: { color: colors.textInverse },
+  chipActive: { backgroundColor: colors.primary, borderColor: colors.primary },
+  chipSuccess: { backgroundColor: '#DCFCE7', borderColor: colors.success },
+  chipFail: { backgroundColor: '#FEE2E2', borderColor: colors.error },
+  chipText: { ...typography.label, color: colors.textSecondary, fontSize: 13 },
+  chipTextActive: { color: colors.textInverse },
+  chipSep: { width: 1, height: 20, backgroundColor: colors.border, marginHorizontal: spacing.xs },
 
   summaryBar: {
     flexDirection: 'row',
     marginHorizontal: screenPaddingHorizontal,
-    backgroundColor: colors.backgroundElevated,
-    borderRadius: 14,
-    borderWidth: 1,
-    borderColor: colors.borderLight,
-    padding: spacing.md,
-    marginBottom: spacing.md,
+    backgroundColor: colors.primary,
+    borderRadius: 16,
+    paddingVertical: spacing.md,
+    paddingHorizontal: spacing.lg,
+    marginBottom: spacing.lg,
   },
-  summaryItem: { flex: 1, alignItems: 'center' },
-  summaryValue: { ...typography.h3, color: colors.textPrimary },
-  summaryLabel: { ...typography.caption, color: colors.textTertiary, marginTop: 2 },
-  summaryDivider: { width: 1, backgroundColor: colors.borderLight },
+  summaryItem: { flex: 1, alignItems: 'center', gap: 3 },
+  summaryValue: { ...typography.h3, color: colors.textInverse },
+  summaryLabel: { ...typography.caption, color: 'rgba(255,255,255,0.5)', marginTop: 0 },
+  summaryDivider: { width: 1, backgroundColor: 'rgba(255,255,255,0.12)', marginVertical: spacing.xs },
 
   list: {
     paddingHorizontal: screenPaddingHorizontal,
