@@ -171,7 +171,7 @@ export function CardInputScreen({ route, navigation }) {
 
 const styles = StyleSheet.create({
   safe: { flex: 1, backgroundColor: colors.background },
-  scroll: { paddingHorizontal: screenPaddingHorizontal, paddingTop: spacing.sm, paddingBottom: 100 },
+  scroll: { paddingHorizontal: screenPaddingHorizontal, paddingTop: spacing.lg, paddingBottom: 100 },
   back: { alignSelf: 'flex-start', marginBottom: spacing.xl },
   backArrow: { fontSize: 24, color: colors.textPrimary },
   title: { ...typography.h1, color: colors.textPrimary, marginBottom: spacing.xs },

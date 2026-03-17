@@ -56,7 +56,7 @@ export function LoginScreen({ navigation }) {
 
 const styles = StyleSheet.create({
   safe: { flex: 1, backgroundColor: colors.background },
-  scroll: { flexGrow: 1, paddingHorizontal: screenPaddingHorizontal, paddingTop: spacing.sm, paddingBottom: spacing.xl },
+  scroll: { flexGrow: 1, paddingHorizontal: screenPaddingHorizontal, paddingTop: spacing.lg, paddingBottom: spacing.xl },
   back: { alignSelf: 'flex-start', marginBottom: spacing.xl },
   backArrow: { fontSize: 24, color: colors.textPrimary },
   title: { ...typography.h1, color: colors.textPrimary, marginBottom: spacing.sm },

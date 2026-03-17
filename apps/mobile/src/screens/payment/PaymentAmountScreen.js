@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import {
   View, Text, TextInput, StyleSheet, TouchableOpacity,
-  KeyboardAvoidingView, Platform, ScrollView,
+  KeyboardAvoidingView, Platform, ScrollView, StatusBar,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Button } from '../../components/Button';
@@ -167,8 +167,8 @@ export function PaymentAmountScreen({ navigation }) {
 }
 
 const styles = StyleSheet.create({
-  safe: { flex: 1, backgroundColor: colors.background },
-  scroll: { paddingHorizontal: screenPaddingHorizontal, paddingTop: spacing.sm, paddingBottom: spacing.xl },
+  safe: { flex: 1, backgroundColor: colors.background, paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0 },
+  scroll: { paddingHorizontal: screenPaddingHorizontal, paddingTop: spacing.md, paddingBottom: spacing.xl },
   back: { alignSelf: 'flex-start', marginBottom: spacing.xl },
   backArrow: { fontSize: 24, color: colors.textPrimary },
   title: { ...typography.h1, color: colors.textPrimary, marginBottom: spacing.xs },

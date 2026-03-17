@@ -66,7 +66,7 @@ export function PaymentSummaryScreen({ route, navigation }) {
 
 const styles = StyleSheet.create({
   safe: { flex: 1, backgroundColor: colors.background },
-  container: { flex: 1, paddingHorizontal: screenPaddingHorizontal, paddingTop: spacing.sm },
+  container: { flex: 1, paddingHorizontal: screenPaddingHorizontal, paddingTop: spacing.lg },
   back: { alignSelf: 'flex-start', marginBottom: spacing.xl },
   backArrow: { fontSize: 24, color: colors.textPrimary },
   title: { ...typography.h1, color: colors.textPrimary, marginBottom: spacing.xs },
