@@ -9,7 +9,7 @@ import { colors, typography, spacing } from '../../theme';
  * Şimdilik banka simülasyonu: 3 saniye "bağlanıyor" → mock onay.
  */
 export function ThreeDSecureScreen({ route, navigation }) {
-  const { amount, fee, total, recipient } = route.params;
+  const { amount, fee, total, recipient, description } = route.params;
   const [step, setStep] = useState('connecting'); // connecting | waiting | approved | failed
 
   useEffect(() => {
@@ -20,7 +20,7 @@ export function ThreeDSecureScreen({ route, navigation }) {
 
   useEffect(() => {
     if (step === 'approved') {
-      navigation.replace('PaymentResult', { success: true, amount, fee, total, recipient });
+      navigation.replace('PaymentResult', { success: true, amount, fee, total, recipient, description });
     }
   }, [step]);
 

@@ -12,7 +12,7 @@ const Row = ({ label, value, highlight }) => (
 );
 
 export function PaymentSummaryScreen({ route, navigation }) {
-  const { amount, fee, total, recipient } = route.params;
+  const { amount, fee, total, recipient, description } = route.params;
 
   const fmt = (n) => n.toFixed(2).replace('.', ',');
 
@@ -38,6 +38,7 @@ export function PaymentSummaryScreen({ route, navigation }) {
 
           <Row label="Alıcı" value={recipient.name} />
           <Row label="IBAN" value={recipient.iban} />
+          {description ? <Row label="Açıklama" value={description} /> : null}
           <View style={styles.divider} />
           <Row label="Hizmet Bedeli (%1,5)" value={`₺${fmt(fee)}`} />
           <Row label="Toplam Çekilecek" value={`₺${fmt(total)}`} highlight />
@@ -53,7 +54,7 @@ export function PaymentSummaryScreen({ route, navigation }) {
         <View style={styles.footer}>
           <Button
             title="Ödemeye Devam"
-            onPress={() => navigation.navigate('CardInput', { amount, fee, total, recipient })}
+            onPress={() => navigation.navigate('CardInput', { amount, fee, total, recipient, description })}
           />
           <TouchableOpacity style={styles.cancelBtn} onPress={() => navigation.goBack()}>
             <Text style={styles.cancelText}>Vazgeç</Text>

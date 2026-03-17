@@ -5,7 +5,7 @@ import { Button } from '../../components/Button';
 import { colors, typography, spacing, screenPaddingHorizontal } from '../../theme';
 
 export function PaymentResultScreen({ route, navigation }) {
-  const { success, amount, fee, total, recipient } = route.params;
+  const { success, amount, fee, total, recipient, description } = route.params;
   const fmt = (n) => n?.toFixed(2).replace('.', ',');
   const now = new Date();
   const dateStr = now.toLocaleDateString('tr-TR', { day: '2-digit', month: 'long', year: 'numeric' });
@@ -78,6 +78,12 @@ export function PaymentResultScreen({ route, navigation }) {
 
           <View style={styles.divider} />
 
+          {description ? (
+            <View style={styles.receiptRow}>
+              <Text style={styles.receiptLabel}>Açıklama</Text>
+              <Text style={styles.receiptValue}>{description}</Text>
+            </View>
+          ) : null}
           <View style={styles.receiptRow}>
             <Text style={styles.receiptLabel}>Tarih</Text>
             <Text style={styles.receiptValue}>{dateStr}, {timeStr}</Text>

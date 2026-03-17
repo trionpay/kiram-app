@@ -13,7 +13,7 @@ const MOCK_RECIPIENTS = [
   { id: '3', name: 'Site Yönetimi', iban: 'TR62 0013 4000 0147 4012 8100 09' },
 ];
 
-const FEE_RATE = 0.015; // %1.5 komisyon (mock)
+const FEE_RATE = 0.015;
 
 export function PaymentAmountScreen({ navigation }) {
   const [amount, setAmount] = useState('');
@@ -22,6 +22,9 @@ export function PaymentAmountScreen({ navigation }) {
   const [customIban, setCustomIban] = useState('');
   const [customName, setCustomName] = useState('');
   const [useCustom, setUseCustom] = useState(false);
+  const [description, setDescription] = useState('');
+  const [saveRecipient, setSaveRecipient] = useState(false);
+  const [nickname, setNickname] = useState('');
 
   const numericAmount = parseFloat(amount.replace(',', '.')) || 0;
   const fee = +(numericAmount * FEE_RATE).toFixed(2);
@@ -37,8 +40,7 @@ export function PaymentAmountScreen({ navigation }) {
       : !!selectedRecipient);
 
   const formatAmount = (text) => {
-    const clean = text.replace(/[^0-9,]/g, '');
-    setAmount(clean);
+    setAmount(text.replace(/[^0-9,]/g, ''));
   };
 
   const formatIban = (text) => {
@@ -53,15 +55,20 @@ export function PaymentAmountScreen({ navigation }) {
       fee,
       total,
       recipient,
+      description: description.trim(),
+      saveRecipient: useCustom && saveRecipient,
+      nickname: nickname.trim(),
     });
   };
 
   return (
     <SafeAreaView style={styles.safe} edges={['top']}>
       <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
-        <ScrollView contentContainerStyle={styles.scroll} keyboardShouldPersistTaps="handled" showsVerticalScrollIndicator={false}>
-
-          {/* Geri */}
+        <ScrollView
+          contentContainerStyle={styles.scroll}
+          keyboardShouldPersistTaps="handled"
+          showsVerticalScrollIndicator={false}
+        >
           <TouchableOpacity style={styles.back} onPress={() => navigation.goBack()}>
             <Text style={styles.backArrow}>←</Text>
           </TouchableOpacity>
@@ -93,21 +100,25 @@ export function PaymentAmountScreen({ navigation }) {
 
           {/* Alıcı */}
           <View style={styles.section}>
-            <View style={styles.recipientHeader}>
+            <View style={styles.sectionHeaderRow}>
               <Text style={styles.label}>Alıcı</Text>
-              <TouchableOpacity onPress={() => { setUseCustom(!useCustom); setSelectedRecipient(null); }}>
+              <TouchableOpacity onPress={() => { setUseCustom(!useCustom); setSelectedRecipient(null); setSaveRecipient(false); }}>
                 <Text style={styles.toggleBtn}>{useCustom ? 'Kayıtlıdan seç' : 'Manuel gir'}</Text>
               </TouchableOpacity>
             </View>
 
             {!useCustom ? (
               <>
-                <TouchableOpacity style={styles.recipientSelector} onPress={() => setShowRecipients(!showRecipients)}>
+                <TouchableOpacity
+                  style={styles.recipientSelector}
+                  onPress={() => setShowRecipients(!showRecipients)}
+                >
                   <Text style={[styles.recipientSelectorText, !selectedRecipient && { color: colors.textTertiary }]}>
                     {selectedRecipient ? selectedRecipient.name : 'Kayıtlı alıcı seçin'}
                   </Text>
                   <Text style={styles.chevron}>{showRecipients ? '▲' : '▼'}</Text>
                 </TouchableOpacity>
+
                 {showRecipients && (
                   <View style={styles.recipientList}>
                     {MOCK_RECIPIENTS.map(r => (
@@ -119,7 +130,7 @@ export function PaymentAmountScreen({ navigation }) {
                         <View style={styles.recipientAvatar}>
                           <Text style={styles.recipientAvatarText}>{r.name[0]}</Text>
                         </View>
-                        <View>
+                        <View style={{ flex: 1 }}>
                           <Text style={styles.recipientName}>{r.name}</Text>
                           <Text style={styles.recipientIban}>{r.iban}</Text>
                         </View>
@@ -127,6 +138,7 @@ export function PaymentAmountScreen({ navigation }) {
                     ))}
                   </View>
                 )}
+
                 {selectedRecipient && (
                   <View style={styles.selectedCard}>
                     <Text style={styles.selectedName}>{selectedRecipient.name}</Text>
@@ -152,12 +164,61 @@ export function PaymentAmountScreen({ navigation }) {
                   autoCapitalize="characters"
                   maxLength={32}
                 />
+
+                {/* IBAN doğrulama notu */}
+                {customIban.replace(/\s/g, '').length === 26 && (
+                  <View style={styles.ibanNote}>
+                    <Text style={styles.ibanNoteIcon}>ℹ</Text>
+                    <Text style={styles.ibanNoteText}>
+                      IBAN doğrulaması ödeme kuruluşu API'si entegre edildiğinde aktif olacak.
+                    </Text>
+                  </View>
+                )}
+
+                {/* Alıcıyı kaydet */}
+                {customName.length > 1 && customIban.replace(/\s/g, '').length === 26 && (
+                  <View style={styles.saveSection}>
+                    <TouchableOpacity
+                      style={styles.saveRow}
+                      onPress={() => setSaveRecipient(!saveRecipient)}
+                    >
+                      <View style={[styles.checkbox, saveRecipient && styles.checkboxActive]}>
+                        {saveRecipient && <Text style={styles.checkmark}>✓</Text>}
+                      </View>
+                      <Text style={styles.saveText}>Bu alıcıyı kaydet</Text>
+                    </TouchableOpacity>
+
+                    {saveRecipient && (
+                      <TextInput
+                        style={[styles.input, { marginTop: spacing.sm }]}
+                        value={nickname}
+                        onChangeText={setNickname}
+                        placeholder='Kısa ad (örn. "Ev Sahibi", "Apartman")'
+                        placeholderTextColor={colors.textTertiary}
+                      />
+                    )}
+                  </View>
+                )}
               </>
             )}
           </View>
+
+          {/* Açıklama */}
+          <View style={styles.section}>
+            <Text style={styles.label}>Açıklama <Text style={styles.optional}>(isteğe bağlı)</Text></Text>
+            <TextInput
+              style={[styles.input, { minHeight: 64, textAlignVertical: 'top' }]}
+              value={description}
+              onChangeText={setDescription}
+              placeholder='Örn. "Nisan 2026 kirası", "Ocak aidatı"'
+              placeholderTextColor={colors.textTertiary}
+              multiline
+              maxLength={100}
+            />
+            <Text style={styles.charCount}>{description.length}/100</Text>
+          </View>
         </ScrollView>
 
-        {/* Devam */}
         <View style={styles.footer}>
           <Button title="Devam" onPress={handleContinue} disabled={!isValid} />
         </View>
@@ -167,8 +228,16 @@ export function PaymentAmountScreen({ navigation }) {
 }
 
 const styles = StyleSheet.create({
-  safe: { flex: 1, backgroundColor: colors.background, paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0 },
-  scroll: { paddingHorizontal: screenPaddingHorizontal, paddingTop: spacing.md, paddingBottom: spacing.xl },
+  safe: {
+    flex: 1,
+    backgroundColor: colors.background,
+    paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0,
+  },
+  scroll: {
+    paddingHorizontal: screenPaddingHorizontal,
+    paddingTop: spacing.md,
+    paddingBottom: spacing.xl,
+  },
   back: { alignSelf: 'flex-start', marginBottom: spacing.xl },
   backArrow: { fontSize: 24, color: colors.textPrimary },
   title: { ...typography.h1, color: colors.textPrimary, marginBottom: spacing.xs },
@@ -176,6 +245,7 @@ const styles = StyleSheet.create({
 
   section: { marginBottom: spacing.xl },
   label: { ...typography.label, color: colors.textSecondary, marginBottom: spacing.sm },
+  optional: { ...typography.caption, color: colors.textTertiary, fontWeight: '400' },
 
   amountRow: {
     flexDirection: 'row',
@@ -189,7 +259,12 @@ const styles = StyleSheet.create({
   amountInput: { flex: 1, ...typography.hero, fontSize: 42, color: colors.textPrimary, letterSpacing: -1 },
   feeHint: { ...typography.caption, color: colors.textTertiary, marginTop: spacing.sm },
 
-  recipientHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: spacing.sm },
+  sectionHeaderRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: spacing.sm,
+  },
   toggleBtn: { ...typography.label, color: colors.accent },
 
   recipientSelector: {
@@ -228,6 +303,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.primary,
     alignItems: 'center',
     justifyContent: 'center',
+    flexShrink: 0,
   },
   recipientAvatarText: { ...typography.label, color: colors.textInverse },
   recipientName: { ...typography.label, color: colors.textPrimary },
@@ -251,6 +327,32 @@ const styles = StyleSheet.create({
     ...typography.body,
     color: colors.textPrimary,
   },
+
+  ibanNote: {
+    flexDirection: 'row',
+    gap: spacing.xs,
+    marginTop: spacing.sm,
+    alignItems: 'flex-start',
+  },
+  ibanNoteIcon: { color: colors.textTertiary, fontSize: 13 },
+  ibanNoteText: { ...typography.caption, color: colors.textTertiary, flex: 1 },
+
+  saveSection: { marginTop: spacing.md },
+  saveRow: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm },
+  checkbox: {
+    width: 22,
+    height: 22,
+    borderRadius: 6,
+    borderWidth: 2,
+    borderColor: colors.border,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  checkboxActive: { backgroundColor: colors.accent, borderColor: colors.accent },
+  checkmark: { color: colors.textInverse, fontSize: 12, fontWeight: '700' },
+  saveText: { ...typography.body, color: colors.textPrimary },
+
+  charCount: { ...typography.caption, color: colors.textTertiary, textAlign: 'right', marginTop: 4 },
 
   footer: {
     paddingHorizontal: screenPaddingHorizontal,
