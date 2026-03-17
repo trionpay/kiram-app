@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Share } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Button } from '../../components/Button';
 import { colors, typography, spacing, screenPaddingHorizontal } from '../../theme';
@@ -13,6 +13,30 @@ export function PaymentResultScreen({ route, navigation }) {
   const refNo = 'TRP' + Date.now().toString().slice(-8);
 
   const goHome = () => navigation.getParent()?.navigate('Dashboard');
+
+  const handleShare = async () => {
+    const lines = [
+      '🧾 Kiram — Ödeme Dekontu',
+      '─────────────────────────',
+      `Tutar:        ₺${fmt(amount)}`,
+      `Hizmet Bedeli: ₺${fmt(fee)}`,
+      `Toplam:       ₺${fmt(total)}`,
+      '─────────────────────────',
+      `Alıcı:  ${recipient?.name}`,
+      `IBAN:   ${recipient?.iban}`,
+      ...(description ? [`Açıklama: ${description}`] : []),
+      '─────────────────────────',
+      `Tarih:  ${dateStr}, ${timeStr}`,
+      `Ref No: ${refNo}`,
+      '',
+      'kiram.com üzerinden gerçekleştirilmiştir.',
+    ];
+    try {
+      await Share.share({ message: lines.join('\n') });
+    } catch (e) {
+      // Kullanıcı iptal etti
+    }
+  };
 
   if (!success) {
     return (
@@ -96,7 +120,7 @@ export function PaymentResultScreen({ route, navigation }) {
 
         {/* Aksiyonlar */}
         <View style={styles.actions}>
-          <TouchableOpacity style={styles.shareBtn}>
+          <TouchableOpacity style={styles.shareBtn} onPress={handleShare}>
             <Text style={styles.shareBtnIcon}>↑</Text>
             <Text style={styles.shareBtnText}>Dekontu Paylaş</Text>
           </TouchableOpacity>
