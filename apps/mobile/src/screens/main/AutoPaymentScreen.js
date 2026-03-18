@@ -221,7 +221,6 @@ export function AutoPaymentScreen({ navigation }) {
             </View>
           </View>
         </View>
-        </View>
       </Modal>
     </SafeAreaView>
   );
