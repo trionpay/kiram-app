@@ -12,7 +12,14 @@ const Stack = createNativeStackNavigator();
 
 export function PaymentNavigator() {
   return (
-    <Stack.Navigator screenOptions={{ headerShown: false }}>
+    <Stack.Navigator
+      screenOptions={{
+        headerShown: false,
+        animation: 'slide_from_right',
+        gestureEnabled: true,
+        gestureDirection: 'horizontal',
+      }}
+    >
       {/* Tip seçimi — ilk ekran */}
       <Stack.Screen name="PaymentType" component={PaymentTypeScreen} />
       {/* Kira & Aidat akışı */}
@@ -22,8 +29,8 @@ export function PaymentNavigator() {
       {/* Ortak son adımlar */}
       <Stack.Screen name="PaymentSummary" component={PaymentSummaryScreen} />
       <Stack.Screen name="CardInput" component={CardInputScreen} />
-      <Stack.Screen name="ThreeDSecure" component={ThreeDSecureScreen} />
-      <Stack.Screen name="PaymentResult" component={PaymentResultScreen} />
+      <Stack.Screen name="ThreeDSecure" component={ThreeDSecureScreen} options={{ animation: 'fade', gestureEnabled: false }} />
+      <Stack.Screen name="PaymentResult" component={PaymentResultScreen} options={{ animation: 'fade', gestureEnabled: false }} />
     </Stack.Navigator>
   );
 }

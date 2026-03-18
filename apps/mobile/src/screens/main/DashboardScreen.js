@@ -1,8 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { LinearGradient } from 'expo-linear-gradient';
 import { TrionPayLogo } from '../../components/TrionPayLogo';
 import { TransactionDetailModal } from '../../components/TransactionDetailModal';
+import { SkeletonTransactionRow } from '../../components/Skeleton';
 import { colors, typography, spacing, screenPaddingHorizontal } from '../../theme';
 
 const MOCK_TXS = [
@@ -11,17 +13,24 @@ const MOCK_TXS = [
   { id: 'TRP10293401', name: 'Kira Ödemesi', iban: 'TR62 0013 4000 0147 4012 8100 09', amount: 12000, fee: 180, total: 12180, status: 'failed', date: '15 Mar', time: '', description: 'Mart 2026 kirası' },
 ];
 
-const QUICK_ACTIONS = [
-  { icon: '↗', label: 'Gönder', screen: 'Payment' },
-  { icon: '📋', label: 'Alıcılar', screen: 'Recipients' },
-  { icon: '🗂', label: 'Geçmiş', screen: 'History' },
-  { icon: '⚡', label: 'Fatura', screen: 'Payment' },
+const RECENT_RECIPIENTS = [
+  { id: '1', nickname: 'Apartman', initial: 'A', emoji: '🏢', color: '#5B7FA6' },
+  { id: '2', nickname: 'Ev Sahibi', initial: 'E', emoji: '🏠', color: '#4A9B7F' },
+  { id: '3', nickname: 'Site', initial: 'S', emoji: '🏡', color: '#B56B6B' },
+  { id: '4', nickname: 'Elektrik', initial: 'E', emoji: '⚡', color: '#B8894A' },
 ];
+
 
 const fmt = (n) => (n || 0).toFixed(2).replace('.', ',');
 
 export function DashboardScreen({ navigation }) {
   const [selectedTx, setSelectedTx] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setIsLoading(false), 1200);
+    return () => clearTimeout(timer);
+  }, []);
 
   return (
     <SafeAreaView style={styles.safe} edges={['top']}>
@@ -45,7 +54,14 @@ export function DashboardScreen({ navigation }) {
         </View>
 
         {/* Hero kart */}
-        <View style={styles.heroCard}>
+        <LinearGradient
+          colors={['#102A43', '#0C1929', '#061018']}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 1, y: 1 }}
+          style={styles.heroCard}
+        >
+          <View style={styles.heroDecorCircle} />
+          <View style={styles.heroDecorCircle2} />
           <View style={styles.heroTop}>
             <View>
               <Text style={styles.heroTitle}>Kira, aidat, fatura</Text>
@@ -61,24 +77,39 @@ export function DashboardScreen({ navigation }) {
             <Text style={styles.heroBtnText}>Ödeme Başlat</Text>
             <Text style={styles.heroBtnIcon}>→</Text>
           </TouchableOpacity>
+        </LinearGradient>
+
+        {/* Son Alıcılar */}
+        <View style={styles.sectionHeader}>
+          <Text style={styles.sectionTitle}>Son Alıcılar</Text>
+          <TouchableOpacity onPress={() => navigation.navigate('Recipients')}>
+            <Text style={styles.seeAll}>Tümü</Text>
+          </TouchableOpacity>
         </View>
 
-        {/* Hızlı aksiyonlar */}
-        <View style={styles.quickRow}>
-          {QUICK_ACTIONS.map((item) => (
+        <ScrollView
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          contentContainerStyle={styles.recipientsRow}
+          style={styles.recipientsScroll}
+        >
+          {RECENT_RECIPIENTS.map((r) => (
             <TouchableOpacity
-              key={item.label}
-              style={styles.quickItem}
-              onPress={() => navigation.navigate(item.screen)}
-              activeOpacity={0.7}
+              key={r.id}
+              style={styles.recipientItem}
+              onPress={() => navigation.navigate('Payment')}
+              activeOpacity={0.75}
             >
-              <View style={styles.quickIcon}>
-                <Text style={styles.quickIconText}>{item.icon}</Text>
+              <View style={[styles.recipientAvatar, { backgroundColor: r.color }]}>
+                <Text style={styles.recipientInitial}>{r.initial}</Text>
+                <View style={styles.recipientBadge}>
+                  <Text style={styles.recipientBadgeEmoji}>{r.emoji}</Text>
+                </View>
               </View>
-              <Text style={styles.quickLabel}>{item.label}</Text>
+              <Text style={styles.recipientLabel} numberOfLines={1}>{r.nickname}</Text>
             </TouchableOpacity>
           ))}
-        </View>
+        </ScrollView>
 
         {/* Son işlemler */}
         <View style={styles.sectionHeader}>
@@ -88,33 +119,41 @@ export function DashboardScreen({ navigation }) {
           </TouchableOpacity>
         </View>
 
-        {MOCK_TXS.map((tx) => (
-          <TouchableOpacity
-            key={tx.id}
-            style={styles.txRow}
-            activeOpacity={0.7}
-            onPress={() => setSelectedTx(tx)}
-          >
-            <View style={[
-              styles.txIconWrap,
-              { backgroundColor: tx.status === 'success' ? '#EFF6FF' : '#FEF2F2' },
-            ]}>
-              <Text style={styles.txIconText}>
-                {tx.status === 'success' ? '↗' : '✕'}
-              </Text>
-            </View>
-            <View style={styles.txMid}>
-              <Text style={styles.txName}>{tx.name}</Text>
-              <Text style={styles.txDate}>{tx.date}</Text>
-            </View>
-            <View style={styles.txRight}>
-              <Text style={[styles.txAmount, tx.status === 'failed' && { color: colors.error }]}>
-                ₺{fmt(tx.amount)}
-              </Text>
-              <Text style={{ fontSize: 16, color: colors.textTertiary }}>›</Text>
-            </View>
-          </TouchableOpacity>
-        ))}
+        {isLoading ? (
+          <>
+            <SkeletonTransactionRow />
+            <SkeletonTransactionRow />
+            <SkeletonTransactionRow />
+          </>
+        ) : (
+          MOCK_TXS.map((tx) => (
+            <TouchableOpacity
+              key={tx.id}
+              style={styles.txRow}
+              activeOpacity={0.7}
+              onPress={() => setSelectedTx(tx)}
+            >
+              <View style={[
+                styles.txIconWrap,
+                { backgroundColor: tx.status === 'success' ? '#EFF6FF' : '#FEF2F2' },
+              ]}>
+                <Text style={styles.txIconText}>
+                  {tx.status === 'success' ? '↗' : '✕'}
+                </Text>
+              </View>
+              <View style={styles.txMid}>
+                <Text style={styles.txName}>{tx.name}</Text>
+                <Text style={styles.txDate}>{tx.date}</Text>
+              </View>
+              <View style={styles.txRight}>
+                <Text style={[styles.txAmount, tx.status === 'failed' && { color: colors.error }]}>
+                  ₺{fmt(tx.amount)}
+                </Text>
+                <Text style={{ fontSize: 16, color: colors.textTertiary }}>›</Text>
+              </View>
+            </TouchableOpacity>
+          ))
+        )}
 
         <TransactionDetailModal
           transaction={selectedTx}
@@ -154,13 +193,37 @@ const styles = StyleSheet.create({
 
   /* Hero kart */
   heroCard: {
-    backgroundColor: colors.primary,
     borderRadius: 20,
     paddingHorizontal: spacing.xl,
     paddingTop: spacing.xl,
     paddingBottom: spacing.xl,
     marginBottom: spacing.xl,
     gap: spacing.lg,
+    overflow: 'hidden',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.25,
+    shadowRadius: 16,
+    elevation: 10,
+  },
+  heroDecorCircle: {
+    position: 'absolute',
+    width: 180,
+    height: 180,
+    borderRadius: 90,
+    backgroundColor: 'rgba(3, 105, 161, 0.12)',
+    top: -60,
+    right: -40,
+  },
+  heroDecorCircle2: {
+    position: 'absolute',
+    width: 120,
+    height: 120,
+    borderRadius: 60,
+    borderWidth: 1,
+    borderColor: 'rgba(255, 255, 255, 0.06)',
+    bottom: -30,
+    left: -20,
   },
   heroTop: {
     flexDirection: 'row',
@@ -192,25 +255,53 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
 
-  /* Hızlı aksiyonlar */
-  quickRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+  /* Son Alıcılar */
+  recipientsScroll: {
+    marginHorizontal: -screenPaddingHorizontal,
     marginBottom: spacing.xxl,
   },
-  quickItem: { alignItems: 'center', gap: 6 },
-  quickIcon: {
+  recipientsRow: {
+    paddingHorizontal: screenPaddingHorizontal,
+    gap: spacing.md,
+  },
+  recipientItem: {
+    alignItems: 'center',
+    gap: 6,
+    width: 64,
+  },
+  recipientAvatar: {
     width: 56,
     height: 56,
     borderRadius: 18,
-    backgroundColor: colors.backgroundElevated,
-    borderWidth: 1,
-    borderColor: colors.border,
     alignItems: 'center',
     justifyContent: 'center',
   },
-  quickIconText: { fontSize: 20 },
-  quickLabel: { ...typography.caption, color: colors.textSecondary },
+  recipientInitial: {
+    ...typography.h3,
+    color: colors.textInverse,
+  },
+  recipientBadge: {
+    position: 'absolute',
+    bottom: -4,
+    right: -4,
+    width: 22,
+    height: 22,
+    borderRadius: 11,
+    backgroundColor: colors.background,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 1.5,
+    borderColor: colors.border,
+  },
+  recipientBadgeEmoji: {
+    fontSize: 11,
+  },
+  recipientLabel: {
+    ...typography.caption,
+    color: colors.textSecondary,
+    textAlign: 'center',
+    width: '100%',
+  },
 
   /* Son işlemler */
   sectionHeader: {

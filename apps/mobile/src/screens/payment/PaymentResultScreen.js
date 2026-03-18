@@ -5,7 +5,7 @@ import { Button } from '../../components/Button';
 import { colors, typography, spacing, screenPaddingHorizontal } from '../../theme';
 
 export function PaymentResultScreen({ route, navigation }) {
-  const { success, amount, fee, total, recipient, description } = route.params;
+  const { success, failReason, amount, fee, total, recipient, description } = route.params;
   const fmt = (n) => n?.toFixed(2).replace('.', ',');
   const now = new Date();
   const dateStr = now.toLocaleDateString('tr-TR', { day: '2-digit', month: 'long', year: 'numeric' });
@@ -39,18 +39,23 @@ export function PaymentResultScreen({ route, navigation }) {
   };
 
   if (!success) {
+    const isInsufficient = failReason === 'insufficient_funds';
     return (
       <SafeAreaView style={styles.safe} edges={['top']}>
         <View style={styles.center}>
-          <View style={[styles.iconCircle, { backgroundColor: '#FEE2E2' }]}>
-            <Text style={styles.iconText}>✕</Text>
+          <View style={[styles.iconCircle, { backgroundColor: isInsufficient ? '#FEF9C3' : '#FEE2E2' }]}>
+            <Text style={styles.iconText}>{isInsufficient ? '💳' : '✕'}</Text>
           </View>
-          <Text style={styles.resultTitle}>İşlem Başarısız</Text>
+          <Text style={styles.resultTitle}>
+            {isInsufficient ? 'Bakiye Yetersiz' : 'İşlem Başarısız'}
+          </Text>
           <Text style={styles.resultSub}>
-            Ödeme gerçekleştirilemedi. Kart limitinizi veya bilgilerinizi kontrol edin.
+            {isInsufficient
+              ? 'Kartınızda yeterli bakiye bulunmuyor. Farklı bir kart deneyebilirsiniz.'
+              : 'Ödeme gerçekleştirilemedi. Kart limitinizi veya bilgilerinizi kontrol edin.'}
           </Text>
           <View style={styles.actions}>
-            <Button title="Tekrar Dene" onPress={() => navigation.goBack()} />
+            <Button title="Farklı Kart Dene" onPress={() => navigation.goBack()} />
             <TouchableOpacity style={styles.homeBtn} onPress={goHome}>
               <Text style={styles.homeBtnText}>Ana Sayfaya Dön</Text>
             </TouchableOpacity>

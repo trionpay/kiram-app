@@ -80,13 +80,17 @@ export function PaymentAmountScreen({ navigation }) {
           <View style={styles.section}>
             <Text style={styles.label}>Gönderilecek Tutar</Text>
             <View style={styles.amountRow}>
-              <Text style={styles.currency}>₺</Text>
+              <Text style={[styles.currency, {
+                fontSize: amount.length > 8 ? 24 : amount.length > 6 ? 28 : amount.length > 4 ? 32 : 36,
+              }]}>₺</Text>
               <TextInput
-                style={[styles.amountInput, { fontSize: amount.length > 7 ? 28 : amount.length > 5 ? 34 : 42 }]}
+                style={[styles.amountInput, {
+                  fontSize: amount.length > 8 ? 24 : amount.length > 6 ? 28 : amount.length > 4 ? 32 : 42,
+                }]}
                 value={amount}
                 onChangeText={formatAmount}
                 keyboardType="decimal-pad"
-                placeholder="0,00"
+                placeholder="0"
                 placeholderTextColor={colors.textTertiary}
                 autoFocus
               />
@@ -255,8 +259,8 @@ const styles = StyleSheet.create({
     paddingBottom: spacing.sm,
     gap: spacing.sm,
   },
-  currency: { ...typography.hero, color: colors.textPrimary, fontSize: 36 },
-  amountInput: { flex: 1, ...typography.hero, fontSize: 42, color: colors.textPrimary, letterSpacing: -1 },
+  currency: { fontFamily: 'DMSans_700Bold', fontSize: 36, lineHeight: 52, color: colors.textPrimary },
+  amountInput: { flex: 1, fontFamily: 'DMSans_700Bold', fontSize: 42, lineHeight: 52, color: colors.textPrimary },
   feeHint: { ...typography.caption, color: colors.textTertiary, marginTop: spacing.sm },
 
   sectionHeaderRow: {

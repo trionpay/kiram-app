@@ -14,17 +14,24 @@ const Stack = createNativeStackNavigator();
 
 export function AuthNavigator() {
   return (
-    <Stack.Navigator screenOptions={{ headerShown: false }}>
-      <Stack.Screen name="Splash" component={SplashScreen} />
-      <Stack.Screen name="Login" component={LoginScreen} />
+    <Stack.Navigator
+      screenOptions={{
+        headerShown: false,
+        animation: 'slide_from_right',
+        gestureEnabled: true,
+        gestureDirection: 'horizontal',
+      }}
+    >
+      <Stack.Screen name="Splash" component={SplashScreen} options={{ animation: 'fade' }} />
+      <Stack.Screen name="Login" component={LoginScreen} options={{ animation: 'fade' }} />
       <Stack.Screen name="OTP" component={OTPScreen} />
       {/* KYC akışı — yeni kullanıcılar için */}
       <Stack.Screen name="KYCName" component={KYCNameScreen} />
       <Stack.Screen name="KYCIdentity" component={KYCIdentityScreen} />
       <Stack.Screen name="KYCPurpose" component={KYCPurposeScreen} />
       <Stack.Screen name="KYCSummary" component={KYCSummaryScreen} />
-      <Stack.Screen name="ForgotPassword" component={ForgotPasswordScreen} />
-      <Stack.Screen name="NotificationPermission" component={NotificationPermissionScreen} />
+      <Stack.Screen name="ForgotPassword" component={ForgotPasswordScreen} options={{ animation: 'slide_from_bottom' }} />
+      <Stack.Screen name="NotificationPermission" component={NotificationPermissionScreen} options={{ animation: 'fade' }} />
     </Stack.Navigator>
   );
 }

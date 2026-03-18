@@ -1,30 +1,41 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import {
   View,
   TouchableOpacity,
   Text,
   StyleSheet,
-  Platform,
+  Animated,
 } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { colors, spacing } from '../theme';
 
 const TABS = [
-  { name: 'Dashboard', icon: '⊞', label: 'Ana Sayfa' },
-  { name: 'Recipients', icon: '◎', label: 'Alıcılar' },
-  { name: 'Payment', icon: null, label: 'Ödeme' }, // orta buton
-  { name: 'History', icon: '↻', label: 'Geçmiş' },
-  { name: 'Profile', icon: '◉', label: 'Profil' },
+  { name: 'Dashboard', iconOutline: 'home-outline', iconFilled: 'home', label: 'Ana Sayfa' },
+  { name: 'Recipients', iconOutline: 'people-outline', iconFilled: 'people', label: 'Alıcılar' },
+  { name: 'Payment', iconOutline: null, iconFilled: null, label: 'Ödeme' },
+  { name: 'History', iconOutline: 'time-outline', iconFilled: 'time', label: 'Geçmiş' },
+  { name: 'Profile', iconOutline: 'person-outline', iconFilled: 'person', label: 'Profil' },
 ];
 
 export function FloatingTabBar({ state, descriptors, navigation }) {
   const insets = useSafeAreaInsets();
   const bottomPad = Math.max(insets.bottom, 12);
+  const centerScale = useRef(new Animated.Value(1)).current;
 
   // Ödeme/nested stack içindeyse navbar'ı gizle
   const activeRoute = state.routes[state.index];
   const nestedState = activeRoute.state;
   if (nestedState && nestedState.index > 0) return null;
+
+  const animateCenterPress = (toValue) => {
+    Animated.spring(centerScale, {
+      toValue,
+      friction: 5,
+      tension: 300,
+      useNativeDriver: true,
+    }).start();
+  };
 
   return (
     <View style={[styles.wrapper, { paddingBottom: bottomPad }]}>
@@ -45,17 +56,21 @@ export function FloatingTabBar({ state, descriptors, navigation }) {
             return (
               <TouchableOpacity
                 key={route.key}
+                onPressIn={() => animateCenterPress(0.92)}
+                onPressOut={() => animateCenterPress(1)}
                 onPress={onPress}
-                activeOpacity={0.85}
+                activeOpacity={1}
                 style={styles.centerBtnWrapper}
               >
-                <View style={styles.centerBtn}>
-                  <Text style={styles.centerBtnIcon}>↗</Text>
-                </View>
+                <Animated.View style={[styles.centerBtn, { transform: [{ scale: centerScale }] }]}>
+                  <Ionicons name="arrow-up" size={22} color={colors.textInverse} />
+                </Animated.View>
                 <Text style={styles.centerLabel}>Ödeme</Text>
               </TouchableOpacity>
             );
           }
+
+          const iconName = isFocused ? tab.iconFilled : tab.iconOutline;
 
           return (
             <TouchableOpacity
@@ -65,9 +80,11 @@ export function FloatingTabBar({ state, descriptors, navigation }) {
               style={styles.tab}
             >
               <View style={[styles.iconWrap, isFocused && styles.iconWrapActive]}>
-                <Text style={[styles.icon, isFocused && styles.iconActive]}>
-                  {tab.icon}
-                </Text>
+                <Ionicons
+                  name={iconName}
+                  size={20}
+                  color={isFocused ? colors.accent : 'rgba(255,255,255,0.4)'}
+                />
               </View>
               <Text style={[styles.label, isFocused && styles.labelActive]}>
                 {tab.label}
@@ -120,14 +137,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   iconWrapActive: {
-    backgroundColor: 'rgba(13, 148, 136, 0.15)',
-  },
-  icon: {
-    fontSize: 18,
-    color: 'rgba(255,255,255,0.35)',
-  },
-  iconActive: {
-    color: colors.accent,
+    backgroundColor: 'rgba(3, 105, 161, 0.15)',
   },
   label: {
     fontSize: 9,
@@ -160,11 +170,6 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.45,
     shadowRadius: 8,
     elevation: 8,
-  },
-  centerBtnIcon: {
-    fontSize: 19,
-    color: colors.textInverse,
-    fontWeight: '600',
   },
   centerLabel: {
     fontSize: 9,

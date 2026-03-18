@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import { View, Text, StyleSheet, Dimensions } from 'react-native';
+import { View, Text, StyleSheet, Dimensions, Animated } from 'react-native';
 import { Button } from '../components/Button';
 import { TrionPayLogo } from '../components/TrionPayLogo';
 import { colors, typography, spacing } from '../theme';
@@ -9,10 +9,38 @@ const { width: SCREEN_W, height: SCREEN_H } = Dimensions.get('window');
 export function SplashScreen({ navigation }) {
   const timer = useRef(null);
 
+  const logoOpacity = useRef(new Animated.Value(0)).current;
+  const logoScale = useRef(new Animated.Value(0.8)).current;
+  const taglineOpacity = useRef(new Animated.Value(0)).current;
+  const taglineTranslateY = useRef(new Animated.Value(20)).current;
+  const footerOpacity = useRef(new Animated.Value(0)).current;
+  const circleScale = useRef(new Animated.Value(1)).current;
+
   useEffect(() => {
-    timer.current = setTimeout(() => navigation.replace('Login'), 3000);
+    Animated.sequence([
+      Animated.parallel([
+        Animated.timing(logoOpacity, { toValue: 1, duration: 600, useNativeDriver: true }),
+        Animated.spring(logoScale, { toValue: 1, friction: 6, tension: 80, useNativeDriver: true }),
+      ]),
+      Animated.delay(150),
+      Animated.parallel([
+        Animated.timing(taglineOpacity, { toValue: 1, duration: 500, useNativeDriver: true }),
+        Animated.timing(taglineTranslateY, { toValue: 0, duration: 500, useNativeDriver: true }),
+      ]),
+      Animated.delay(100),
+      Animated.timing(footerOpacity, { toValue: 1, duration: 400, useNativeDriver: true }),
+    ]).start();
+
+    Animated.loop(
+      Animated.sequence([
+        Animated.timing(circleScale, { toValue: 1.05, duration: 2000, useNativeDriver: true }),
+        Animated.timing(circleScale, { toValue: 1, duration: 2000, useNativeDriver: true }),
+      ])
+    ).start();
+
+    timer.current = setTimeout(() => navigation.replace('Login'), 3500);
     return () => clearTimeout(timer.current);
-  }, [navigation]);
+  }, [navigation, logoOpacity, logoScale, taglineOpacity, taglineTranslateY, footerOpacity, circleScale]);
 
   const handlePress = () => {
     clearTimeout(timer.current);
@@ -22,27 +50,27 @@ export function SplashScreen({ navigation }) {
   return (
     <View style={styles.screen}>
       {/* Arka plan dekoratif şekiller */}
-      <View style={styles.circleTopRight} />
-      <View style={styles.circleBottomLeft} />
+      <Animated.View style={[styles.circleTopRight, { transform: [{ scale: circleScale }] }]} />
+      <Animated.View style={[styles.circleBottomLeft, { transform: [{ scale: circleScale }] }]} />
 
       {/* İçerik */}
       <View style={styles.content}>
         {/* Logo */}
-        <View style={styles.logoWrapper}>
+        <Animated.View style={[styles.logoWrapper, { opacity: logoOpacity, transform: [{ scale: logoScale }] }]}>
           <TrionPayLogo width={SCREEN_W * 0.48} color="#FFFFFF" accentColor="#5FE00B" />
-        </View>
+        </Animated.View>
 
         {/* Alt bilgi */}
-        <View style={styles.infoBlock}>
+        <Animated.View style={[styles.infoBlock, { opacity: taglineOpacity, transform: [{ translateY: taglineTranslateY }] }]}>
           <View style={styles.dividerLine} />
           <Text style={styles.tagline}>
             Ödemeleriniz güvende,{'\n'}deneyim sizinle.
           </Text>
-        </View>
+        </Animated.View>
       </View>
 
       {/* Alt buton */}
-      <View style={styles.footer}>
+      <Animated.View style={[styles.footer, { opacity: footerOpacity }]}>
         <Button
           title="Başlayın"
           onPress={handlePress}
@@ -50,7 +78,7 @@ export function SplashScreen({ navigation }) {
           textStyle={styles.btnText}
         />
         <Text style={styles.version}>kiram.com</Text>
-      </View>
+      </Animated.View>
     </View>
   );
 }

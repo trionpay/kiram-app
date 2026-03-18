@@ -8,10 +8,16 @@ const Stack = createNativeStackNavigator();
 
 export function RootNavigator() {
   return (
-    <Stack.Navigator screenOptions={{ headerShown: false }}>
+    <Stack.Navigator
+      screenOptions={{
+        headerShown: false,
+        animation: 'fade',
+        animationDuration: 250,
+      }}
+    >
       <Stack.Screen name="Auth" component={AuthNavigator} />
       <Stack.Screen name="Main" component={MainNavigator} />
-      <Stack.Screen name="AutoPayment" component={AutoPaymentScreen} />
+      <Stack.Screen name="AutoPayment" component={AutoPaymentScreen} options={{ animation: 'slide_from_bottom' }} />
     </Stack.Navigator>
   );
 }

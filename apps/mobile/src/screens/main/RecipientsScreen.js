@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View, Text, StyleSheet, TouchableOpacity, ScrollView,
   TextInput, Modal, KeyboardAvoidingView, Platform,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Button } from '../../components/Button';
+import { SkeletonRecipientRow } from '../../components/Skeleton';
 import { colors, typography, spacing, screenPaddingHorizontal } from '../../theme';
 
 const INITIAL_RECIPIENTS = [
@@ -25,6 +26,12 @@ export function RecipientsScreen({ navigation }) {
   const [editTarget, setEditTarget] = useState(null);
   const [form, setForm] = useState({ name: '', iban: '', nickname: '' });
   const [search, setSearch] = useState('');
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setIsLoading(false), 900);
+    return () => clearTimeout(timer);
+  }, []);
 
   const filtered = recipients.filter(r =>
     r.nickname.toLowerCase().includes(search.toLowerCase()) ||
@@ -92,42 +99,48 @@ export function RecipientsScreen({ navigation }) {
         contentContainerStyle={styles.list}
         showsVerticalScrollIndicator={false}
       >
-        {filtered.length === 0 && (
+        {isLoading ? (
+          <>
+            <SkeletonRecipientRow />
+            <SkeletonRecipientRow />
+            <SkeletonRecipientRow />
+          </>
+        ) : filtered.length === 0 ? (
           <View style={styles.empty}>
             <Text style={styles.emptyIcon}>📋</Text>
             <Text style={styles.emptyTitle}>Alıcı bulunamadı</Text>
             <Text style={styles.emptySubtitle}>Yeni alıcı eklemek için "+ Ekle" butonunu kullanın.</Text>
           </View>
+        ) : (
+          filtered.map(r => (
+            <View key={r.id} style={styles.card}>
+              <View style={styles.cardLeft}>
+                <View style={styles.avatar}>
+                  <Text style={styles.avatarText}>{r.nickname[0].toUpperCase()}</Text>
+                </View>
+                <View style={styles.info}>
+                  <Text style={styles.nickname}>{r.nickname}</Text>
+                  <Text style={styles.name}>{r.name}</Text>
+                  <Text style={styles.iban}>{r.iban}</Text>
+                </View>
+              </View>
+              <View style={styles.cardActions}>
+                <TouchableOpacity
+                  style={styles.payBtn}
+                  onPress={() => navigation.navigate('Payment', { screen: 'PaymentAmount' })}
+                >
+                  <Text style={styles.payBtnText}>Öde</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.editBtn} onPress={() => openEdit(r)}>
+                  <Text style={styles.editBtnText}>✎</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.deleteBtn} onPress={() => handleDelete(r.id)}>
+                  <Text style={styles.deleteBtnText}>✕</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          ))
         )}
-
-        {filtered.map(r => (
-          <View key={r.id} style={styles.card}>
-            <View style={styles.cardLeft}>
-              <View style={styles.avatar}>
-                <Text style={styles.avatarText}>{r.nickname[0].toUpperCase()}</Text>
-              </View>
-              <View style={styles.info}>
-                <Text style={styles.nickname}>{r.nickname}</Text>
-                <Text style={styles.name}>{r.name}</Text>
-                <Text style={styles.iban}>{r.iban}</Text>
-              </View>
-            </View>
-            <View style={styles.cardActions}>
-              <TouchableOpacity
-                style={styles.payBtn}
-                onPress={() => navigation.navigate('Payment', { screen: 'PaymentAmount' })}
-              >
-                <Text style={styles.payBtnText}>Öde</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.editBtn} onPress={() => openEdit(r)}>
-                <Text style={styles.editBtnText}>✎</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.deleteBtn} onPress={() => handleDelete(r.id)}>
-                <Text style={styles.deleteBtnText}>✕</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-        ))}
       </ScrollView>
 
       {/* Ekle / Düzenle modal */}

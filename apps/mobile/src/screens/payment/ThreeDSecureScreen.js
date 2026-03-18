@@ -77,9 +77,15 @@ export function ThreeDSecureScreen({ route, navigation }) {
           <View style={styles.testRow}>
             <TouchableOpacity
               style={styles.testFail}
-              onPress={() => navigation.replace('PaymentResult', { success: false, amount, fee, total, recipient, description })}
+              onPress={() => navigation.replace('PaymentResult', { success: false, failReason: 'rejected', amount, fee, total, recipient, description })}
             >
               <Text style={styles.testFailText}>Ödemeyi Reddet (Test)</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[styles.testFail, { borderColor: colors.warning, marginTop: spacing.xs }]}
+              onPress={() => navigation.replace('PaymentResult', { success: false, failReason: 'insufficient_funds', amount, fee, total, recipient, description })}
+            >
+              <Text style={[styles.testFailText, { color: colors.warning }]}>Bakiye Yetersiz (Test)</Text>
             </TouchableOpacity>
           </View>
         )}

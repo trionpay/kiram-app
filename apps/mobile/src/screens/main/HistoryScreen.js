@@ -1,9 +1,10 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import {
   View, Text, StyleSheet, TouchableOpacity, ScrollView,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { TransactionDetailModal } from '../../components/TransactionDetailModal';
+import { SkeletonTransactionRow } from '../../components/Skeleton';
 import { colors, typography, spacing, screenPaddingHorizontal } from '../../theme';
 
 export const MOCK_HISTORY = [
@@ -23,6 +24,12 @@ export const MOCK_HISTORY = [
     id: 'TRP10293401', name: 'Kira Ödemesi', iban: 'TR62 0013 4000 0147 4012 8100 09',
     amount: 12000, fee: 180, total: 12180, status: 'failed',
     date: '14 Mart 2026', time: '18:44', description: 'Mart 2026 kirası',
+    month: 3,
+  },
+  {
+    id: 'TRP10293310', name: 'Doğalgaz Faturası', iban: 'TR33 0006 1005 1978 6457 8413 26',
+    amount: 380, fee: 5.7, total: 385.7, status: 'pending',
+    date: '17 Mart 2026', time: '17:05', description: '',
     month: 3,
   },
   {
@@ -57,7 +64,7 @@ export const MOCK_HISTORY = [
   },
 ];
 
-const STATUS_FILTERS = ['Tümü', 'Başarılı', 'Başarısız'];
+const STATUS_FILTERS = ['Tümü', 'Başarılı', 'Başarısız', 'Beklemede'];
 const DATE_FILTERS = ['Tümü', 'Bu Ay', 'Geçen Ay'];
 
 const fmt = (n) => (n || 0).toFixed(2).replace('.', ',');
@@ -89,13 +96,20 @@ export function HistoryScreen() {
   const [statusFilter, setStatusFilter] = useState('Tümü');
   const [dateFilter, setDateFilter] = useState('Tümü');
   const [selected, setSelected] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setIsLoading(false), 1000);
+    return () => clearTimeout(timer);
+  }, []);
 
   const filtered = useMemo(() => {
     return MOCK_HISTORY.filter(tx => {
       const statusOk =
         statusFilter === 'Tümü' ||
         (statusFilter === 'Başarılı' && tx.status === 'success') ||
-        (statusFilter === 'Başarısız' && tx.status === 'failed');
+        (statusFilter === 'Başarısız' && tx.status === 'failed') ||
+        (statusFilter === 'Beklemede' && tx.status === 'pending');
       const dateOk =
         dateFilter === 'Tümü' ||
         (dateFilter === 'Bu Ay' && tx.month === 3) ||
@@ -125,19 +139,21 @@ export function HistoryScreen() {
           ))}
           {/* Durum */}
           {STATUS_FILTERS.filter(f => f !== 'Tümü').map(f => {
-            const isSuccess = f === 'Başarılı';
             const isActive = statusFilter === f;
+            const chipStyle = isActive
+              ? f === 'Başarılı' ? styles.chipSuccess
+              : f === 'Başarısız' ? styles.chipFail
+              : styles.chipPending
+              : null;
+            const prefix = f === 'Başarılı' ? '✓ ' : f === 'Başarısız' ? '✕ ' : '⏳ ';
             return (
               <TouchableOpacity
                 key={'s-' + f}
-                style={[
-                  styles.chip,
-                  isActive && (isSuccess ? styles.chipSuccess : styles.chipFail),
-                ]}
+                style={[styles.chip, chipStyle]}
                 onPress={() => setStatusFilter(isActive ? 'Tümü' : f)}
               >
                 <Text style={[styles.chipText, isActive && styles.chipTextActive]}>
-                  {isSuccess ? '✓ ' : '✕ '}{f}
+                  {prefix}{f}
                 </Text>
               </TouchableOpacity>
             );
@@ -150,45 +166,68 @@ export function HistoryScreen() {
 
       {/* Liste */}
       <ScrollView contentContainerStyle={styles.list} showsVerticalScrollIndicator={false}>
-        {filtered.length === 0 && (
+        {isLoading ? (
+          <>
+            <SkeletonTransactionRow />
+            <SkeletonTransactionRow />
+            <SkeletonTransactionRow />
+            <SkeletonTransactionRow />
+            <SkeletonTransactionRow />
+          </>
+        ) : filtered.length === 0 ? (
           <View style={styles.empty}>
             <Text style={styles.emptyIcon}>🗂</Text>
             <Text style={styles.emptyTitle}>İşlem bulunamadı</Text>
             <Text style={styles.emptySub}>Farklı bir filtre deneyin.</Text>
           </View>
-        )}
-
-        {filtered.map(tx => (
-          <TouchableOpacity
-            key={tx.id}
-            style={styles.txRow}
-            onPress={() => setSelected(tx)}
-            activeOpacity={0.7}
-          >
-            <View style={[
-              styles.txIcon,
-              { backgroundColor: tx.status === 'success' ? '#EFF6FF' : '#FEF2F2' },
-            ]}>
-              <Text style={styles.txIconText}>{tx.status === 'success' ? '↗' : '✕'}</Text>
-            </View>
-
-            <View style={styles.txMid}>
-              <Text style={styles.txName}>{tx.name}</Text>
-              {tx.description ? <Text style={styles.txDesc}>{tx.description}</Text> : null}
-              <Text style={styles.txDate}>{tx.date} · {tx.time}</Text>
-            </View>
-
-            <View style={styles.txRight}>
-              <Text style={[
-                styles.txAmount,
-                tx.status === 'failed' && { color: colors.error },
+        ) : (
+          filtered.map(tx => (
+            <TouchableOpacity
+              key={tx.id}
+              style={styles.txRow}
+              onPress={() => setSelected(tx)}
+              activeOpacity={0.7}
+            >
+              <View style={[
+                styles.txIcon,
+                {
+                  backgroundColor:
+                    tx.status === 'success' ? '#EFF6FF'
+                    : tx.status === 'pending' ? '#FFFBEB'
+                    : '#FEF2F2',
+                },
               ]}>
-                ₺{fmt(tx.amount)}
-              </Text>
-              <Text style={styles.txChevron}>›</Text>
-            </View>
-          </TouchableOpacity>
-        ))}
+                <Text style={styles.txIconText}>
+                  {tx.status === 'success' ? '↗' : tx.status === 'pending' ? '⏳' : '✕'}
+                </Text>
+              </View>
+
+              <View style={styles.txMid}>
+                <View style={styles.txNameRow}>
+                  <Text style={styles.txName}>{tx.name}</Text>
+                  {tx.status === 'pending' && (
+                    <View style={styles.pendingBadge}>
+                      <Text style={styles.pendingBadgeText}>Beklemede</Text>
+                    </View>
+                  )}
+                </View>
+                {tx.description ? <Text style={styles.txDesc}>{tx.description}</Text> : null}
+                <Text style={styles.txDate}>{tx.date} · {tx.time}</Text>
+              </View>
+
+              <View style={styles.txRight}>
+                <Text style={[
+                  styles.txAmount,
+                  tx.status === 'failed' && { color: colors.error },
+                  tx.status === 'pending' && { color: colors.warning },
+                ]}>
+                  ₺{fmt(tx.amount)}
+                </Text>
+                <Text style={styles.txChevron}>›</Text>
+              </View>
+            </TouchableOpacity>
+          ))
+        )}
       </ScrollView>
 
       <TransactionDetailModal
@@ -229,6 +268,7 @@ const styles = StyleSheet.create({
   chipActive: { backgroundColor: colors.primary, borderColor: colors.primary },
   chipSuccess: { backgroundColor: colors.success, borderColor: colors.success },
   chipFail: { backgroundColor: colors.error, borderColor: colors.error },
+  chipPending: { backgroundColor: colors.warning, borderColor: colors.warning },
   chipText: { ...typography.label, color: colors.textSecondary, fontSize: 13 },
   chipTextActive: { color: colors.textInverse },
 
@@ -264,7 +304,15 @@ const styles = StyleSheet.create({
   txIcon: { width: 42, height: 42, borderRadius: 13, alignItems: 'center', justifyContent: 'center', flexShrink: 0 },
   txIconText: { fontSize: 16 },
   txMid: { flex: 1 },
+  txNameRow: { flexDirection: 'row', alignItems: 'center', gap: spacing.xs, flexWrap: 'wrap' },
   txName: { ...typography.label, color: colors.textPrimary },
+  pendingBadge: {
+    backgroundColor: '#FEF9C3',
+    borderRadius: 6,
+    paddingHorizontal: 6,
+    paddingVertical: 2,
+  },
+  pendingBadgeText: { ...typography.caption, color: '#92400E', fontSize: 10 },
   txDesc: { ...typography.caption, color: colors.textSecondary, marginTop: 1 },
   txDate: { ...typography.caption, color: colors.textTertiary, marginTop: 2 },
   txRight: { flexDirection: 'row', alignItems: 'center', gap: spacing.xs },
