@@ -82,7 +82,7 @@ export function PaymentAmountScreen({ navigation }) {
             <View style={styles.amountRow}>
               <Text style={styles.currency}>₺</Text>
               <TextInput
-                style={styles.amountInput}
+                style={[styles.amountInput, { fontSize: amount.length > 7 ? 28 : amount.length > 5 ? 34 : 42 }]}
                 value={amount}
                 onChangeText={formatAmount}
                 keyboardType="decimal-pad"

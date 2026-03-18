@@ -11,16 +11,17 @@ import { colors, typography, spacing, screenPaddingHorizontal } from '../../them
  * Fatura kategorileri ve mock kurum listesi.
  * API bağlandığında bu liste dinamik olarak API'den çekilecek.
  */
+// color: şirket rengi, initials: logo baş harfleri
 const CATEGORIES = [
   {
     id: 'electricity',
     icon: '⚡',
     label: 'Elektrik',
     companies: [
-      { id: 'e1', name: 'AYEDAŞ', logo: '⚡' },
-      { id: 'e2', name: 'BEDAŞ', logo: '⚡' },
-      { id: 'e3', name: 'Toroslar EDAŞ', logo: '⚡' },
-      { id: 'e4', name: 'Başkent EDAŞ', logo: '⚡' },
+      { id: 'e1', name: 'AYEDAŞ', initials: 'AY', color: '#F59E0B' },
+      { id: 'e2', name: 'BEDAŞ', initials: 'BE', color: '#EF4444' },
+      { id: 'e3', name: 'Toroslar EDAŞ', initials: 'TE', color: '#10B981' },
+      { id: 'e4', name: 'Başkent EDAŞ', initials: 'BŞ', color: '#6366F1' },
     ],
   },
   {
@@ -28,9 +29,9 @@ const CATEGORIES = [
     icon: '💧',
     label: 'Su',
     companies: [
-      { id: 'w1', name: 'İSKİ', logo: '💧' },
-      { id: 'w2', name: 'ASKİ', logo: '💧' },
-      { id: 'w3', name: 'İZSU', logo: '💧' },
+      { id: 'w1', name: 'İSKİ', initials: 'İS', color: '#0EA5E9' },
+      { id: 'w2', name: 'ASKİ', initials: 'AS', color: '#06B6D4' },
+      { id: 'w3', name: 'İZSU', initials: 'İZ', color: '#3B82F6' },
     ],
   },
   {
@@ -38,20 +39,20 @@ const CATEGORIES = [
     icon: '🔥',
     label: 'Doğalgaz',
     companies: [
-      { id: 'g1', name: 'İGDAŞ', logo: '🔥' },
-      { id: 'g2', name: 'Bursagaz', logo: '🔥' },
-      { id: 'g3', name: 'Akenerji Doğalgaz', logo: '🔥' },
+      { id: 'g1', name: 'İGDAŞ', initials: 'İG', color: '#F97316' },
+      { id: 'g2', name: 'Bursagaz', initials: 'BG', color: '#EF4444' },
+      { id: 'g3', name: 'Akenerji', initials: 'AK', color: '#8B5CF6' },
     ],
   },
   {
     id: 'internet',
     icon: '📶',
-    label: 'İnternet / Telekom',
+    label: 'Telekom',
     companies: [
-      { id: 'i1', name: 'Türk Telekom', logo: '📶' },
-      { id: 'i2', name: 'Vodafone', logo: '📶' },
-      { id: 'i3', name: 'Turkcell Superonline', logo: '📶' },
-      { id: 'i4', name: 'Turkcell', logo: '📶' },
+      { id: 'i1', name: 'Türk Telekom', initials: 'TT', color: '#3B82F6' },
+      { id: 'i2', name: 'Vodafone', initials: 'VF', color: '#EF4444' },
+      { id: 'i3', name: 'Turkcell SOS', initials: 'SO', color: '#F59E0B' },
+      { id: 'i4', name: 'Turkcell', initials: 'TC', color: '#F59E0B' },
     ],
   },
 ];
@@ -169,8 +170,8 @@ export function BillPaymentScreen({ navigation }) {
                   onPress={() => { setSelectedCompany(co.id); setStep('subscriber'); }}
                   activeOpacity={0.7}
                 >
-                  <View style={styles.companyLogo}>
-                    <Text style={{ fontSize: 20 }}>{co.logo}</Text>
+                  <View style={[styles.companyLogo, { backgroundColor: co.color }]}>
+                    <Text style={styles.companyLogoText}>{co.initials}</Text>
                   </View>
                   <Text style={[styles.companyName, selectedCompany === co.id && { color: colors.accent }]}>
                     {co.name}
@@ -330,7 +331,7 @@ const styles = StyleSheet.create({
     borderColor: colors.primary,
   },
   categoryIcon: { fontSize: 32 },
-  categoryLabel: { ...typography.label, color: colors.textPrimary },
+  categoryLabel: { ...typography.label, color: colors.textPrimary, textAlign: 'center', fontSize: 13 },
 
   /* Kurum listesi */
   companyList: { gap: spacing.sm },
@@ -347,8 +348,14 @@ const styles = StyleSheet.create({
   companyRowActive: { borderColor: colors.accent, backgroundColor: '#EFF6FF' },
   companyLogo: {
     width: 44, height: 44, borderRadius: 12,
-    backgroundColor: colors.surface,
     alignItems: 'center', justifyContent: 'center',
+    flexShrink: 0,
+  },
+  companyLogoText: {
+    color: '#fff',
+    fontFamily: 'DMSans_700Bold',
+    fontSize: 14,
+    letterSpacing: 0.5,
   },
   companyName: { ...typography.label, color: colors.textPrimary, flex: 1 },
   companyArrow: { fontSize: 20, color: colors.textTertiary },
@@ -425,7 +432,7 @@ const styles = StyleSheet.create({
 
   footer: {
     paddingHorizontal: screenPaddingHorizontal,
-    paddingBottom: Platform.OS === 'ios' ? spacing.lg : 100,
-    paddingTop: spacing.md,
+    paddingBottom: 12,
+    paddingTop: spacing.sm,
   },
 });

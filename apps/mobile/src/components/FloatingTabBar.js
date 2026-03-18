@@ -21,6 +21,11 @@ export function FloatingTabBar({ state, descriptors, navigation }) {
   const insets = useSafeAreaInsets();
   const bottomPad = Math.max(insets.bottom, 12);
 
+  // Ödeme/nested stack içindeyse navbar'ı gizle
+  const activeRoute = state.routes[state.index];
+  const nestedState = activeRoute.state;
+  if (nestedState && nestedState.index > 0) return null;
+
   return (
     <View style={[styles.wrapper, { paddingBottom: bottomPad }]}>
       <View style={styles.bar}>
