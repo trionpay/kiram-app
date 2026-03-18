@@ -131,7 +131,8 @@ export function AutoPaymentScreen({ navigation }) {
 
       {/* Yeni talimat modal */}
       <Modal visible={showForm} animationType="slide" transparent>
-        <View style={styles.modalOverlay}>
+        <View style={styles.modalContainer}>
+          <TouchableOpacity style={styles.modalOverlay} activeOpacity={1} onPress={() => setShowForm(false)} />
           <View style={styles.modalSheet}>
             <View style={styles.modalHandle} />
             <Text style={styles.modalTitle}>Yeni Otomatik Çekim</Text>
@@ -220,6 +221,7 @@ export function AutoPaymentScreen({ navigation }) {
             </View>
           </View>
         </View>
+        </View>
       </Modal>
     </SafeAreaView>
   );
@@ -264,7 +266,8 @@ const styles = StyleSheet.create({
   apiNoteText: { ...typography.caption, color: colors.textTertiary, lineHeight: 18 },
 
   /* Modal */
-  modalOverlay: { flex: 1, backgroundColor: 'rgba(0,0,0,0.4)', justifyContent: 'flex-end' },
+  modalContainer: { flex: 1, justifyContent: 'flex-end' },
+  modalOverlay: { ...StyleSheet.absoluteFillObject, backgroundColor: 'rgba(0,0,0,0.4)' },
   modalSheet: {
     backgroundColor: colors.backgroundElevated, borderTopLeftRadius: 28, borderTopRightRadius: 28,
     padding: screenPaddingHorizontal, paddingBottom: 44, maxHeight: '90%',
