@@ -4,6 +4,7 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Button } from '../../components/Button';
+import { LegalModal } from '../../components/LegalModal';
 import { colors, typography, spacing, screenPaddingHorizontal } from '../../theme';
 
 const PURPOSE_LABELS = {
@@ -17,6 +18,7 @@ export function KYCSummaryScreen({ navigation, route }) {
   const { firstName, lastName, city, tckn, birthDate, purposes } = route.params;
   const [loading, setLoading] = useState(false);
   const [agreed, setAgreed] = useState(false);
+  const [legalDoc, setLegalDoc] = useState(null);
 
   const maskedTckn = tckn.slice(0, 3) + '*'.repeat(5) + tckn.slice(8);
 
@@ -69,15 +71,17 @@ export function KYCSummaryScreen({ navigation, route }) {
             {agreed && <Text style={styles.checkmark}>✓</Text>}
           </View>
           <Text style={styles.agreeText}>
-            <Text style={styles.agreeLink}>Kullanıcı Sözleşmesi</Text>
+            <Text style={styles.agreeLink} onPress={() => setLegalDoc('terms')}>Kullanıcı Sözleşmesi</Text>
             {', '}
-            <Text style={styles.agreeLink}>KVKK Aydınlatma Metni</Text>
+            <Text style={styles.agreeLink} onPress={() => setLegalDoc('kvkk')}>KVKK Aydınlatma Metni</Text>
             {' ve '}
-            <Text style={styles.agreeLink}>Gizlilik Politikası</Text>
+            <Text style={styles.agreeLink} onPress={() => setLegalDoc('privacy')}>Gizlilik Politikası</Text>
             {"'nı okudum, kabul ediyorum."}
           </Text>
         </TouchableOpacity>
       </ScrollView>
+
+      {legalDoc && <LegalModal docKey={legalDoc} onClose={() => setLegalDoc(null)} />}
 
       <View style={styles.footer}>
         {loading ? (
