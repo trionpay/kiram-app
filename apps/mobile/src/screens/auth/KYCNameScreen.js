@@ -169,7 +169,7 @@ const styles = StyleSheet.create({
   footer: {
     paddingHorizontal: screenPaddingHorizontal,
     paddingTop: spacing.sm,
-    paddingBottom: spacing.md,
+    paddingBottom: 0,
   },
 
   /* Modal */

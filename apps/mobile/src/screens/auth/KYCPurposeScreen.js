@@ -138,7 +138,7 @@ const styles = StyleSheet.create({
   checkboxActive: { backgroundColor: colors.accent, borderColor: colors.accent },
   checkmark: { color: colors.textInverse, fontSize: 13, fontWeight: '700' },
 
-  footer: { paddingHorizontal: screenPaddingHorizontal, paddingBottom: spacing.md, paddingTop: spacing.sm, gap: spacing.sm },
+  footer: { paddingHorizontal: screenPaddingHorizontal, paddingBottom: 0, paddingTop: spacing.sm, gap: spacing.sm },
   backBtn: { alignItems: 'center', paddingVertical: spacing.sm },
   backText: { ...typography.label, color: colors.textSecondary },
 });

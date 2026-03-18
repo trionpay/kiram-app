@@ -132,7 +132,7 @@ const styles = StyleSheet.create({
   agreeText: { ...typography.bodySmall, color: colors.textSecondary, flex: 1, lineHeight: 20 },
   agreeLink: { color: colors.accent, fontFamily: 'DMSans_600SemiBold' },
 
-  footer: { paddingHorizontal: screenPaddingHorizontal, paddingBottom: spacing.md, paddingTop: spacing.sm, gap: spacing.sm },
+  footer: { paddingHorizontal: screenPaddingHorizontal, paddingBottom: 0, paddingTop: spacing.sm, gap: spacing.sm },
   loadingRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: spacing.sm, height: 52 },
   loadingText: { ...typography.body, color: colors.textSecondary },
   backBtn: { alignItems: 'center', paddingVertical: spacing.sm },
