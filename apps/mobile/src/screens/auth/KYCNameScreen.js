@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import {
   View, Text, TextInput, StyleSheet, TouchableOpacity,
-  KeyboardAvoidingView, Platform, ScrollView,
+  KeyboardAvoidingView, Platform, ScrollView, Modal,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Button } from '../../components/Button';
@@ -14,27 +14,26 @@ const CITIES = [
   'Trabzon', 'Eskişehir', 'Denizli', 'Sakarya', 'Diğer',
 ];
 
-export function KYCNameScreen({ navigation, route }) {
+export function KYCNameScreen({ navigation }) {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [city, setCity] = useState('');
-  const [showCities, setShowCities] = useState(false);
+  const [cityModalVisible, setCityModalVisible] = useState(false);
 
   const isValid = firstName.trim().length > 1 && lastName.trim().length > 1 && city.length > 0;
 
-  const handleNext = () => {
-    navigation.navigate('KYCIdentity', { firstName, lastName, city });
-  };
-
   return (
-    <SafeAreaView style={styles.safe} edges={['top']}>
-      <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+    <SafeAreaView style={styles.safe} edges={['top', 'bottom']}>
+      <KeyboardAvoidingView
+        style={styles.flex}
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        keyboardVerticalOffset={0}
+      >
         <ScrollView
           contentContainerStyle={styles.scroll}
           keyboardShouldPersistTaps="handled"
           showsVerticalScrollIndicator={false}
         >
-          {/* İlerleme */}
           <View style={styles.progressRow}>
             {[1, 2, 3, 4].map(i => (
               <View key={i} style={[styles.progressBar, i <= 1 && styles.progressBarActive]} />
@@ -47,7 +46,6 @@ export function KYCNameScreen({ navigation, route }) {
             Kimlik bilgileriniz güvenli şekilde saklanır ve üçüncü taraflarla paylaşılmaz.
           </Text>
 
-          {/* Ad */}
           <View style={styles.field}>
             <Text style={styles.fieldLabel}>Ad</Text>
             <TextInput
@@ -58,10 +56,10 @@ export function KYCNameScreen({ navigation, route }) {
               placeholderTextColor={colors.textTertiary}
               autoCapitalize="words"
               autoFocus
+              returnKeyType="next"
             />
           </View>
 
-          {/* Soyad */}
           <View style={styles.field}>
             <Text style={styles.fieldLabel}>Soyad</Text>
             <TextInput
@@ -71,53 +69,69 @@ export function KYCNameScreen({ navigation, route }) {
               placeholder="Soyadınız"
               placeholderTextColor={colors.textTertiary}
               autoCapitalize="words"
+              returnKeyType="done"
             />
           </View>
 
-          {/* Şehir */}
           <View style={styles.field}>
             <Text style={styles.fieldLabel}>Şehir</Text>
             <TouchableOpacity
-              style={styles.citySelector}
-              onPress={() => setShowCities(!showCities)}
+              style={[styles.citySelector, city && styles.citySelectorFilled]}
+              onPress={() => setCityModalVisible(true)}
             >
               <Text style={[styles.citySelectorText, !city && { color: colors.textTertiary }]}>
                 {city || 'Yaşadığınız şehri seçin'}
               </Text>
-              <Text style={styles.chevron}>{showCities ? '▲' : '▼'}</Text>
+              <Text style={styles.chevron}>▼</Text>
             </TouchableOpacity>
-
-            {showCities && (
-              <View style={styles.cityList}>
-                <ScrollView nestedScrollEnabled showsVerticalScrollIndicator={false} style={{ maxHeight: 220 }}>
-                  {CITIES.map(c => (
-                    <TouchableOpacity
-                      key={c}
-                      style={[styles.cityItem, city === c && styles.cityItemActive]}
-                      onPress={() => { setCity(c); setShowCities(false); }}
-                    >
-                      <Text style={[styles.cityItemText, city === c && styles.cityItemTextActive]}>
-                        {c}
-                      </Text>
-                    </TouchableOpacity>
-                  ))}
-                </ScrollView>
-              </View>
-            )}
           </View>
         </ScrollView>
 
         <View style={styles.footer}>
-          <Button title="Devam" onPress={handleNext} disabled={!isValid} />
+          <Button title="Devam" onPress={() => navigation.navigate('KYCIdentity', { firstName, lastName, city })} disabled={!isValid} />
         </View>
       </KeyboardAvoidingView>
+
+      {/* Şehir seçici modal — klavye/buton sorunlarından bağımsız */}
+      <Modal visible={cityModalVisible} animationType="slide" transparent>
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalSheet}>
+            <View style={styles.modalHandle} />
+            <View style={styles.modalHeader}>
+              <Text style={styles.modalTitle}>Şehir Seçin</Text>
+              <TouchableOpacity onPress={() => setCityModalVisible(false)}>
+                <Text style={styles.modalClose}>✕</Text>
+              </TouchableOpacity>
+            </View>
+            <ScrollView showsVerticalScrollIndicator={false} style={styles.cityScroll}>
+              {CITIES.map(c => (
+                <TouchableOpacity
+                  key={c}
+                  style={[styles.cityItem, city === c && styles.cityItemActive]}
+                  onPress={() => { setCity(c); setCityModalVisible(false); }}
+                >
+                  <Text style={[styles.cityItemText, city === c && styles.cityItemTextActive]}>
+                    {c}
+                  </Text>
+                  {city === c && <Text style={styles.cityCheck}>✓</Text>}
+                </TouchableOpacity>
+              ))}
+            </ScrollView>
+          </View>
+        </View>
+      </Modal>
     </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
   safe: { flex: 1, backgroundColor: colors.background },
-  scroll: { paddingHorizontal: screenPaddingHorizontal, paddingTop: spacing.lg, paddingBottom: spacing.xl },
+  flex: { flex: 1 },
+  scroll: {
+    paddingHorizontal: screenPaddingHorizontal,
+    paddingTop: spacing.lg,
+    paddingBottom: spacing.md,
+  },
 
   progressRow: { flexDirection: 'row', gap: spacing.xs, marginBottom: spacing.xs },
   progressBar: { flex: 1, height: 3, borderRadius: 2, backgroundColor: colors.border },
@@ -138,7 +152,6 @@ const styles = StyleSheet.create({
     ...typography.bodyLarge,
     color: colors.textPrimary,
   },
-
   citySelector: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -149,21 +162,52 @@ const styles = StyleSheet.create({
     borderRadius: 14,
     padding: spacing.md,
   },
+  citySelectorFilled: { borderColor: colors.accent },
   citySelectorText: { ...typography.bodyLarge, color: colors.textPrimary },
   chevron: { color: colors.textTertiary, fontSize: 12 },
 
-  cityList: {
-    backgroundColor: colors.backgroundElevated,
-    borderWidth: 1,
-    borderColor: colors.border,
-    borderRadius: 14,
-    marginTop: spacing.xs,
-    overflow: 'hidden',
+  footer: {
+    paddingHorizontal: screenPaddingHorizontal,
+    paddingTop: spacing.sm,
+    paddingBottom: spacing.md,
   },
-  cityItem: { padding: spacing.md, borderBottomWidth: 1, borderBottomColor: colors.borderLight },
-  cityItemActive: { backgroundColor: '#EFF6FF' },
+
+  /* Modal */
+  modalOverlay: { flex: 1, backgroundColor: 'rgba(0,0,0,0.4)', justifyContent: 'flex-end' },
+  modalSheet: {
+    backgroundColor: colors.backgroundElevated,
+    borderTopLeftRadius: 24,
+    borderTopRightRadius: 24,
+    paddingHorizontal: screenPaddingHorizontal,
+    paddingBottom: 40,
+    maxHeight: '75%',
+  },
+  modalHandle: {
+    width: 40, height: 4, borderRadius: 2,
+    backgroundColor: colors.border,
+    alignSelf: 'center',
+    marginTop: spacing.md,
+    marginBottom: spacing.lg,
+  },
+  modalHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: spacing.md,
+  },
+  modalTitle: { ...typography.h3, color: colors.textPrimary },
+  modalClose: { fontSize: 20, color: colors.textSecondary, padding: spacing.xs },
+  cityScroll: { flexGrow: 0 },
+  cityItem: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingVertical: spacing.md,
+    borderBottomWidth: 1,
+    borderBottomColor: colors.borderLight,
+  },
+  cityItemActive: {},
   cityItemText: { ...typography.body, color: colors.textPrimary },
   cityItemTextActive: { color: colors.accent, fontFamily: 'DMSans_600SemiBold' },
-
-  footer: { paddingHorizontal: screenPaddingHorizontal, paddingBottom: 100, paddingTop: spacing.md },
+  cityCheck: { color: colors.accent, fontSize: 16, fontWeight: '700' },
 });

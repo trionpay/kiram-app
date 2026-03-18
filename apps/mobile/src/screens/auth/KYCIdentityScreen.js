@@ -66,7 +66,7 @@ export function KYCIdentityScreen({ navigation, route }) {
               style={[styles.input, tckn.length === 11 && (tcknValid ? styles.inputValid : styles.inputError)]}
               value={tckn}
               onChangeText={t => setTckn(t.replace(/\D/g, '').slice(0, 11))}
-              placeholder="00000000000"
+              placeholder="T.C. Kimlik No"
               placeholderTextColor={colors.textTertiary}
               keyboardType="number-pad"
               maxLength={11}
@@ -150,7 +150,7 @@ const styles = StyleSheet.create({
   },
   noticeText: { ...typography.bodySmall, color: colors.textSecondary, lineHeight: 20 },
 
-  footer: { paddingHorizontal: screenPaddingHorizontal, paddingBottom: 100, paddingTop: spacing.md, gap: spacing.sm },
+  footer: { paddingHorizontal: screenPaddingHorizontal, paddingBottom: spacing.md, paddingTop: spacing.sm, gap: spacing.sm },
   backBtn: { alignItems: 'center', paddingVertical: spacing.sm },
   backText: { ...typography.label, color: colors.textSecondary },
 });

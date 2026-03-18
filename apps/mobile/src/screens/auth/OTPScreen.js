@@ -94,5 +94,5 @@ const styles = StyleSheet.create({
   resendWait: { ...typography.body, color: colors.textTertiary },
   timer: { color: colors.accent, fontWeight: '600' },
   resendBtn: { ...typography.label, color: colors.accent },
-  footer: { paddingHorizontal: screenPaddingHorizontal, paddingBottom: spacing.xxl, paddingTop: spacing.md },
+  footer: { paddingHorizontal: screenPaddingHorizontal, paddingBottom: spacing.md, paddingTop: spacing.sm },
 });

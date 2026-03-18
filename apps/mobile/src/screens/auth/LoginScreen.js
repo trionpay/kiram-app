@@ -68,5 +68,5 @@ const styles = StyleSheet.create({
   divider: { width: 1.5, height: 22, backgroundColor: colors.border, marginRight: spacing.sm },
   input: { flex: 1, ...typography.bodyLarge, color: colors.textPrimary, letterSpacing: 1 },
   hint: { ...typography.bodySmall, color: colors.textTertiary, marginTop: spacing.md },
-  footer: { paddingHorizontal: screenPaddingHorizontal, paddingBottom: spacing.xxl, paddingTop: spacing.md },
+  footer: { paddingHorizontal: screenPaddingHorizontal, paddingBottom: spacing.md, paddingTop: spacing.sm },
 });
