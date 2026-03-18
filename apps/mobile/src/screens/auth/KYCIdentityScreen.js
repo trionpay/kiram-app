@@ -150,7 +150,7 @@ const styles = StyleSheet.create({
   },
   noticeText: { ...typography.bodySmall, color: colors.textSecondary, lineHeight: 20 },
 
-  footer: { paddingHorizontal: screenPaddingHorizontal, paddingBottom: 0, paddingTop: spacing.sm, gap: spacing.sm },
+  footer: { paddingHorizontal: screenPaddingHorizontal, paddingBottom: 12, paddingTop: spacing.sm, gap: spacing.sm },
   backBtn: { alignItems: 'center', paddingVertical: spacing.sm },
   backText: { ...typography.label, color: colors.textSecondary },
 });
