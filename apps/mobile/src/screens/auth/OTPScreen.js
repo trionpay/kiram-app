@@ -27,7 +27,10 @@ export function OTPScreen({ route, navigation }) {
 
   const verify = (c = code) => {
     setLoading(true);
-    setTimeout(() => { setLoading(false); navigation.replace('Main'); }, 1000);
+    // Mock: API bağlandığında backend yeni/mevcut kullanıcı kontrolü yapacak.
+    // Şimdilik her doğrulama KYC akışına yönlendiriyor (yeni kullanıcı senaryosu).
+    // Mevcut kullanıcı için: navigation.replace('Main')
+    setTimeout(() => { setLoading(false); navigation.replace('KYCName'); }, 1000);
   };
 
   const boxes = Array.from({ length: CODE_LENGTH }, (_, i) => code[i] ?? '');
