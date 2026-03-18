@@ -4,6 +4,7 @@ import {
   TextInput, Modal, Alert, KeyboardAvoidingView, Platform,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { CommonActions } from '@react-navigation/native';
 import { LegalModal } from '../../components/LegalModal';
 import { colors, typography, spacing, screenPaddingHorizontal } from '../../theme';
 
@@ -46,14 +47,17 @@ export function ProfileScreen({ navigation }) {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [showDeleteModal, setShowDeleteModal] = useState(false);
 
-  const handleLogout = () => {
-    navigation.getParent()?.getParent()?.replace('Auth');
+  const resetToAuth = () => {
+    navigation.dispatch(
+      CommonActions.reset({ index: 0, routes: [{ name: 'Auth' }] })
+    );
   };
+
+  const handleLogout = () => resetToAuth();
 
   const handleDeleteAccount = () => {
     setShowDeleteModal(false);
-    // Mock: API bağlandığında gerçek pasife alma isteği gönderilecek
-    navigation.getParent()?.getParent()?.replace('Auth');
+    resetToAuth();
   };
 
   return (
