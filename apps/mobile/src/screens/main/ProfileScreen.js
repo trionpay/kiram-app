@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import {
   View, Text, StyleSheet, TouchableOpacity, ScrollView,
-  TextInput, Modal, Alert,
+  TextInput, Modal, Alert, KeyboardAvoidingView, Platform,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { LegalModal } from '../../components/LegalModal';
@@ -79,6 +79,7 @@ export function ProfileScreen({ navigation }) {
           <MenuItem
             icon="📧"
             label="E-posta"
+            subtitle="İsteğe bağlı"
             value={MOCK_USER.email}
             onPress={() => setShowEditEmail(true)}
           />
@@ -135,15 +136,19 @@ export function ProfileScreen({ navigation }) {
 
       {/* E-posta düzenleme modal */}
       <Modal visible={showEditEmail} transparent animationType="slide">
-        <View style={styles.editOverlay}>
+        <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+          <TouchableOpacity style={styles.editOverlay} activeOpacity={1} onPress={() => setShowEditEmail(false)} />
           <View style={styles.editSheet}>
             <View style={styles.editHandle} />
             <Text style={styles.editTitle}>E-posta Güncelle</Text>
+            <Text style={styles.editNote}>
+              Yeni adresinize doğrulama maili gönderilecek. Onaylandıktan sonra güncellenir.
+            </Text>
             <TextInput
               style={styles.editInput}
               value={newEmail}
               onChangeText={setNewEmail}
-              placeholder={MOCK_USER.email}
+              placeholder="yeni@eposta.com"
               placeholderTextColor={colors.textTertiary}
               keyboardType="email-address"
               autoCapitalize="none"
@@ -154,18 +159,19 @@ export function ProfileScreen({ navigation }) {
               onPress={() => setShowEditEmail(false)}
               disabled={!newEmail.includes('@')}
             >
-              <Text style={styles.editSaveBtnText}>Kaydet</Text>
+              <Text style={styles.editSaveBtnText}>Doğrulama Maili Gönder</Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.editCancelBtn} onPress={() => setShowEditEmail(false)}>
               <Text style={styles.editCancelText}>Vazgeç</Text>
             </TouchableOpacity>
           </View>
-        </View>
+        </KeyboardAvoidingView>
       </Modal>
 
       {/* Şifre değiştir modal */}
       <Modal visible={showChangePassword} transparent animationType="slide">
-        <View style={styles.editOverlay}>
+        <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+          <TouchableOpacity style={styles.editOverlay} activeOpacity={1} onPress={() => { setShowChangePassword(false); setCurrentPassword(''); setNewPassword(''); setConfirmPassword(''); }} />
           <View style={styles.editSheet}>
             <View style={styles.editHandle} />
             <Text style={styles.editTitle}>Şifre Değiştir</Text>
@@ -209,7 +215,7 @@ export function ProfileScreen({ navigation }) {
               <Text style={styles.editCancelText}>Vazgeç</Text>
             </TouchableOpacity>
           </View>
-        </View>
+        </KeyboardAvoidingView>
       </Modal>
 
       {/* Hesap silme onay modal */}
@@ -321,6 +327,7 @@ const styles = StyleSheet.create({
     borderRadius: 14, padding: spacing.md, ...typography.body, color: colors.textPrimary,
     marginBottom: spacing.md,
   },
+  editNote: { ...typography.bodySmall, color: colors.textSecondary, marginBottom: spacing.md, lineHeight: 18 },
   editSaveBtn: { backgroundColor: colors.accent, borderRadius: 14, height: 50, alignItems: 'center', justifyContent: 'center', marginBottom: spacing.sm },
   editSaveBtnText: { ...typography.label, color: colors.textInverse },
   editCancelBtn: { alignItems: 'center', paddingVertical: spacing.sm },
