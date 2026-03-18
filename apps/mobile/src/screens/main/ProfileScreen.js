@@ -18,12 +18,15 @@ function SectionHeader({ title }) {
   return <Text style={styles.sectionHeader}>{title}</Text>;
 }
 
-function MenuItem({ icon, label, value, onPress, danger }) {
+function MenuItem({ icon, label, subtitle, value, onPress, danger }) {
   return (
     <TouchableOpacity style={styles.menuItem} onPress={onPress} activeOpacity={0.7}>
       <View style={styles.menuLeft}>
         <Text style={styles.menuIcon}>{icon}</Text>
-        <Text style={[styles.menuLabel, danger && { color: colors.error }]}>{label}</Text>
+        <View>
+          <Text style={[styles.menuLabel, danger && { color: colors.error }]}>{label}</Text>
+          {subtitle ? <Text style={styles.menuSubtitle}>{subtitle}</Text> : null}
+        </View>
       </View>
       <View style={styles.menuRight}>
         {value ? <Text style={styles.menuValue}>{value}</Text> : null}
@@ -37,6 +40,10 @@ export function ProfileScreen({ navigation }) {
   const [legalDoc, setLegalDoc] = useState(null);
   const [showEditEmail, setShowEditEmail] = useState(false);
   const [newEmail, setNewEmail] = useState('');
+  const [showChangePassword, setShowChangePassword] = useState(false);
+  const [currentPassword, setCurrentPassword] = useState('');
+  const [newPassword, setNewPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
   const [showDeleteModal, setShowDeleteModal] = useState(false);
 
   const handleLogout = () => {
@@ -84,8 +91,14 @@ export function ProfileScreen({ navigation }) {
           <MenuItem
             icon="🔒"
             label="Şifre Değiştir"
-            onPress={() => {}}
+            onPress={() => setShowChangePassword(true)}
           />
+        </View>
+
+        {/* Ödeme */}
+        <SectionHeader title="Ödeme" />
+        <View style={styles.section}>
+          <MenuItem icon="🔁" label="Otomatik Çekim" subtitle="Kira ve aidat talimatlarınız" onPress={() => navigation.navigate('AutoPayment')} />
         </View>
 
         {/* Yasal */}
@@ -144,6 +157,55 @@ export function ProfileScreen({ navigation }) {
               <Text style={styles.editSaveBtnText}>Kaydet</Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.editCancelBtn} onPress={() => setShowEditEmail(false)}>
+              <Text style={styles.editCancelText}>Vazgeç</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
+
+      {/* Şifre değiştir modal */}
+      <Modal visible={showChangePassword} transparent animationType="slide">
+        <View style={styles.editOverlay}>
+          <View style={styles.editSheet}>
+            <View style={styles.editHandle} />
+            <Text style={styles.editTitle}>Şifre Değiştir</Text>
+            <TextInput
+              style={styles.editInput}
+              value={currentPassword}
+              onChangeText={setCurrentPassword}
+              placeholder="Mevcut şifre"
+              placeholderTextColor={colors.textTertiary}
+              secureTextEntry
+            />
+            <TextInput
+              style={[styles.editInput, { marginTop: spacing.sm }]}
+              value={newPassword}
+              onChangeText={setNewPassword}
+              placeholder="Yeni şifre (min. 8 karakter)"
+              placeholderTextColor={colors.textTertiary}
+              secureTextEntry
+            />
+            <TextInput
+              style={[styles.editInput, { marginTop: spacing.sm }]}
+              value={confirmPassword}
+              onChangeText={setConfirmPassword}
+              placeholder="Yeni şifre tekrar"
+              placeholderTextColor={colors.textTertiary}
+              secureTextEntry
+            />
+            {newPassword.length > 0 && confirmPassword.length > 0 && newPassword !== confirmPassword && (
+              <Text style={{ ...typography.caption, color: colors.error, marginTop: spacing.xs }}>
+                Şifreler eşleşmiyor
+              </Text>
+            )}
+            <TouchableOpacity
+              style={[styles.editSaveBtn, { marginTop: spacing.md }, (newPassword.length < 8 || newPassword !== confirmPassword || !currentPassword) && { opacity: 0.5 }]}
+              onPress={() => { setShowChangePassword(false); setCurrentPassword(''); setNewPassword(''); setConfirmPassword(''); }}
+              disabled={newPassword.length < 8 || newPassword !== confirmPassword || !currentPassword}
+            >
+              <Text style={styles.editSaveBtnText}>Şifreyi Güncelle</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.editCancelBtn} onPress={() => { setShowChangePassword(false); setCurrentPassword(''); setNewPassword(''); setConfirmPassword(''); }}>
               <Text style={styles.editCancelText}>Vazgeç</Text>
             </TouchableOpacity>
           </View>
@@ -233,6 +295,7 @@ const styles = StyleSheet.create({
   menuIcon: { fontSize: 18, width: 24, textAlign: 'center' },
   menuLabel: { ...typography.body, color: colors.textPrimary },
   menuRight: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm },
+  menuSubtitle: { ...typography.caption, color: colors.textTertiary, marginTop: 1 },
   menuValue: { ...typography.bodySmall, color: colors.textSecondary },
   menuChevron: { fontSize: 20, color: colors.textTertiary },
 

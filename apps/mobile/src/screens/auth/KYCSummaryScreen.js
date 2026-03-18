@@ -27,7 +27,7 @@ export function KYCSummaryScreen({ navigation, route }) {
     // Mock: API bağlandığında KYC verisi gönderilecek, hesap aktifleştirilecek
     setTimeout(() => {
       setLoading(false);
-      navigation.replace('Main');
+      navigation.replace('NotificationPermission');
     }, 1500);
   };
 

@@ -35,9 +35,13 @@ export function DashboardScreen({ navigation }) {
             <Text style={styles.greeting}>Merhaba 👋</Text>
             <Text style={styles.name}>Kullanıcı</Text>
           </View>
-          <View style={styles.avatar}>
+          <TouchableOpacity
+            style={styles.avatar}
+            onPress={() => navigation.navigate('Profile')}
+            activeOpacity={0.8}
+          >
             <Text style={styles.avatarTxt}>K</Text>
-          </View>
+          </TouchableOpacity>
         </View>
 
         {/* Hero kart */}

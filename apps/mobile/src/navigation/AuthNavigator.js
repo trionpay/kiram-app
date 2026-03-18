@@ -7,6 +7,8 @@ import { KYCNameScreen } from '../screens/auth/KYCNameScreen';
 import { KYCIdentityScreen } from '../screens/auth/KYCIdentityScreen';
 import { KYCPurposeScreen } from '../screens/auth/KYCPurposeScreen';
 import { KYCSummaryScreen } from '../screens/auth/KYCSummaryScreen';
+import { ForgotPasswordScreen } from '../screens/auth/ForgotPasswordScreen';
+import { NotificationPermissionScreen } from '../screens/auth/NotificationPermissionScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -21,6 +23,8 @@ export function AuthNavigator() {
       <Stack.Screen name="KYCIdentity" component={KYCIdentityScreen} />
       <Stack.Screen name="KYCPurpose" component={KYCPurposeScreen} />
       <Stack.Screen name="KYCSummary" component={KYCSummaryScreen} />
+      <Stack.Screen name="ForgotPassword" component={ForgotPasswordScreen} />
+      <Stack.Screen name="NotificationPermission" component={NotificationPermissionScreen} />
     </Stack.Navigator>
   );
 }

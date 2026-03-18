@@ -48,6 +48,9 @@ export function LoginScreen({ navigation }) {
         </ScrollView>
         <View style={styles.footer}>
           <Button title="Kodu Gönder" onPress={() => navigation.navigate('OTP', { phone })} disabled={phone.length < 10} />
+          <TouchableOpacity style={styles.forgotBtn} onPress={() => navigation.navigate('ForgotPassword')}>
+            <Text style={styles.forgotText}>Şifremi Unuttum</Text>
+          </TouchableOpacity>
         </View>
       </KeyboardAvoidingView>
     </SafeAreaView>
@@ -68,5 +71,7 @@ const styles = StyleSheet.create({
   divider: { width: 1.5, height: 22, backgroundColor: colors.border, marginRight: spacing.sm },
   input: { flex: 1, ...typography.bodyLarge, color: colors.textPrimary, letterSpacing: 1 },
   hint: { ...typography.bodySmall, color: colors.textTertiary, marginTop: spacing.md },
-  footer: { paddingHorizontal: screenPaddingHorizontal, paddingBottom: 12, paddingTop: spacing.sm },
+  footer: { paddingHorizontal: screenPaddingHorizontal, paddingBottom: 12, paddingTop: spacing.sm, gap: spacing.sm },
+  forgotBtn: { alignItems: 'center', paddingVertical: spacing.xs },
+  forgotText: { ...typography.label, color: colors.accent },
 });

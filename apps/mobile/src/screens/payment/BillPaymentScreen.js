@@ -101,6 +101,7 @@ export function BillPaymentScreen({ navigation }) {
 
   return (
     <SafeAreaView style={styles.safe} edges={['top']}>
+      <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
       <View style={styles.header}>
         <TouchableOpacity
           style={styles.back}
@@ -279,6 +280,7 @@ export function BillPaymentScreen({ navigation }) {
           <Button title="Ödemeye Devam" onPress={handlePay} />
         </View>
       )}
+      </KeyboardAvoidingView>
     </SafeAreaView>
   );
 }

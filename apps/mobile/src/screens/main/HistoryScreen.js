@@ -110,45 +110,40 @@ export function HistoryScreen() {
         <Text style={styles.title}>İşlem Geçmişi</Text>
       </View>
 
-      {/* Filtreler — tek hava dar satır */}
-      <ScrollView
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        contentContainerStyle={styles.filterRow}
-      >
+      {/* Filtreler — iki ayrı satır, daha havadar */}
+      <View style={styles.filtersWrapper}>
         {/* Tarih */}
-        {DATE_FILTERS.map(f => (
-          <TouchableOpacity
-            key={'d-' + f}
-            style={[styles.chip, dateFilter === f && styles.chipActive]}
-            onPress={() => setDateFilter(f)}
-          >
-            <Text style={[styles.chipText, dateFilter === f && styles.chipTextActive]}>{f}</Text>
-          </TouchableOpacity>
-        ))}
-
-        <View style={styles.chipSep} />
-
-        {/* Durum */}
-        {STATUS_FILTERS.filter(f => f !== 'Tümü').map(f => {
-          const isSuccess = f === 'Başarılı';
-          const isActive = statusFilter === f;
-          return (
+        <View style={styles.filterRowInline}>
+          {DATE_FILTERS.map(f => (
             <TouchableOpacity
-              key={'s-' + f}
-              style={[
-                styles.chip,
-                isActive && (isSuccess ? styles.chipSuccess : styles.chipFail),
-              ]}
-              onPress={() => setStatusFilter(isActive ? 'Tümü' : f)}
+              key={'d-' + f}
+              style={[styles.chip, dateFilter === f && styles.chipActive]}
+              onPress={() => setDateFilter(f)}
             >
-              <Text style={[styles.chipText, isActive && styles.chipTextActive]}>
-                {isSuccess ? '✓ ' : '✕ '}{f}
-              </Text>
+              <Text style={[styles.chipText, dateFilter === f && styles.chipTextActive]}>{f}</Text>
             </TouchableOpacity>
-          );
-        })}
-      </ScrollView>
+          ))}
+          {/* Durum */}
+          {STATUS_FILTERS.filter(f => f !== 'Tümü').map(f => {
+            const isSuccess = f === 'Başarılı';
+            const isActive = statusFilter === f;
+            return (
+              <TouchableOpacity
+                key={'s-' + f}
+                style={[
+                  styles.chip,
+                  isActive && (isSuccess ? styles.chipSuccess : styles.chipFail),
+                ]}
+                onPress={() => setStatusFilter(isActive ? 'Tümü' : f)}
+              >
+                <Text style={[styles.chipText, isActive && styles.chipTextActive]}>
+                  {isSuccess ? '✓ ' : '✕ '}{f}
+                </Text>
+              </TouchableOpacity>
+            );
+          })}
+        </View>
+      </View>
 
       {/* Özet bar */}
       <SummaryBar transactions={filtered} />
@@ -214,11 +209,14 @@ const styles = StyleSheet.create({
   },
   title: { ...typography.h1, color: colors.textPrimary },
 
-  filterRow: {
+  filtersWrapper: {
     paddingHorizontal: screenPaddingHorizontal,
-    gap: spacing.sm,
     paddingBottom: spacing.md,
-    alignItems: 'center',
+  },
+  filterRowInline: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: spacing.sm,
   },
   chip: {
     paddingVertical: 7,
@@ -233,7 +231,6 @@ const styles = StyleSheet.create({
   chipFail: { backgroundColor: colors.error, borderColor: colors.error },
   chipText: { ...typography.label, color: colors.textSecondary, fontSize: 13 },
   chipTextActive: { color: colors.textInverse },
-  chipSep: { width: 1, height: 20, backgroundColor: colors.border, marginHorizontal: spacing.xs },
 
   summaryBar: {
     flexDirection: 'row',
