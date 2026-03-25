@@ -22,8 +22,9 @@ export function AdminLoginForm() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
-    if (password !== DEMO_PASSWORD) {
-      setError('Şifre hatalı. Demo şifresi ekranda gösterilir.');
+    const entered = password.trim();
+    if (entered !== DEMO_PASSWORD) {
+      setError('Şifre hatalı. Yukarıdaki demo şifreyi aynen kullanın (kopyalarken baş/son boşluk olmasın).');
       return;
     }
     setLoading(true);
@@ -72,7 +73,12 @@ export function AdminLoginForm() {
             </h2>
             <p className="text-text-secondary text-sm leading-relaxed">
               Demo şifre:{' '}
-              <span className="font-mono font-semibold text-accent">{DEMO_PASSWORD}</span>
+              <span
+                className="font-mono font-semibold text-accent select-all bg-accent/5 px-1.5 py-0.5 rounded-md"
+                title="Tıklayıp seçebilir veya çift tıklayarak kopyalayabilirsiniz"
+              >
+                {DEMO_PASSWORD}
+              </span>
             </p>
           </div>
 
