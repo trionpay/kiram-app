@@ -1,0 +1,46 @@
+---
+description: Kiram.com projesi bağlamı, isimlendirme ve kurallar. Bağlam penceresi dolduğunda veya yeni oturumda referans al.
+globs: 
+alwaysApply: true
+---
+
+# Kiram.com Proje Kuralları ve Bağlam
+
+## İsimlendirme (kritik)
+
+- **Kiram** = Ürün / uygulama adı. Mobil uygulamanın görünen adı "Kiram" (store’da ve uygulama içinde).
+- **Kiram App** = Mobil uygulamanın tam ifadesi (konuşma / dokümanlarda).
+- **kiram.com** = Web platformu / web sitesi; bu domain’de yayına çıkacak.
+- **Trion Pay** = Müşteri şirketinin / marka sahibinin adı. Uygulama adı değil; teklif, sözleşme ve kurumsal referanslarda kullanılır.
+
+Kod ve UI’da kullanıcıya gösterilen ürün adı **Kiram** / **kiram.com** olmalı. "Trion Pay" yalnızca müşteri/şirket bağlamında (örn. yasal metinler, admin, doküman) kullanılır.
+
+## Yapı (monorepo)
+
+- `apps/mobile` — Kiram mobil uygulama (Expo / React Native). Slug: `kiram`. Görünen ad: Kiram.
+- `apps/web` — kiram.com web uygulaması (Next.js). Aynı özellik seti, responsive.
+- `apps/admin` — Yönetim paneli (ileride). Kullanıcı listesi, işlem logları, istatistik; refund/iptal yok (Blueprint).
+- `packages/shared-types` — Ortak TypeScript tipleri.
+- `packages/api-client` — API client; ödeme kuruluşu API dokümanları gelince entegre edilir.
+- `docs/Blueprint-Scope.md` — Kapsam ve kullanıcı hikayeleri (User Story’ler) referansı. Kapsam dışına çıkmayın.
+
+## Teknoloji
+
+- Mobil: React Native, Expo (~55), EAS Build/Submit. Navigasyon: React Navigation.
+- Web: Next.js, TypeScript, Tailwind. Aynı API ve tasarım sistemi.
+- Tema: `apps/mobile/src/theme/` (colors, typography, spacing). Lacivert (#0C1929) + teal vurgu (#0D9488). Midas App tarzı, özgün; mor gradyan kullanılmıyor.
+- Deployment: Web/backend için Railway (Blueprint); mobil EAS.
+
+## Geliştirme sırası
+
+1. Mobil önce (tema, navigasyon, Splash, Giriş, Dashboard, ödeme akışı, alıcılar, geçmiş, profil).
+2. Web: Aynı ekran seti, kiram.com.
+3. Admin paneli sonra.
+4. Backend/veritabanı: Gerçek auth ve kalıcı veri bağlanırken; API dokümanları müşteri (Trion Pay) tarafından iletilecek.
+
+## Kurallar
+
+- Yeni ekran/özellik eklerken `docs/Blueprint-Scope.md` ile uyum kontrol et; kapsam dışı özellik ekleme.
+- Mobil UI’da tutarlılık için `src/theme` ve `src/components` kullan.
+- Tasarım kalitesi ve özgünlük önemli; generic “AI” görünümünden kaçın.
+- Dil: Uygulama metinleri Türkçe. MVP’de sadece Türkçe ve Light theme (Blueprint).
