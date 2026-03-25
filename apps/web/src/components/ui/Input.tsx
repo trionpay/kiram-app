@@ -1,12 +1,13 @@
 'use client';
 
-import { InputHTMLAttributes, forwardRef } from 'react';
+import { type InputHTMLAttributes, type ReactNode, forwardRef } from 'react';
 
-interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
+/** `prefix` HTML'de string; bizim önek slot'u için çakışmayı kaldırıyoruz. */
+interface InputProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'prefix'> {
   label?: string;
   hint?: string;
   error?: string;
-  prefix?: React.ReactNode;
+  prefix?: ReactNode;
 }
 
 export const Input = forwardRef<HTMLInputElement, InputProps>(

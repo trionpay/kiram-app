@@ -1,4 +1,3 @@
-import Link from 'next/link';
 import { TrionPayLogo } from '@/components/ui/TrionPayLogo';
 
 const LINKS = {
@@ -29,7 +28,7 @@ export function Footer() {
           <div className="md:col-span-2">
             <TrionPayLogo width={120} color="#1E3A5F" accentColor="#5FE00B" />
             <p className="text-text-tertiary text-sm mt-4 leading-relaxed max-w-xs">
-              Kira, aidat ve faturalarını kredi kartınla güvenle öde. Türkiye'nin ödeme platformu.
+              Kira, aidat ve faturalarını kredi kartınla güvenle öde. Türkiye&apos;nin ödeme platformu.
             </p>
             <div className="flex gap-3 mt-4">
               <a href="#" className="w-9 h-9 bg-surface rounded-lg flex items-center justify-center text-text-tertiary hover:text-text-primary transition-colors">

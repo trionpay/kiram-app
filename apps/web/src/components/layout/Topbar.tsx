@@ -1,9 +1,11 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Sidebar } from './Sidebar';
+import { TrionPayLogo } from '@/components/ui/TrionPayLogo';
 
 const PAGE_TITLES: Record<string, string> = {
   '/dashboard': 'Ana Sayfa',
@@ -77,6 +79,20 @@ export function Topbar() {
     )?.[1] ?? '';
 
   useEffect(() => {
+    if (!sidebarOpen) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setSidebarOpen(false);
+    };
+    document.addEventListener('keydown', onKey);
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.removeEventListener('keydown', onKey);
+      document.body.style.overflow = prevOverflow;
+    };
+  }, [sidebarOpen]);
+
+  useEffect(() => {
     if (!notificationsOpen) return;
 
     const handlePointerDown = (e: MouseEvent | TouchEvent) => {
@@ -112,25 +128,27 @@ export function Topbar() {
 
   return (
     <>
-      <header className="sticky top-0 z-40 bg-background/90 backdrop-blur-md border-b border-border px-6 h-16 flex items-center gap-4">
-        {/* Hamburger — sadece mobilde */}
+      <header className="sticky top-0 z-40 bg-background/90 backdrop-blur-md border-b border-border px-4 sm:px-6 h-16 flex items-center gap-2 sm:gap-4 min-w-0">
+        {/* Hamburger — mobilde dar alanda küçülmesin, logo üstüne binmesin */}
         <button
           type="button"
           onClick={() => setSidebarOpen(true)}
-          className="lg:hidden w-8 h-8 flex flex-col justify-center items-center gap-1.5 rounded-lg hover:bg-surface transition-colors"
+          className="lg:hidden shrink-0 relative z-20 w-10 h-10 flex flex-col justify-center items-center gap-1.5 rounded-lg hover:bg-surface transition-colors"
           aria-label="Menü"
+          aria-expanded={sidebarOpen}
         >
           <span className="w-5 h-0.5 bg-text-primary rounded-full" />
           <span className="w-5 h-0.5 bg-text-primary rounded-full" />
           <span className="w-3.5 h-0.5 bg-text-primary rounded-full self-start" />
         </button>
 
-        {/* Mobil logo */}
-        <Link href="/dashboard" className="lg:hidden flex items-center gap-2">
-          <div className="w-7 h-7 rounded-lg bg-primary flex items-center justify-center">
-            <span className="text-white text-xs font-bold">K</span>
-          </div>
-          <span className="font-bold text-primary tracking-tight">kiram</span>
+        {/* Mobil marka — TrionPay; z-10 ile hamburgerin altında kalır */}
+        <Link
+          href="/dashboard"
+          className="lg:hidden relative z-10 flex items-center min-w-0 shrink overflow-hidden max-w-[min(200px,50vw)]"
+          aria-label="Ana sayfa"
+        >
+          <TrionPayLogo width={88} color="#0C1929" accentColor="#5FE00B" />
         </Link>
 
         {/* Sayfa başlığı — desktop */}
@@ -139,7 +157,7 @@ export function Topbar() {
         <div className="flex-1" />
 
         {/* Sağ aksiyonlar */}
-        <div className="flex items-center gap-3">
+        <div className="flex shrink-0 items-center gap-2 sm:gap-3">
           {/* Bildirim */}
           <div ref={notificationsRootRef} className="relative">
             <button
@@ -246,18 +264,27 @@ export function Topbar() {
         </div>
       </header>
 
-      {/* Mobil sidebar overlay */}
-      {sidebarOpen && (
-        <>
-          <div
-            className="lg:hidden fixed inset-0 z-50 bg-black/50 backdrop-blur-sm"
-            onClick={() => setSidebarOpen(false)}
-          />
-          <div className="lg:hidden fixed inset-y-0 left-0 z-50 w-72 bg-primary shadow-2xl">
-            <Sidebar onClose={() => setSidebarOpen(false)} />
-          </div>
-        </>
-      )}
+      {/* Mobil menü: body'ye portal — üst layout overflow-hidden kırpmasın diye */}
+      {sidebarOpen &&
+        typeof document !== 'undefined' &&
+        createPortal(
+          <>
+            <div
+              className="lg:hidden fixed inset-0 z-[200] bg-black/50 backdrop-blur-sm"
+              onClick={() => setSidebarOpen(false)}
+              aria-hidden
+            />
+            <div
+              className="lg:hidden fixed inset-y-0 left-0 z-[200] w-[min(85vw,288px)] bg-primary shadow-2xl flex flex-col"
+              role="dialog"
+              aria-modal="true"
+              aria-label="Uygulama menüsü"
+            >
+              <Sidebar onClose={() => setSidebarOpen(false)} />
+            </div>
+          </>,
+          document.body
+        )}
     </>
   );
 }

@@ -1,28 +1,21 @@
-# GitHub ve canlı yayın (Vercel)
+# GitHub ve deploy
+
+**Öncelikli rehber:** Canlı ortam için **[GITHUB-RAILWAY.md](./GITHUB-RAILWAY.md)** — Railway üzerinden monorepo deploy adımları.
+
+Aşağıdaki Vercel adımları yalnızca **alternatif** olarak kalır.
 
 ## Kod GitHub’da
 
-Bu monorepo `git push` ile GitHub’a gönderilir. Uzak repo: `origin` (ör. `baranbdrr/kiram-app`).
-
 ```bash
 git add -A
-git status   # .env dosyası eklenmediğinden emin ol
-git commit -m "feat(web): landing, 404, bildirim paneli"
+git status
+git commit -m "mesaj"
 git push origin main
 ```
 
-## Canlı site (deploy)
+## Alternatif: Vercel (Next.js)
 
-GitHub kodu barındırır; **Next.js uygulamasını** genelde **Vercel** üzerinden yayınlarsın (Next.js ile aynı ekip).
+1. [vercel.com](https://vercel.com) → repo import → **Root Directory:** `apps/web`
+2. Deploy sonrası domain ayarı.
 
-1. [vercel.com](https://vercel.com) → **Add New Project** → GitHub’dan `kiram-app` repo’sunu seç.
-2. **Root Directory**: `apps/web` olarak ayarla.
-3. **Framework Preset**: Next.js (otomatik).
-4. **Deploy** — birkaç dakika içinde `*.vercel.app` URL’si oluşur.
-5. İstersen **Domains** kısmından `kiram.com` ekle.
-
-> Ortam değişkenleri gerektiğinde Vercel **Settings → Environment Variables** üzerinden eklenir.
-
-## GitHub Actions (isteğe bağlı)
-
-Vercel’in “Import from GitHub” entegrasyonu her push’ta otomatik deploy eder; ayrıca workflow şart değildir.
+Ortam değişkenleri: Vercel **Settings → Environment Variables**.
