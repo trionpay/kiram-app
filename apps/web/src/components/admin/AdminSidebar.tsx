@@ -2,17 +2,21 @@
 
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
+import { TrionPayLogo } from '@/components/ui/TrionPayLogo';
 import { clearAdminMockSession } from '@/lib/admin/session';
 
-const nav = [
-  { href: '/admin', label: 'Özet' },
-  { href: '/admin/users', label: 'Kullanıcılar' },
-  { href: '/admin/transactions', label: 'İşlem logları' },
+const NAV_ITEMS = [
+  { href: '/admin', icon: '⊞', label: 'Özet' },
+  { href: '/admin/users', icon: '◎', label: 'Kullanıcılar' },
+  { href: '/admin/transactions', icon: '↻', label: 'İşlem logları' },
 ] as const;
 
 export function AdminSidebar() {
   const pathname = usePathname();
   const router = useRouter();
+
+  const isActive = (href: string) =>
+    pathname === href || (href !== '/admin' && pathname.startsWith(href));
 
   const handleLogout = () => {
     clearAdminMockSession();
@@ -21,34 +25,49 @@ export function AdminSidebar() {
   };
 
   return (
-    <aside className="flex w-56 flex-shrink-0 flex-col border-r border-white/10 bg-[#0C1929] text-white">
-      <div className="border-b border-white/10 px-5 py-6">
-        <p className="text-xs font-semibold uppercase tracking-wider text-white/40">Yönetim</p>
-        <p className="mt-1 text-lg font-bold text-white">Kiram</p>
+    <aside className="flex w-56 xl:w-60 flex-shrink-0 flex-col bg-primary text-white overflow-hidden">
+      <div className="px-6 py-6 border-b border-white/8">
+        <TrionPayLogo width={110} color="#FFFFFF" accentColor="#5FE00B" />
       </div>
-      <nav className="flex flex-1 flex-col gap-0.5 p-3">
-        {nav.map(({ href, label }) => {
-          const active = pathname === href || (href !== '/admin' && pathname.startsWith(href));
-          return (
+
+      <nav className="flex-1 overflow-y-auto px-3 py-5">
+        <p className="text-white/25 text-[10px] font-bold tracking-widest uppercase px-3 mb-2">
+          Yönetim
+        </p>
+        <div className="space-y-0.5">
+          {NAV_ITEMS.map(({ href, icon, label }) => (
             <Link
               key={href}
               href={href}
               className={`
-                rounded-xl px-4 py-3 text-sm font-semibold transition-colors
-                ${active ? 'bg-white/10 text-white' : 'text-white/70 hover:bg-white/5 hover:text-white'}
+                flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium
+                transition-all duration-150
+                ${isActive(href)
+                  ? 'bg-white/10 text-white'
+                  : 'text-white/50 hover:text-white/80 hover:bg-white/5'}
               `}
             >
+              <span
+                className={`text-base w-5 text-center ${isActive(href) ? 'text-accent' : ''}`}
+              >
+                {icon}
+              </span>
               {label}
+              {isActive(href) && (
+                <span className="ml-auto w-1.5 h-1.5 rounded-full bg-accent flex-shrink-0" />
+              )}
             </Link>
-          );
-        })}
+          ))}
+        </div>
       </nav>
-      <div className="border-t border-white/10 p-3">
+
+      <div className="px-3 pb-5 pt-2 border-t border-white/8">
         <button
           type="button"
           onClick={handleLogout}
-          className="w-full rounded-xl px-4 py-3 text-left text-sm font-semibold text-white/60 transition-colors hover:bg-white/5 hover:text-white"
+          className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-white/50 hover:text-white/80 hover:bg-white/5 transition-all"
         >
+          <span className="text-base w-5 text-center">⎋</span>
           Çıkış
         </button>
       </div>

@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
+import { TrionPayLogo } from '@/components/ui/TrionPayLogo';
 import { setAdminMockSession } from '@/lib/admin/session';
 
 /** Demo: gerçek auth gelince kaldırılır. */
@@ -22,7 +23,7 @@ export function AdminLoginForm() {
     e.preventDefault();
     setError('');
     if (password !== DEMO_PASSWORD) {
-      setError('Geçersiz şifre. Demo için ipucuna bakın.');
+      setError('Şifre hatalı. Demo şifresi ekranda gösterilir.');
       return;
     }
     setLoading(true);
@@ -34,30 +35,62 @@ export function AdminLoginForm() {
   };
 
   return (
-    <div className="flex min-h-screen flex-col justify-center bg-[#061018] px-6 py-12">
-      <div className="mx-auto w-full max-w-md rounded-2xl border border-white/10 bg-[#0C1929] p-8 shadow-xl">
-        <p className="text-xs font-semibold uppercase tracking-wider text-white/40">Yönetim</p>
-        <h1 className="mt-2 text-2xl font-bold text-white">Kiram paneli</h1>
-        <p className="mt-2 text-sm text-white/50">
-          Demo giriş — şifre: <span className="font-mono text-accent-light">{DEMO_PASSWORD}</span>
-        </p>
+    <div className="min-h-screen flex">
+      {/* Sol panel — kullanıcı auth layout ile aynı dil */}
+      <div
+        className="hidden lg:flex lg:w-[480px] xl:w-[520px] flex-shrink-0 flex-col justify-between p-12 relative overflow-hidden"
+        style={{ background: 'linear-gradient(135deg, #102A43, #0C1929, #061018)' }}
+      >
+        <div>
+          <TrionPayLogo width={130} color="#FFFFFF" accentColor="#5FE00B" />
+        </div>
+        <div className="space-y-4">
+          <div className="w-9 h-0.5 bg-accent rounded-full" />
+          <h1 className="text-3xl font-bold text-white leading-snug">
+            Yönetim paneli
+          </h1>
+          <p className="text-white/50 text-base leading-relaxed max-w-sm">
+            Kiram operasyonları için güvenli giriş. Bu ortamda demo hesabı kullanılır.
+          </p>
+        </div>
+        <p className="text-white/25 text-xs tracking-widest uppercase">kiram.com</p>
+      </div>
 
-        <form onSubmit={handleSubmit} className="mt-8 space-y-5">
-          <div className="[&_label]:text-white/70 [&_input]:text-white [&_input]:placeholder:text-white/30">
+      {/* Sağ panel — ana uygulama light theme token’ları */}
+      <div className="flex-1 flex items-center justify-center p-6 bg-background">
+        <div className="w-full max-w-md">
+          <div className="mb-8 lg:hidden">
+            <TrionPayLogo width={110} color="#0C1929" accentColor="#5FE00B" />
+          </div>
+
+          <div className="space-y-2 mb-8">
+            <p className="text-xs font-bold tracking-widest text-text-tertiary uppercase">
+              Yönetim
+            </p>
+            <h2 className="text-3xl font-bold text-text-primary leading-tight">
+              Panele giriş
+            </h2>
+            <p className="text-text-secondary text-sm leading-relaxed">
+              Demo şifre:{' '}
+              <span className="font-mono font-semibold text-accent">{DEMO_PASSWORD}</span>
+            </p>
+          </div>
+
+          <form onSubmit={handleSubmit} className="space-y-5">
             <Input
               type="password"
               label="Şifre"
-              placeholder="••••••••••••"
+              placeholder="Demo şifrenizi girin"
               value={password}
               onChange={e => setPassword(e.target.value)}
               autoComplete="current-password"
             />
-          </div>
-          {error && <p className="text-sm text-error">{error}</p>}
-          <Button type="submit" className="w-full" size="lg" loading={loading} disabled={!password}>
-            Giriş yap
-          </Button>
-        </form>
+            {error && <p className="text-sm font-medium text-error">{error}</p>}
+            <Button type="submit" className="w-full" size="lg" loading={loading} disabled={!password}>
+              Giriş yap
+            </Button>
+          </form>
+        </div>
       </div>
     </div>
   );
