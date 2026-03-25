@@ -9,6 +9,7 @@ const NAV_ITEMS = [
   { href: '/admin', icon: '⊞', label: 'Özet' },
   { href: '/admin/users', icon: '◎', label: 'Kullanıcılar' },
   { href: '/admin/transactions', icon: '↻', label: 'İşlem logları' },
+  { href: '/admin/broadcast', icon: '◆', label: 'Toplu duyuru' },
 ] as const;
 
 export function AdminSidebar() {
