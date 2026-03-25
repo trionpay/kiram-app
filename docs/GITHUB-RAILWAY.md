@@ -31,12 +31,14 @@ Kök dizinde çalıştırmak istersen (ör. workspace script):
   `"start:web": "npm run start --workspace=web"`  
   ve Start Command: `npm run start:web`.
 
-## İkinci servis: Admin panel (`apps/admin`)
+## Yönetim paneli (`/admin`)
 
-Admin ayrı Next uygulaması olduğunda aynı Railway projesine **ikinci bir service** eklersin:
+Blueprint §8 admin özellikleri, **`apps/web` içinde** route grubu olarak `/admin` altında sunulur (ör. `/admin`, `/admin/login`, `/admin/users`). **Ayrı bir Railway servisi gerekmez** — tek web servisi (`apps/web`) `kiram.com` ile aynı deploy’da hem kullanıcı portalını hem yönetim URL’lerini karşılar.
+
+İleride ayrı bir `apps/admin` uygulaması açılırsa aynı Railway projesine ikinci service eklenebilir:
 
 - Root Directory: `apps/admin`
-- Build / Start: yine `npm run build` / `npm run start` (o paketin `package.json`’ına göre).
+- Build / Start: o paketin `package.json`’ına göre `npm run build` / `npm run start`.
 
 ## Vercel (isteğe bağlı)
 
