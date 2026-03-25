@@ -12,7 +12,7 @@ const NAV_ITEMS = [
   { href: '/admin/broadcast', icon: '◆', label: 'Toplu duyuru' },
 ] as const;
 
-export function AdminSidebar() {
+export function AdminSidebar({ operatorEmail }: { operatorEmail: string | null }) {
   const pathname = usePathname();
   const router = useRouter();
 
@@ -29,6 +29,14 @@ export function AdminSidebar() {
     <aside className="flex w-56 xl:w-60 flex-shrink-0 flex-col bg-primary text-white overflow-hidden">
       <div className="px-6 py-6 border-b border-white/8">
         <TrionPayLogo width={110} color="#FFFFFF" accentColor="#5FE00B" />
+        {operatorEmail ? (
+          <p className="mt-4 text-xs text-white/45 leading-snug break-all" title="Giriş yapan yönetici">
+            <span className="text-white/30 uppercase tracking-wider text-[10px] block mb-0.5">
+              Yönetici
+            </span>
+            {operatorEmail}
+          </p>
+        ) : null}
       </div>
 
       <nav className="flex-1 overflow-y-auto px-3 py-5">
