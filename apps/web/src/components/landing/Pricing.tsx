@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { FadeIn } from './FadeIn';
 
 export function Pricing() {
@@ -67,6 +68,21 @@ export function Pricing() {
                   <span className="text-text-secondary text-sm">{item}</span>
                 </div>
               ))}
+            </div>
+
+            <div className="mt-8 pt-8 border-t border-border flex flex-col items-center text-center gap-2">
+              <Link
+                href="/login"
+                className="inline-flex w-full sm:w-auto sm:min-w-[240px] items-center justify-center gap-2 bg-accent hover:bg-accent-dark text-white font-bold text-base px-8 py-4 rounded-2xl transition-all hover:scale-[1.02] active:scale-[0.98] shadow-lg shadow-accent/25"
+              >
+                Hemen Başla
+                <span className="text-lg" aria-hidden>
+                  →
+                </span>
+              </Link>
+              <p className="text-text-tertiary text-xs max-w-sm">
+                Ücretsiz hesap oluştur; yukarı kaydırmadan devam et.
+              </p>
             </div>
           </div>
         </FadeIn>
