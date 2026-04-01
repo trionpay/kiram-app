@@ -5,7 +5,7 @@ import { FadeIn } from './FadeIn';
 const STATS = [
   { value: '50K+', label: 'Aktif Kullanıcı' },
   { value: '₺120M+', label: 'İşlem Hacmi' },
-  { value: '99.9%', label: 'Uptime' },
+  { value: '%99+', label: 'Başarılı ödeme oranı' },
   { value: '4.8', label: 'App Store Puanı', suffix: '⭐' },
 ];
 
@@ -21,7 +21,7 @@ export function TrustBar() {
                   {stat.value}
                   {stat.suffix && <span className="ml-1">{stat.suffix}</span>}
                 </p>
-                <p className="text-text-tertiary text-sm mt-1">{stat.label}</p>
+                <p className="mt-2 text-sm font-medium text-primary/70">{stat.label}</p>
               </div>
             ))}
           </div>
