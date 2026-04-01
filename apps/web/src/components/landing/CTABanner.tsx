@@ -18,29 +18,30 @@ export function CTABanner() {
           <p className="text-white/70 mb-8 max-w-xl mx-auto">
             Hemen ücretsiz hesap oluştur, kira ve faturalarını kredi kartınla ödemeye başla.
           </p>
-          <div className="flex flex-col gap-5 items-center">
+          <div className="flex flex-col items-center w-full max-w-md mx-auto">
+            <p className="text-white/50 text-xs font-medium mb-2">Önerilen: web’de hesap aç</p>
             <Link
               href="/login"
-              className="inline-flex items-center justify-center gap-2 bg-accent hover:bg-accent-dark text-white font-bold text-base px-8 py-4 rounded-2xl transition-all hover:scale-[1.02]"
+              className="inline-flex w-full items-center justify-center gap-2 bg-accent hover:bg-accent-dark text-white font-bold text-base px-8 py-4 rounded-2xl transition-all hover:scale-[1.02] active:scale-[0.98] shadow-lg shadow-accent/30"
             >
               Hemen Başla
               <span aria-hidden>→</span>
             </Link>
-            <div className="flex flex-col items-center gap-2 w-full">
-              <p className="text-white/45 text-xs font-medium uppercase tracking-wider">
-                Uygulamayı indir
+            <div className="w-full border-t border-white/15 mt-8 pt-8 flex flex-col items-center gap-3">
+              <p className="text-white/40 text-xs font-medium uppercase tracking-wider">
+                İstersen uygulamayı indir
               </p>
               <div className="flex flex-wrap items-center justify-center gap-2">
                 <a
                   href="#"
-                  className="inline-flex items-center gap-2 rounded-xl border-2 border-white/35 bg-transparent px-4 py-2.5 text-sm font-medium text-white/90 transition-colors hover:border-white/55 hover:bg-white/5"
+                  className="inline-flex items-center gap-1.5 rounded-lg border border-white/25 bg-transparent px-3 py-2 text-xs font-medium text-white/65 transition-colors hover:border-white/40 hover:text-white/85 hover:bg-white/5"
                 >
                   <AppleIcon />
                   App Store
                 </a>
                 <a
                   href="#"
-                  className="inline-flex items-center gap-2 rounded-xl border-2 border-white/35 bg-transparent px-4 py-2.5 text-sm font-medium text-white/90 transition-colors hover:border-white/55 hover:bg-white/5"
+                  className="inline-flex items-center gap-1.5 rounded-lg border border-white/25 bg-transparent px-3 py-2 text-xs font-medium text-white/65 transition-colors hover:border-white/40 hover:text-white/85 hover:bg-white/5"
                 >
                   <PlayStoreIcon />
                   Play Store
