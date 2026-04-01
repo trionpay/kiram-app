@@ -50,30 +50,37 @@ export function Hero() {
               Ev sahibine kira, siteye aidat, kurumlara fatura — hepsini kredi kartınla, tek uygulamadan, saniyeler içinde.
             </p>
 
-            {/* CTA Butonları */}
-            <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+            {/* CTA: tek birincil aksiyon (web kayıt); mağaza linkleri ikincil outline */}
+            <div className="flex flex-col gap-5 justify-center lg:justify-start">
               <Link
                 href="/login"
-                className="inline-flex items-center justify-center gap-2 bg-accent hover:bg-accent-dark text-white font-bold text-base px-8 py-4 rounded-2xl transition-all hover:scale-[1.02] active:scale-[0.98] shadow-lg shadow-accent/25"
+                className="inline-flex items-center justify-center gap-2 self-center lg:self-start bg-accent hover:bg-accent-dark text-white font-bold text-base px-8 py-4 rounded-2xl transition-all hover:scale-[1.02] active:scale-[0.98] shadow-lg shadow-accent/25"
               >
                 Hemen Başla
-                <span className="text-lg">→</span>
+                <span className="text-lg" aria-hidden>
+                  →
+                </span>
               </Link>
-              <div className="flex items-center justify-center gap-3">
-                <a
-                  href="#"
-                  className="flex items-center gap-2 bg-white/10 hover:bg-white/15 backdrop-blur-sm border border-white/10 text-white font-medium text-sm px-5 py-3 rounded-xl transition-all"
-                >
-                  <AppleIcon />
-                  App Store
-                </a>
-                <a
-                  href="#"
-                  className="flex items-center gap-2 bg-white/10 hover:bg-white/15 backdrop-blur-sm border border-white/10 text-white font-medium text-sm px-5 py-3 rounded-xl transition-all"
-                >
-                  <PlayStoreIcon />
-                  Play Store
-                </a>
+              <div className="flex flex-col items-center lg:items-start gap-2">
+                <p className="text-white/45 text-xs font-medium uppercase tracking-wider">
+                  Uygulamayı indir
+                </p>
+                <div className="flex flex-wrap items-center justify-center lg:justify-start gap-2">
+                  <a
+                    href="#"
+                    className="inline-flex items-center gap-2 rounded-xl border-2 border-white/35 bg-transparent px-4 py-2.5 text-sm font-medium text-white/90 transition-colors hover:border-white/55 hover:bg-white/5"
+                  >
+                    <AppleIcon />
+                    App Store
+                  </a>
+                  <a
+                    href="#"
+                    className="inline-flex items-center gap-2 rounded-xl border-2 border-white/35 bg-transparent px-4 py-2.5 text-sm font-medium text-white/90 transition-colors hover:border-white/55 hover:bg-white/5"
+                  >
+                    <PlayStoreIcon />
+                    Play Store
+                  </a>
+                </div>
               </div>
             </div>
 

@@ -56,7 +56,11 @@ export function LandingNav() {
           </Link>
           <Link
             href="/login"
-            className="text-sm font-semibold px-5 py-2.5 rounded-xl bg-accent hover:bg-accent-dark text-white transition-colors"
+            className={`text-sm font-semibold px-4 py-2 rounded-xl border-2 transition-colors ${
+              scrolled
+                ? 'border-primary/20 text-primary hover:bg-primary/5'
+                : 'border-white/50 text-white hover:bg-white/10'
+            }`}
           >
             Hemen Başla
           </Link>
@@ -94,7 +98,12 @@ export function LandingNav() {
             <a href="#faq" className="block text-text-secondary hover:text-text-primary py-2">SSS</a>
             <div className="pt-3 border-t border-border space-y-2">
               <Link href="/login" className="block text-center py-2.5 text-text-secondary">Giriş Yap</Link>
-              <Link href="/login" className="block text-center py-2.5 bg-accent text-white rounded-xl font-semibold">Hemen Başla</Link>
+              <Link
+                href="/login"
+                className="block text-center py-2.5 rounded-xl font-semibold border-2 border-accent text-accent hover:bg-accent/5"
+              >
+                Hemen Başla
+              </Link>
             </div>
           </div>
         </div>

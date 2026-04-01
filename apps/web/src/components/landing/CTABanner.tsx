@@ -18,29 +18,34 @@ export function CTABanner() {
           <p className="text-white/70 mb-8 max-w-xl mx-auto">
             Hemen ücretsiz hesap oluştur, kira ve faturalarını kredi kartınla ödemeye başla.
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+          <div className="flex flex-col gap-5 items-center">
             <Link
               href="/login"
               className="inline-flex items-center justify-center gap-2 bg-accent hover:bg-accent-dark text-white font-bold text-base px-8 py-4 rounded-2xl transition-all hover:scale-[1.02]"
             >
               Hemen Başla
-              <span>→</span>
+              <span aria-hidden>→</span>
             </Link>
-            <div className="flex items-center justify-center gap-3">
-              <a
-                href="#"
-                className="flex items-center gap-2 bg-white/10 hover:bg-white/20 border border-white/20 text-white font-medium text-sm px-5 py-3 rounded-xl transition-colors"
-              >
-                <AppleIcon />
-                App Store
-              </a>
-              <a
-                href="#"
-                className="flex items-center gap-2 bg-white/10 hover:bg-white/20 border border-white/20 text-white font-medium text-sm px-5 py-3 rounded-xl transition-colors"
-              >
-                <PlayStoreIcon />
-                Play Store
-              </a>
+            <div className="flex flex-col items-center gap-2 w-full">
+              <p className="text-white/45 text-xs font-medium uppercase tracking-wider">
+                Uygulamayı indir
+              </p>
+              <div className="flex flex-wrap items-center justify-center gap-2">
+                <a
+                  href="#"
+                  className="inline-flex items-center gap-2 rounded-xl border-2 border-white/35 bg-transparent px-4 py-2.5 text-sm font-medium text-white/90 transition-colors hover:border-white/55 hover:bg-white/5"
+                >
+                  <AppleIcon />
+                  App Store
+                </a>
+                <a
+                  href="#"
+                  className="inline-flex items-center gap-2 rounded-xl border-2 border-white/35 bg-transparent px-4 py-2.5 text-sm font-medium text-white/90 transition-colors hover:border-white/55 hover:bg-white/5"
+                >
+                  <PlayStoreIcon />
+                  Play Store
+                </a>
+              </div>
             </div>
           </div>
         </FadeIn>
