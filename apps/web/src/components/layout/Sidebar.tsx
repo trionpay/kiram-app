@@ -8,7 +8,7 @@ const NAV_GROUPS = [
   {
     label: 'GENEL',
     items: [
-      { href: '/dashboard', icon: '⊞', label: 'Ana Sayfa' },
+      { href: '/dashboard', icon: '⊞', label: 'Genel bakış' },
       { href: '/payment', icon: '↗', label: 'Ödeme Yap' },
     ],
   },

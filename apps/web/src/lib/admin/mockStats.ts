@@ -1,3 +1,6 @@
+/** Bekleyen işlem sayısı bunu aşınca özet kartı uyarı (sarı/turuncu) stiline geçer. */
+export const PENDING_QUEUE_ALERT_THRESHOLD = 10;
+
 export interface AdminDashboardStats {
   todayVolumeTry: number;
   successfulCount: number;
@@ -18,6 +21,7 @@ export const mockDashboardStats: AdminDashboardStats = {
   successfulCount: 142,
   failedCount: 8,
   newRegistrationsToday: 23,
+  /** Uyarı stilini görmek için geçici olarak 11+ yapın (eşik: PENDING_QUEUE_ALERT_THRESHOLD). */
   pendingCount: 3,
   successRateLast24hPercent: 94.6,
   activeUsersCount: 1_842,

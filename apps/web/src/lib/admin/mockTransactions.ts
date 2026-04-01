@@ -1,13 +1,23 @@
-export type TransactionStatus = 'success' | 'failed';
+export type TransactionStatus = 'success' | 'failed' | 'pending';
+
+/** Ödeme türü — liste ve raporlarda rozet/ikon ile gösterilir */
+export type TransactionPaymentKind = 'rent' | 'bill' | 'dues' | 'other';
 
 export interface AdminTransactionRow {
   id: string;
   userId: string;
   userLabel: string;
+  /** İşlem tutarı (alıcıya giden / fatura tutarı) TRY */
   amountTry: number;
+  /** Hizmet bedeli (komisyon) TRY — Blueprint dekont / admin ciro */
+  feeTry: number;
   status: TransactionStatus;
   createdAt: string;
-  description: string;
+  paymentKind: TransactionPaymentKind;
+  /** Kira: maskeli IBAN; fatura: kurum + abone/tesisat kısaltması */
+  recipientDetail: string;
+  /** İşlem notu (bekleme nedeni vb.); isteğe bağlı */
+  note?: string;
 }
 
 export const initialMockTransactions: AdminTransactionRow[] = [
@@ -16,44 +26,78 @@ export const initialMockTransactions: AdminTransactionRow[] = [
     userId: 'u1',
     userLabel: 'Ayşe Y.',
     amountTry: 4_500,
+    feeTry: 67.5,
     status: 'success',
     createdAt: '2025-03-25T09:12:00',
-    description: 'Kira ödemesi',
+    paymentKind: 'rent',
+    recipientDetail: 'TR12 **** **** **** **** 5601',
   },
   {
     id: 't2',
     userId: 'u2',
     userLabel: 'Mehmet K.',
     amountTry: 890.5,
+    feeTry: 13.36,
     status: 'success',
     createdAt: '2025-03-25T10:03:00',
-    description: 'Fatura',
+    paymentKind: 'bill',
+    recipientDetail: 'İGDAŞ · Abone …4821',
   },
   {
     id: 't3',
     userId: 'u1',
     userLabel: 'Ayşe Y.',
     amountTry: 1_200,
+    feeTry: 18,
     status: 'failed',
     createdAt: '2025-03-25T11:45:00',
-    description: 'Aidat',
+    paymentKind: 'dues',
+    recipientDetail: 'Site Yönetimi A Blok · Aidat',
   },
   {
     id: 't4',
     userId: 'u4',
     userLabel: 'Can Ö.',
     amountTry: 12_000,
+    feeTry: 180,
     status: 'success',
     createdAt: '2025-03-24T16:20:00',
-    description: 'Kira ödemesi',
+    paymentKind: 'rent',
+    recipientDetail: 'TR98 **** **** **** **** 9024',
   },
   {
     id: 't5',
     userId: 'u3',
     userLabel: 'Zeynep D.',
     amountTry: 350,
+    feeTry: 5.25,
     status: 'failed',
     createdAt: '2025-03-24T08:00:00',
-    description: 'Fatura',
+    paymentKind: 'bill',
+    recipientDetail: 'Başkent EDAŞ · Sayaç …9910',
+  },
+  {
+    id: 't6',
+    userId: 'u2',
+    userLabel: 'Mehmet K.',
+    amountTry: 2_100,
+    feeTry: 31.5,
+    status: 'pending',
+    createdAt: '2025-03-25T14:02:00',
+    paymentKind: 'rent',
+    recipientDetail: 'TR12 **** **** **** **** 5601',
+    note: '3D Secure / banka onayı bekleniyor',
+  },
+  {
+    id: 't7',
+    userId: 'u4',
+    userLabel: 'Can Ö.',
+    amountTry: 750,
+    feeTry: 11.25,
+    status: 'pending',
+    createdAt: '2025-03-25T14:18:00',
+    paymentKind: 'bill',
+    recipientDetail: 'İSKİ · Abone …7732',
+    note: 'Webhook işleniyor',
   },
 ];

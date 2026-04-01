@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import {
   View, Text, StyleSheet, TouchableOpacity, ScrollView,
-  TextInput, ActivityIndicator, Platform, KeyboardAvoidingView,
+  TextInput, ActivityIndicator, Platform, KeyboardAvoidingView, Switch,
 } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Button } from '../../components/Button';
 import { colors, typography, spacing, screenPaddingHorizontal } from '../../theme';
@@ -59,11 +60,14 @@ const CATEGORIES = [
 
 const STEPS = ['category', 'company', 'subscriber', 'result'];
 
+const SAVED_BILL_SUBSCRIBERS_KEY = 'kiram_saved_bill_subscribers';
+
 export function BillPaymentScreen({ navigation }) {
   const [step, setStep] = useState('category');
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [selectedCompany, setSelectedCompany] = useState(null);
   const [subscriberNo, setSubscriberNo] = useState('');
+  const [saveBillSubscriber, setSaveBillSubscriber] = useState(false);
   const [querying, setQuerying] = useState(false);
   const [billResult, setBillResult] = useState(null);
 
@@ -84,8 +88,30 @@ export function BillPaymentScreen({ navigation }) {
     }, 1500);
   };
 
-  const handlePay = () => {
+  const handlePay = async () => {
     const company = category?.companies.find(c => c.id === selectedCompany);
+    if (
+      saveBillSubscriber &&
+      selectedCategory &&
+      selectedCompany &&
+      subscriberNo.trim()
+    ) {
+      try {
+        const raw = await AsyncStorage.getItem(SAVED_BILL_SUBSCRIBERS_KEY);
+        const list = raw ? JSON.parse(raw) : [];
+        const entry = {
+          id: `${selectedCategory}-${selectedCompany}-${subscriberNo.trim()}`,
+          categoryId: selectedCategory,
+          providerId: selectedCompany,
+          providerName: company?.name ?? '',
+          ref: subscriberNo.trim(),
+        };
+        const next = [entry, ...list.filter(x => x.id !== entry.id)].slice(0, 20);
+        await AsyncStorage.setItem(SAVED_BILL_SUBSCRIBERS_KEY, JSON.stringify(next));
+      } catch {
+        /* ignore */
+      }
+    }
     const fee = +(billResult.amount * 0.015).toFixed(2);
     const total = +(billResult.amount + fee).toFixed(2);
     navigation.navigate('PaymentSummary', {
@@ -108,7 +134,10 @@ export function BillPaymentScreen({ navigation }) {
           onPress={() => {
             if (step === 'category') navigation.goBack();
             else if (step === 'company') setStep('category');
-            else if (step === 'subscriber') setStep('company');
+            else if (step === 'subscriber') {
+              setStep('company');
+              setSaveBillSubscriber(false);
+            }
             else if (step === 'result') { setStep('subscriber'); setBillResult(null); }
           }}
         >
@@ -145,7 +174,11 @@ export function BillPaymentScreen({ navigation }) {
                 <TouchableOpacity
                   key={cat.id}
                   style={[styles.categoryCard, selectedCategory === cat.id && styles.categoryCardActive]}
-                  onPress={() => { setSelectedCategory(cat.id); setStep('company'); }}
+                  onPress={() => {
+                    setSelectedCategory(cat.id);
+                    setStep('company');
+                    setSaveBillSubscriber(false);
+                  }}
                   activeOpacity={0.8}
                 >
                   <Text style={styles.categoryIcon}>{cat.icon}</Text>
@@ -168,7 +201,11 @@ export function BillPaymentScreen({ navigation }) {
                 <TouchableOpacity
                   key={co.id}
                   style={[styles.companyRow, selectedCompany === co.id && styles.companyRowActive]}
-                  onPress={() => { setSelectedCompany(co.id); setStep('subscriber'); }}
+                  onPress={() => {
+                    setSelectedCompany(co.id);
+                    setStep('subscriber');
+                    setSaveBillSubscriber(false);
+                  }}
                   activeOpacity={0.7}
                 >
                   <View style={[styles.companyLogo, { backgroundColor: co.color }]}>
@@ -207,6 +244,23 @@ export function BillPaymentScreen({ navigation }) {
               <Text style={styles.hint}>
                 Fatura veya dağıtım şirketi uygulamanızdan bulabilirsiniz.
               </Text>
+            </View>
+
+            <View style={styles.saveRow}>
+              <View style={styles.saveTextCol}>
+                <Text style={styles.saveLabel}>Abone bilgilerimi kaydet</Text>
+                <Text style={styles.saveHint}>
+                  Sonraki fatura ödemelerinde hızlı doldurmak için bu cihazda saklanır (hesap bağlandığında
+                  sunucuya taşınır).
+                </Text>
+              </View>
+              <Switch
+                value={saveBillSubscriber}
+                onValueChange={setSaveBillSubscriber}
+                trackColor={{ false: colors.border, true: colors.accent }}
+                thumbColor={colors.textInverse}
+                ios_backgroundColor={colors.border}
+              />
             </View>
           </>
         )}
@@ -376,6 +430,22 @@ const styles = StyleSheet.create({
     letterSpacing: 2,
   },
   hint: { ...typography.caption, color: colors.textTertiary, marginTop: spacing.sm },
+
+  saveRow: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    justifyContent: 'space-between',
+    gap: spacing.md,
+    backgroundColor: colors.backgroundElevated,
+    borderRadius: 14,
+    borderWidth: 1,
+    borderColor: colors.border,
+    padding: spacing.md,
+    marginTop: spacing.sm,
+  },
+  saveTextCol: { flex: 1, paddingRight: spacing.xs },
+  saveLabel: { ...typography.label, color: colors.textPrimary, marginBottom: 4 },
+  saveHint: { ...typography.caption, color: colors.textTertiary, lineHeight: 18 },
 
   /* Borç kartı */
   billCard: {

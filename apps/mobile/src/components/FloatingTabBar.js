@@ -11,7 +11,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { colors, spacing } from '../theme';
 
 const TABS = [
-  { name: 'Dashboard', iconOutline: 'home-outline', iconFilled: 'home', label: 'Ana Sayfa' },
+  { name: 'Dashboard', iconOutline: 'home-outline', iconFilled: 'home', label: 'Genel bakış' },
   { name: 'Recipients', iconOutline: 'people-outline', iconFilled: 'people', label: 'Alıcılar' },
   { name: 'Payment', iconOutline: null, iconFilled: null, label: 'Ödeme' },
   { name: 'History', iconOutline: 'time-outline', iconFilled: 'time', label: 'Geçmiş' },

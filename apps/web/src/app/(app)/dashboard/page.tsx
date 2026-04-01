@@ -3,10 +3,47 @@
 import Link from 'next/link';
 import { Badge } from '@/components/ui/Badge';
 
-const STATS = [
-  { label: 'Bu Ay Ödeme', value: '₺14.700', change: '+%12', up: true },
-  { label: 'Bekleyen', value: '₺12.000', change: '1 işlem', up: null },
-  { label: 'Kayıtlı Alıcı', value: '4', change: 'aktif', up: null },
+type DashboardStatDelta = 'outflow_up' | 'outflow_down' | 'neutral';
+
+type DashboardStatCard = {
+  label: string;
+  hint: string;
+  value: string;
+  change: string;
+  changeNote?: string;
+  deltaTone: DashboardStatDelta;
+};
+
+function statDeltaClass(tone: DashboardStatDelta) {
+  if (tone === 'outflow_up') return 'text-warning';
+  if (tone === 'outflow_down') return 'text-success';
+  return 'text-text-tertiary';
+}
+
+/** Özet kartları: çıkan ödeme artışı = turuncu (dikkat), azalış = yeşil; metinler metriği açıklar */
+const STATS: DashboardStatCard[] = [
+  {
+    label: 'Bu ay ödemeleri',
+    hint: 'Bu ay hesabınızdan çıkan, tamamlanan ödemelerin toplamıdır.',
+    value: '₺14.700',
+    change: '+%12',
+    changeNote: 'Önceki aya göre',
+    deltaTone: 'outflow_up',
+  },
+  {
+    label: 'Bekleyen',
+    hint: 'Onay veya tahsilat bekleyen işlemlerin toplam tutarı.',
+    value: '₺12.000',
+    change: '1 işlem',
+    deltaTone: 'neutral',
+  },
+  {
+    label: 'Kayıtlı alıcı',
+    hint: 'Ödeme yapabileceğiniz kayıtlı IBAN / alıcı sayısı.',
+    value: '4',
+    change: 'aktif',
+    deltaTone: 'neutral',
+  },
 ];
 
 const RECENT_RECIPIENTS = [
@@ -17,12 +54,51 @@ const RECENT_RECIPIENTS = [
   { id: '5', nickname: 'Su İdaresi', emoji: '💧', color: '#6B7FA6' },
 ];
 
+/** Dashboard üst bölümü — ödeme ekranına hızlı kısayol (mock sıklık sırası) */
+const QUICK_PAY_RECIPIENTS = RECENT_RECIPIENTS.slice(0, 4);
+
 const RECENT_TRANSACTIONS = [
-  { id: '1', title: 'Apartman Aidatı', subtitle: 'Ocak 2025', amount: '₺850', status: 'success', date: '15 Oca' },
-  { id: '2', title: 'Doğalgaz', subtitle: 'İGDAŞ', amount: '₺320', status: 'success', date: '12 Oca' },
-  { id: '3', title: 'Kira', subtitle: 'Ev Sahibi — Şub', amount: '₺12.000', status: 'pending', date: '1 Şub' },
-  { id: '4', title: 'İnternet', subtitle: 'Türk Telekom', amount: '₺199', status: 'success', date: '8 Oca' },
-];
+  {
+    id: '1',
+    title: 'Apartman Aidatı',
+    subtitle: 'Ocak 2025',
+    amount: '₺850',
+    status: 'success',
+    date: '15 Oca',
+    icon: '🏢',
+    iconTint: '#5B7FA6',
+  },
+  {
+    id: '2',
+    title: 'Doğalgaz',
+    subtitle: 'İGDAŞ',
+    amount: '₺320',
+    status: 'success',
+    date: '12 Oca',
+    icon: '🔥',
+    iconTint: '#C2410C',
+  },
+  {
+    id: '3',
+    title: 'Kira',
+    subtitle: 'Ev Sahibi — Şub',
+    amount: '₺12.000',
+    status: 'pending',
+    date: '1 Şub',
+    icon: '🏠',
+    iconTint: '#4A9B7F',
+  },
+  {
+    id: '4',
+    title: 'İnternet',
+    subtitle: 'Türk Telekom',
+    amount: '₺199',
+    status: 'success',
+    date: '8 Oca',
+    icon: '📶',
+    iconTint: '#0369A1',
+  },
+] as const;
 
 const STATUS_BADGE: Record<string, React.ReactNode> = {
   success: <Badge variant="success">Başarılı</Badge>,
@@ -33,11 +109,13 @@ const STATUS_BADGE: Record<string, React.ReactNode> = {
 export default function DashboardPage() {
   return (
     <div className="space-y-8">
-      {/* Üst başlık */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-2xl font-bold text-text-primary">Hoş geldiniz, Ahmet 👋</h1>
-          <p className="text-text-secondary text-sm mt-1">İşte hesabınızın özeti.</p>
+      {/* Sayfa başlığı: hiyerarşi (Pastel — zayıf “Ana Sayfa” yerine belirgin başlık) */}
+      <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-start">
+        <div className="min-w-0">
+          <h1 className="text-2xl font-bold tracking-tight text-text-primary sm:text-3xl">Genel bakış</h1>
+          <p className="mt-2 text-base text-text-secondary">
+            Hoş geldiniz, Ahmet 👋 İşte hesabınızın özeti.
+          </p>
         </div>
         <Link
           href="/payment"
@@ -47,50 +125,91 @@ export default function DashboardPage() {
         </Link>
       </div>
 
-      {/* Stats */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+      {/* Stats — etiket + kısa açıklama; gider artışı yeşil gösterilmez */}
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
         {STATS.map(stat => (
-          <div key={stat.label} className="bg-elevated rounded-2xl border border-border p-5">
-            <p className="text-text-tertiary text-xs font-medium mb-2">{stat.label}</p>
-            <p className="text-2xl font-bold text-text-primary">{stat.value}</p>
-            <p className={`text-xs mt-1 font-medium ${stat.up === true ? 'text-success' : stat.up === false ? 'text-error' : 'text-text-tertiary'}`}>
-              {stat.change}
-            </p>
+          <div key={stat.label} className="rounded-2xl border border-border bg-elevated p-5">
+            <p className="text-xs font-semibold text-text-primary">{stat.label}</p>
+            <p className="mt-1 text-[11px] leading-snug text-text-secondary">{stat.hint}</p>
+            <p className="mt-3 text-2xl font-bold tabular-nums text-text-primary">{stat.value}</p>
+            <div className="mt-1.5">
+              <p className={`text-xs font-semibold tabular-nums ${statDeltaClass(stat.deltaTone)}`}>
+                {stat.change}
+              </p>
+              {stat.changeNote ? (
+                <p className="mt-0.5 text-[11px] leading-snug text-text-tertiary">{stat.changeNote}</p>
+              ) : null}
+            </div>
           </div>
         ))}
       </div>
 
-      {/* Hero aksiyonu */}
-      <div
-        className="relative rounded-3xl p-8 overflow-hidden"
-        style={{ background: 'linear-gradient(135deg, #102A43, #0C1929, #061018)' }}
+      {/* Hızlı ödeme — giriş yapmış kullanıcı için işlevsel alan (landing sloganı yok) */}
+      <section
+        className="rounded-2xl border border-border bg-elevated p-5 sm:p-6 shadow-sm"
+        aria-labelledby="dashboard-quick-pay-heading"
       >
-        <div className="absolute top-[-40px] right-[-40px] w-56 h-56 rounded-full opacity-10" style={{ background: '#0369A1' }} />
-        <div className="absolute bottom-[-60px] right-[100px] w-36 h-36 rounded-full opacity-5" style={{ background: '#0369A1' }} />
-        <div className="relative z-10 flex flex-col sm:flex-row sm:items-center justify-between gap-6">
-          <div>
-            <p className="text-white/50 text-sm mb-1.5">Hızlı işlem</p>
-            <h2 className="text-2xl font-bold text-white">Kira, aidat, fatura<br />tek yerden öde.</h2>
+        <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
+          <div className="min-w-0">
+            <h2 id="dashboard-quick-pay-heading" className="text-lg font-bold text-text-primary">
+              Hızlı ödeme
+            </h2>
+            <p className="mt-1 text-sm text-text-secondary max-w-xl">
+              Sık kullandığınız alıcılardan birini seçerek ödeme akışına geçin. Tutar ve kart adımlarını bir sonraki
+              ekranda tamamlarsınız.
+            </p>
           </div>
           <Link
             href="/payment"
-            className="inline-flex items-center gap-2 bg-white text-primary font-bold text-sm px-6 py-3 rounded-2xl hover:bg-white/90 transition-colors active:scale-[0.98] whitespace-nowrap flex-shrink-0"
+            className="inline-flex shrink-0 items-center justify-center gap-2 rounded-2xl bg-primary px-5 py-3 text-sm font-semibold text-white transition-colors hover:bg-primary-light active:scale-[0.98]"
           >
-            Ödeme Başlat <span>→</span>
+            Ödeme akışına git <span aria-hidden>→</span>
           </Link>
         </div>
-      </div>
-
-      {/* İki kolon: Alıcılar + Son işlemler */}
-      <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
-        {/* Son Alıcılar — dar kolon */}
-        <div className="lg:col-span-2 bg-elevated rounded-2xl border border-border p-5">
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="font-bold text-text-primary text-sm">Son Alıcılar</h2>
-            <Link href="/recipients" className="text-accent text-xs font-semibold hover:underline">
-              Tümünü Gör
+        <div className="mt-5">
+          <p className="text-xs font-semibold uppercase tracking-wide text-text-tertiary mb-3">
+            Sık kullanılan alıcılar
+          </p>
+          <div className="flex flex-wrap gap-2">
+            {QUICK_PAY_RECIPIENTS.map(r => (
+              <Link
+                key={r.id}
+                href="/payment"
+                className="inline-flex items-center gap-2 rounded-xl border border-border bg-surface px-3 py-2.5 text-sm font-semibold text-text-primary transition-colors hover:border-accent hover:bg-accent/5"
+              >
+                <span
+                  className="flex h-8 w-8 items-center justify-center rounded-lg text-base"
+                  style={{ backgroundColor: `${r.color}22`, border: `1px solid ${r.color}40` }}
+                  aria-hidden
+                >
+                  {r.emoji}
+                </span>
+                <span className="max-w-[140px] truncate">{r.nickname}</span>
+              </Link>
+            ))}
+            <Link
+              href="/recipients"
+              className="inline-flex items-center gap-2 rounded-xl border border-dashed border-border px-3 py-2.5 text-sm font-medium text-text-secondary transition-colors hover:border-accent hover:text-accent"
+            >
+              <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-surface text-text-tertiary" aria-hidden>
+                +
+              </span>
+              Alıcı yönet
             </Link>
           </div>
+        </div>
+      </section>
+
+      {/* İki kolon: Alıcılar + Son işlemler — üst başlıklar aynı grid hizasında */}
+      <div className="grid grid-cols-1 items-start gap-6 lg:grid-cols-5">
+        {/* Son Alıcılar — dar kolon */}
+        <div className="flex h-full flex-col rounded-2xl border border-border bg-elevated p-5 lg:col-span-2">
+          <header className="mb-4 flex min-h-11 shrink-0 items-center justify-between gap-3 border-b border-border pb-3">
+            <h2 className="text-sm font-bold leading-tight text-text-primary">Son Alıcılar</h2>
+            <Link href="/recipients" className="shrink-0 text-xs font-semibold text-accent hover:underline">
+              Tümünü Gör
+            </Link>
+          </header>
           <div className="space-y-3">
             {RECENT_RECIPIENTS.map(r => (
               <Link
@@ -120,30 +239,42 @@ export default function DashboardPage() {
           </div>
         </div>
 
-        {/* Son İşlemler — geniş kolon */}
-        <div className="lg:col-span-3 bg-elevated rounded-2xl border border-border p-5">
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="font-bold text-text-primary text-sm">Son İşlemler</h2>
-            <Link href="/history" className="text-accent text-xs font-semibold hover:underline">
+        {/* Son İşlemler — geniş kolon; durum + tutar sabit sütunlarda hizalı */}
+        <div className="flex h-full flex-col rounded-2xl border border-border bg-elevated p-5 lg:col-span-3">
+          <header className="mb-4 flex min-h-11 shrink-0 items-center justify-between gap-3 border-b border-border pb-3">
+            <h2 className="text-sm font-bold leading-tight text-text-primary">Son İşlemler</h2>
+            <Link href="/history" className="shrink-0 text-xs font-semibold text-accent hover:underline">
               Tümünü Gör
             </Link>
-          </div>
-          <div className="divide-y divide-border">
+          </header>
+          <div className="min-w-0 divide-y divide-border">
             {RECENT_TRANSACTIONS.map(tx => (
-              <div key={tx.id} className="flex items-center gap-3 py-3 first:pt-0 last:pb-0">
-                <div className="w-8 h-8 rounded-xl bg-surface flex items-center justify-center flex-shrink-0">
-                  <span className="text-text-tertiary text-xs">₺</span>
+              <div
+                key={tx.id}
+                className="flex min-w-0 items-center gap-3 py-3.5 first:pt-0 last:pb-0 max-[380px]:flex-wrap max-[380px]:gap-y-2"
+              >
+                <div
+                  className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl text-lg"
+                  style={{
+                    backgroundColor: `${tx.iconTint}22`,
+                    border: `1.5px solid ${tx.iconTint}44`,
+                  }}
+                  aria-hidden
+                >
+                  {tx.icon}
                 </div>
-                <div className="flex-1 min-w-0">
-                  <p className="font-semibold text-text-primary text-sm truncate">{tx.title}</p>
-                  <p className="text-text-tertiary text-xs">{tx.subtitle}</p>
+                <div className="min-w-0 flex-1">
+                  <p className="truncate text-sm font-semibold text-text-primary">{tx.title}</p>
+                  <p className="text-xs text-text-tertiary">{tx.subtitle}</p>
                 </div>
-                <div className="flex-shrink-0 hidden sm:block">
-                  {STATUS_BADGE[tx.status]}
-                </div>
-                <div className="text-right flex-shrink-0">
-                  <p className="font-bold text-text-primary text-sm">{tx.amount}</p>
-                  <p className="text-text-tertiary text-xs">{tx.date}</p>
+                <div className="flex min-w-0 shrink-0 items-center gap-3 sm:gap-4 max-[380px]:w-full max-[380px]:basis-full max-[380px]:justify-between max-[380px]:pl-14">
+                  <div className="flex w-[5.5rem] shrink-0 justify-center sm:w-[6rem]">
+                    {STATUS_BADGE[tx.status]}
+                  </div>
+                  <div className="w-[4.5rem] shrink-0 text-right sm:w-[5.25rem]">
+                    <p className="text-sm font-bold tabular-nums leading-tight text-text-primary">{tx.amount}</p>
+                    <p className="text-xs tabular-nums leading-tight text-text-tertiary">{tx.date}</p>
+                  </div>
                 </div>
               </div>
             ))}

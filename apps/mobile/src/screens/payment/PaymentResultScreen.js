@@ -57,7 +57,7 @@ export function PaymentResultScreen({ route, navigation }) {
           <View style={styles.actions}>
             <Button title="Farklı Kart Dene" onPress={() => navigation.goBack()} />
             <TouchableOpacity style={styles.homeBtn} onPress={goHome}>
-              <Text style={styles.homeBtnText}>Ana Sayfaya Dön</Text>
+              <Text style={styles.homeBtnText}>Genel bakışa dön</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -129,7 +129,7 @@ export function PaymentResultScreen({ route, navigation }) {
             <Text style={styles.shareBtnIcon}>↑</Text>
             <Text style={styles.shareBtnText}>Dekontu Paylaş</Text>
           </TouchableOpacity>
-          <Button title="Ana Sayfaya Dön" onPress={goHome} />
+          <Button title="Genel bakışa dön" onPress={goHome} />
         </View>
       </View>
     </SafeAreaView>

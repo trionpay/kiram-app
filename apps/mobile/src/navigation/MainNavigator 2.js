@@ -36,7 +36,7 @@ export function MainNavigator() {
         name="Dashboard"
         component={DashboardScreen}
         options={{
-          tabBarLabel: 'Ana Sayfa',
+          tabBarLabel: 'Genel bakış',
           tabBarIcon: ({ focused }) => <TabIcon icon="🏠" focused={focused} />,
         }}
       />

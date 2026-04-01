@@ -3,12 +3,12 @@
 import { useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { Sidebar } from './Sidebar';
 import { TrionPayLogo } from '@/components/ui/TrionPayLogo';
 
 const PAGE_TITLES: Record<string, string> = {
-  '/dashboard': 'Ana Sayfa',
+  '/dashboard': 'Genel bakış',
   '/payment': 'Ödeme Yap',
   '/history': 'Geçmiş',
   '/recipients': 'Alıcılar',
@@ -66,6 +66,7 @@ const INITIAL_NOTIFICATIONS: MockNotification[] = [
 
 export function Topbar() {
   const pathname = usePathname();
+  const router = useRouter();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [notificationsOpen, setNotificationsOpen] = useState(false);
   const [notifications, setNotifications] = useState<MockNotification[]>(INITIAL_NOTIFICATIONS);
@@ -77,6 +78,17 @@ export function Topbar() {
     Object.entries(PAGE_TITLES).find(
       ([key]) => pathname === key || (key !== '/dashboard' && pathname.startsWith(key))
     )?.[1] ?? '';
+
+  const showBack = pathname !== '/dashboard';
+  const isDashboard = pathname === '/dashboard';
+
+  const handleBack = () => {
+    if (typeof window !== 'undefined' && window.history.length > 1) {
+      router.back();
+    } else {
+      router.push('/dashboard');
+    }
+  };
 
   useEffect(() => {
     if (!sidebarOpen) return;
@@ -142,17 +154,49 @@ export function Topbar() {
           <span className="w-3.5 h-0.5 bg-text-primary rounded-full self-start" />
         </button>
 
+        {showBack ? (
+          <button
+            type="button"
+            onClick={handleBack}
+            className="shrink-0 z-20 w-10 h-10 flex items-center justify-center rounded-lg hover:bg-surface transition-colors text-text-primary text-lg font-medium leading-none"
+            aria-label="Geri"
+          >
+            ←
+          </button>
+        ) : null}
+
         {/* Mobil marka — TrionPay; z-10 ile hamburgerin altında kalır */}
         <Link
           href="/dashboard"
-          className="lg:hidden relative z-10 flex items-center min-w-0 shrink overflow-hidden max-w-[min(200px,50vw)]"
-          aria-label="Ana sayfa"
+          className="lg:hidden relative z-10 flex shrink-0 items-center min-w-0 overflow-hidden max-w-[min(200px,50vw)]"
+          aria-label="Genel bakış"
         >
           <TrionPayLogo width={88} color="#0C1929" accentColor="#5FE00B" />
         </Link>
 
-        {/* Sayfa başlığı — desktop */}
-        <span className="hidden lg:block text-sm font-semibold text-text-secondary">{title}</span>
+        {/* Mobil: sayfa adı (Genel bakış ana içerikte; tekrar etmesin) */}
+        {!isDashboard && title ? (
+          <span className="min-w-0 flex-1 truncate pl-1 text-base font-bold tracking-tight text-text-primary lg:hidden">
+            {title}
+          </span>
+        ) : null}
+
+        {/* Masaüstü: belirgin sayfa başlığı; Genel bakış solda menüde olduğu için üst çubukta yok */}
+        {!isDashboard && title ? (
+          <div className="hidden min-w-0 items-center gap-3 lg:flex">
+            {showBack ? (
+              <button
+                type="button"
+                onClick={handleBack}
+                className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg text-base font-medium text-text-primary transition-colors hover:bg-surface"
+                aria-label="Geri"
+              >
+                ←
+              </button>
+            ) : null}
+            <span className="truncate text-xl font-bold tracking-tight text-text-primary">{title}</span>
+          </div>
+        ) : null}
 
         <div className="flex-1" />
 
