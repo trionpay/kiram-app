@@ -101,11 +101,8 @@ export function Footer() {
             </Link>
           </div>
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-            <p className="text-text-tertiary text-sm">
+            <p className="text-text-secondary text-sm">
               © 2026 TrionPay. Tüm hakları saklıdır.
-            </p>
-            <p className="text-text-tertiary text-xs">
-              TrionPay, BDDK ve TCMB lisanslı bir ödeme kuruluşudur.
             </p>
           </div>
         </div>

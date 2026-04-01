@@ -162,21 +162,15 @@ export default function LoginPage() {
         </p>
       </div>
 
-      <div className="space-y-3">
-        <Button
-          className="w-full"
-          size="lg"
-          onClick={handleSendCode}
-          disabled={phone.length < 10}
-          loading={loading}
-        >
-          Kodu Gönder
-        </Button>
-
-        <button className="w-full text-center text-accent text-sm font-semibold py-2 hover:underline">
-          Şifremi Unuttum
-        </button>
-      </div>
+      <Button
+        className="w-full"
+        size="lg"
+        onClick={handleSendCode}
+        disabled={phone.length < 10}
+        loading={loading}
+      >
+        Kodu Gönder
+      </Button>
     </div>
   );
 }

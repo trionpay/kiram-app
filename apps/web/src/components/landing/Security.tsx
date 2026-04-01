@@ -5,7 +5,7 @@ import { FadeIn } from './FadeIn';
 const BADGES = [
   { icon: '🔒', title: '256-bit SSL', desc: 'Banka düzeyinde şifreleme' },
   { icon: '🛡️', title: 'PCI-DSS', desc: 'Kart güvenliği sertifikası' },
-  { icon: '🏛️', title: 'BDDK/TCMB', desc: 'Lisanslı ödeme kuruluşu' },
+  { icon: '🏛️', title: 'Regülasyon', desc: 'Ödeme işlemleri lisanslı altyapı sağlayıcı ile' },
   { icon: '📋', title: 'KVKK', desc: 'Kişisel veri koruması' },
 ];
 

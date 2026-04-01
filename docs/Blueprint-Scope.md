@@ -24,9 +24,8 @@ Bu belge, Trion Pay mobil ve web uygulamalarının ilk sürümündeki (MVP) teme
 - **S1** – Splash ekranı (Trion Pay kurumsal kimlik, marka güveni).
 - **S2** – SMS OTP ile kayıt/giriş.
 - **S3** – Minimum KYC adımları (Ad, Soyad, TCKN, Doğum Tarihi vb.) ile hesap aktifleştirme.
-- **S4** – "Şifremi Unuttum" akışı (SMS ile sıfırlama).
-- **S5** – OTP ekranlarında "Kodu Tekrar Gönder" + geri sayım sayacı.
-- **S6** – Tek cihaz oturumu: yeni giriş diğer oturumları sonlandırır.
+- **S4** – OTP ekranlarında "Kodu Tekrar Gönder" + geri sayım sayacı.
+- **S5** – Tek cihaz oturumu: yeni giriş diğer oturumları sonlandırır.
 - **Kapsam Dışı:** Liveness, OCR kimlik tarama (API’de hazır SDK yoksa).
 
 ## 2. Ana Dashboard (Vitrin)
