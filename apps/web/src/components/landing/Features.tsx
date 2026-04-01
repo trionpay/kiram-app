@@ -44,8 +44,13 @@ export function Features() {
             <h2 className="text-3xl md:text-4xl font-bold text-text-primary mb-4">
               Neden Kiram?
             </h2>
-            <p className="text-text-secondary max-w-2xl mx-auto">
+            <p className="text-text-secondary max-w-2xl mx-auto text-base leading-relaxed">
               Ev ödemelerini yönetmenin en kolay ve güvenli yolu.
+            </p>
+            <p className="text-text-tertiary max-w-2xl mx-auto text-sm leading-relaxed mt-3">
+              <span className="font-semibold text-text-secondary">Kiram</span>, Trion Pay güvencesiyle{' '}
+              <span className="font-semibold text-text-secondary">kiram.com</span> üzerinden sunduğumuz ürün
+              adıdır — aynı deneyimi tek çatı altında toplar.
             </p>
           </div>
         </FadeIn>
