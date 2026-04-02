@@ -11,7 +11,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { colors, spacing } from '../theme';
 
 const TABS = [
-  { name: 'Dashboard', iconOutline: 'home-outline', iconFilled: 'home', label: 'Genel bakış' },
+  { name: 'Dashboard', iconOutline: 'home-outline', iconFilled: 'home', label: 'Ana Sayfa' },
   { name: 'Recipients', iconOutline: 'people-outline', iconFilled: 'people', label: 'Alıcılar' },
   { name: 'Payment', iconOutline: null, iconFilled: null, label: 'Ödeme' },
   { name: 'History', iconOutline: 'time-outline', iconFilled: 'time', label: 'Geçmiş' },
@@ -83,7 +83,7 @@ export function FloatingTabBar({ state, descriptors, navigation }) {
                 <Ionicons
                   name={iconName}
                   size={20}
-                  color={isFocused ? colors.accent : 'rgba(255,255,255,0.4)'}
+                  color={isFocused ? '#FFFFFF' : 'rgba(255,255,255,0.72)'}
                 />
               </View>
               <Text style={[styles.label, isFocused && styles.labelActive]}>
@@ -137,16 +137,16 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   iconWrapActive: {
-    backgroundColor: 'rgba(3, 105, 161, 0.15)',
+    backgroundColor: 'rgba(255,255,255,0.18)',
   },
   label: {
     fontSize: 9,
     fontWeight: '500',
-    color: 'rgba(255,255,255,0.3)',
+    color: 'rgba(255,255,255,0.74)',
     letterSpacing: 0.2,
   },
   labelActive: {
-    color: colors.accent,
+    color: '#FFFFFF',
   },
 
   /* Orta ödeme butonu */

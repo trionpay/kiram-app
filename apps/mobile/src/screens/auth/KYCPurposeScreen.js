@@ -51,7 +51,7 @@ export function KYCPurposeScreen({ navigation, route }) {
 
         <Text style={styles.title}>Kiram'ı ne için{'\n'}kullanacaksınız?</Text>
         <Text style={styles.subtitle}>
-          Birden fazla seçebilirsiniz. Bu bilgi deneyiminizi kişiselleştirmek için kullanılır.
+          Bu bilgi deneyiminizi kişiselleştirmek için kullanılır.
         </Text>
 
         <View style={styles.options}>

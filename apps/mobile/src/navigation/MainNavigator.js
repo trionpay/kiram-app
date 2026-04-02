@@ -10,13 +10,14 @@ import { FloatingTabBar } from '../components/FloatingTabBar';
 
 const Tab = createBottomTabNavigator();
 
-export function MainNavigator() {
+export function MainNavigator({ route }) {
+  const firstName = route?.params?.firstName;
   return (
     <Tab.Navigator
       tabBar={(props) => <FloatingTabBar {...props} />}
       screenOptions={{ headerShown: false }}
     >
-      <Tab.Screen name="Dashboard" component={DashboardScreen} />
+      <Tab.Screen name="Dashboard" component={DashboardScreen} initialParams={{ firstName }} />
       <Tab.Screen name="Recipients" component={RecipientsScreen} />
       <Tab.Screen name="Payment" component={PaymentNavigator} />
       <Tab.Screen name="History" component={HistoryScreen} />

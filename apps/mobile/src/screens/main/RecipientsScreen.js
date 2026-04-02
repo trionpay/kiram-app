@@ -1,12 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import {
   View, Text, StyleSheet, TouchableOpacity, ScrollView,
-  TextInput, Modal, KeyboardAvoidingView, Platform,
+  TextInput, Modal, KeyboardAvoidingView, Platform, Alert,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import * as Clipboard from 'expo-clipboard';
 import { Button } from '../../components/Button';
 import { SkeletonRecipientRow } from '../../components/Skeleton';
 import { colors, typography, spacing, screenPaddingHorizontal } from '../../theme';
+
+const AVATAR_COLORS = ['#5B7FA6', '#4A9B7F', '#B56B6B', '#B8894A', '#6C5B95'];
 
 const INITIAL_RECIPIENTS = [
   { id: '1', name: 'Apartman Yönetimi', iban: 'TR33 0006 1005 1978 6457 8413 26', nickname: 'Apartman' },
@@ -18,6 +21,16 @@ function formatIban(text) {
   const clean = text.replace(/\s/g, '').toUpperCase();
   const parts = clean.match(/.{1,4}/g) || [];
   return parts.join(' ');
+}
+
+function normalizeIban(iban) {
+  return iban.replace(/\s/g, '').toUpperCase();
+}
+
+function maskIban(iban) {
+  const clean = normalizeIban(iban);
+  if (clean.length < 12) return iban;
+  return `${clean.slice(0, 4)} ${'*'.repeat(4)} ${'*'.repeat(4)} ${'*'.repeat(4)} ${clean.slice(-4)}`;
 }
 
 export function RecipientsScreen({ navigation }) {
@@ -33,11 +46,15 @@ export function RecipientsScreen({ navigation }) {
     return () => clearTimeout(timer);
   }, []);
 
-  const filtered = recipients.filter(r =>
-    r.nickname.toLowerCase().includes(search.toLowerCase()) ||
-    r.name.toLowerCase().includes(search.toLowerCase()) ||
-    r.iban.includes(search)
-  );
+  const normalizedSearch = search.trim().toLowerCase();
+  const normalizedSearchIban = normalizeIban(search);
+
+  const filtered = recipients.filter((r) => {
+    const byName = r.nickname.toLowerCase().includes(normalizedSearch)
+      || r.name.toLowerCase().includes(normalizedSearch);
+    const byIban = normalizeIban(r.iban).includes(normalizedSearchIban);
+    return byName || byIban;
+  });
 
   const openAdd = () => {
     setEditTarget(null);
@@ -51,28 +68,44 @@ export function RecipientsScreen({ navigation }) {
     setShowModal(true);
   };
 
-  const handleDelete = (id) => {
-    setRecipients(prev => prev.filter(r => r.id !== id));
+  const handleDelete = (recipient) => {
+    Alert.alert(
+      'Alıcı silinsin mi?',
+      `${recipient.nickname} kaydını silmek istediğinize emin misiniz?`,
+      [
+        { text: 'Vazgeç', style: 'cancel' },
+        {
+          text: 'Sil',
+          style: 'destructive',
+          onPress: () => setRecipients(prev => prev.filter(r => r.id !== recipient.id)),
+        },
+      ]
+    );
+  };
+
+  const handleCopyIban = async (iban) => {
+    await Clipboard.setStringAsync(iban);
+    Alert.alert('Kopyalandı', 'IBAN panoya kopyalandı.');
   };
 
   const handleSave = () => {
-    if (!form.name || form.iban.replace(/\s/g, '').length !== 26) return;
+    if (!form.name || normalizeIban(form.iban).length !== 26) return;
     if (editTarget) {
-      setRecipients(prev => prev.map(r =>
-        r.id === editTarget ? { ...r, ...form } : r
-      ));
+      setRecipients(prev => prev.map(r => (
+        r.id === editTarget ? { ...r, ...form, iban: formatIban(form.iban) } : r
+      )));
     } else {
       setRecipients(prev => [...prev, {
         id: Date.now().toString(),
         name: form.name,
-        iban: form.iban,
+        iban: formatIban(form.iban),
         nickname: form.nickname || form.name,
       }]);
     }
     setShowModal(false);
   };
 
-  const isFormValid = form.name.length > 1 && form.iban.replace(/\s/g, '').length === 26;
+  const isFormValid = form.name.trim().length > 1 && normalizeIban(form.iban).length === 26;
 
   return (
     <SafeAreaView style={styles.safe} edges={['top']}>
@@ -83,7 +116,6 @@ export function RecipientsScreen({ navigation }) {
         </TouchableOpacity>
       </View>
 
-      {/* Arama */}
       <View style={styles.searchWrap}>
         <Text style={styles.searchIcon}>🔍</Text>
         <TextInput
@@ -92,6 +124,7 @@ export function RecipientsScreen({ navigation }) {
           onChangeText={setSearch}
           placeholder="İsim veya IBAN ara..."
           placeholderTextColor={colors.textTertiary}
+          autoCapitalize="none"
         />
       </View>
 
@@ -112,29 +145,48 @@ export function RecipientsScreen({ navigation }) {
             <Text style={styles.emptySubtitle}>Yeni alıcı eklemek için "+ Ekle" butonunu kullanın.</Text>
           </View>
         ) : (
-          filtered.map(r => (
+          filtered.map((r, idx) => (
             <View key={r.id} style={styles.card}>
               <View style={styles.cardLeft}>
-                <View style={styles.avatar}>
+                <View style={[styles.avatar, { backgroundColor: AVATAR_COLORS[idx % AVATAR_COLORS.length] }]}>
                   <Text style={styles.avatarText}>{r.nickname[0].toUpperCase()}</Text>
                 </View>
                 <View style={styles.info}>
-                  <Text style={styles.nickname}>{r.nickname}</Text>
-                  <Text style={styles.name}>{r.name}</Text>
-                  <Text style={styles.iban}>{r.iban}</Text>
+                  <Text
+                    style={styles.nickname}
+                    numberOfLines={1}
+                    onLongPress={() => Alert.alert('Alıcı', `${r.nickname}\n${r.name}`)}
+                  >
+                    {r.nickname}
+                  </Text>
+                  <Text style={styles.name} numberOfLines={1}>{r.name}</Text>
+                  <Text style={styles.iban} numberOfLines={1}>{maskIban(r.iban)}</Text>
                 </View>
               </View>
               <View style={styles.cardActions}>
                 <TouchableOpacity
+                  style={styles.copyBtn}
+                  onPress={() => handleCopyIban(r.iban)}
+                  accessibilityLabel="IBAN kopyala"
+                >
+                  <Text style={styles.copyBtnText}>⧉</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
                   style={styles.payBtn}
-                  onPress={() => navigation.navigate('Payment', { screen: 'PaymentAmount' })}
+                  onPress={() => navigation.navigate('Payment', {
+                    screen: 'PaymentAmount',
+                    params: {
+                      origin: 'Recipients',
+                      preselectedRecipient: r,
+                    },
+                  })}
                 >
                   <Text style={styles.payBtnText}>Öde</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.editBtn} onPress={() => openEdit(r)}>
                   <Text style={styles.editBtnText}>✎</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.deleteBtn} onPress={() => handleDelete(r.id)}>
+                <TouchableOpacity style={styles.deleteBtn} onPress={() => handleDelete(r)}>
                   <Text style={styles.deleteBtnText}>✕</Text>
                 </TouchableOpacity>
               </View>
@@ -143,7 +195,6 @@ export function RecipientsScreen({ navigation }) {
         )}
       </ScrollView>
 
-      {/* Ekle / Düzenle modal */}
       <Modal visible={showModal} transparent animationType="slide">
         <View style={styles.modalOverlay}>
           <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
@@ -177,14 +228,12 @@ export function RecipientsScreen({ navigation }) {
                 maxLength={32}
               />
 
-              <Text style={[styles.fieldLabel, { marginTop: spacing.md }]}>
-                Kısa Ad (Nickname) <Text style={styles.optional}>isteğe bağlı</Text>
-              </Text>
+              <Text style={[styles.fieldLabel, { marginTop: spacing.md }]}>Kısa ad <Text style={styles.optional}>isteğe bağlı</Text></Text>
               <TextInput
                 style={styles.input}
                 value={form.nickname}
                 onChangeText={t => setForm(f => ({ ...f, nickname: t }))}
-                placeholder='Örn. "Ev Sahibi", "Apartman"'
+                placeholder='Orn. "Ev Sahibi", "Apartman"'
                 placeholderTextColor={colors.textTertiary}
               />
 
@@ -265,18 +314,28 @@ const styles = StyleSheet.create({
     width: 44,
     height: 44,
     borderRadius: 22,
-    backgroundColor: colors.primary,
     alignItems: 'center',
     justifyContent: 'center',
     flexShrink: 0,
   },
   avatarText: { ...typography.label, color: colors.textInverse },
-  info: { flex: 1 },
+  info: { flex: 1, gap: 2 },
   nickname: { ...typography.label, color: colors.textPrimary },
-  name: { ...typography.bodySmall, color: colors.textSecondary, marginTop: 1 },
-  iban: { ...typography.caption, color: colors.textTertiary, marginTop: 1 },
+  name: { ...typography.bodySmall, color: colors.textSecondary },
+  iban: { ...typography.caption, color: colors.textSecondary },
 
   cardActions: { flexDirection: 'row', alignItems: 'center', gap: spacing.xs, marginLeft: spacing.sm },
+  copyBtn: {
+    width: 32,
+    height: 32,
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: colors.border,
+    backgroundColor: colors.surface,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  copyBtnText: { fontSize: 13, color: colors.textSecondary },
   payBtn: {
     backgroundColor: colors.accent,
     borderRadius: 10,
@@ -288,11 +347,11 @@ const styles = StyleSheet.create({
     width: 32,
     height: 32,
     borderRadius: 10,
-    backgroundColor: colors.surface,
+    backgroundColor: '#DBEAFE',
     alignItems: 'center',
     justifyContent: 'center',
   },
-  editBtnText: { fontSize: 16, color: colors.textSecondary },
+  editBtnText: { fontSize: 16, color: colors.primary },
   deleteBtn: {
     width: 32,
     height: 32,
@@ -303,7 +362,6 @@ const styles = StyleSheet.create({
   },
   deleteBtnText: { fontSize: 14, color: colors.error, fontWeight: '700' },
 
-  /* Modal */
   modalOverlay: {
     flex: 1,
     backgroundColor: 'rgba(0,0,0,0.4)',

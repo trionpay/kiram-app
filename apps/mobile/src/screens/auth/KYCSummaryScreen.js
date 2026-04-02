@@ -3,6 +3,7 @@ import {
   View, Text, StyleSheet, TouchableOpacity, ScrollView, ActivityIndicator,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Button } from '../../components/Button';
 import { LegalModal } from '../../components/LegalModal';
 import { colors, typography, spacing, screenPaddingHorizontal } from '../../theme';
@@ -13,6 +14,7 @@ const PURPOSE_LABELS = {
   bills: '⚡ Fatura Ödemesi',
   all: '✨ Hepsi',
 };
+const PROFILE_FIRST_NAME_KEY = 'kiram_profile_first_name_v1';
 
 export function KYCSummaryScreen({ navigation, route }) {
   const { firstName, lastName, city, tckn, birthDate, purposes } = route.params;
@@ -22,12 +24,13 @@ export function KYCSummaryScreen({ navigation, route }) {
 
   const maskedTckn = tckn.slice(0, 3) + '*'.repeat(5) + tckn.slice(8);
 
-  const handleConfirm = () => {
+  const handleConfirm = async () => {
     setLoading(true);
     // Mock: API bağlandığında KYC verisi gönderilecek, hesap aktifleştirilecek
-    setTimeout(() => {
+    setTimeout(async () => {
+      await AsyncStorage.setItem(PROFILE_FIRST_NAME_KEY, firstName.trim());
       setLoading(false);
-      navigation.replace('NotificationPermission');
+      navigation.replace('NotificationPermission', { firstName });
     }, 1500);
   };
 

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Alert, Linking } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import * as Notifications from 'expo-notifications';
 import { Button } from '../../components/Button';
 import { colors, typography, spacing, screenPaddingHorizontal } from '../../theme';
 
@@ -15,17 +16,33 @@ const FEATURES = [
  * expo-notifications API bağlandığında gerçek izin isteği yapılacak.
  * Şimdilik UX ekranı — kullanıcı "İzin Ver" veya "Şimdi Değil" seçer.
  */
-export function NotificationPermissionScreen({ navigation }) {
+export function NotificationPermissionScreen({ navigation, route }) {
   const [loading, setLoading] = useState(false);
 
   const handleAllow = async () => {
-    setLoading(true);
-    // API gelince: await Notifications.requestPermissionsAsync()
-    // Şimdilik mock — 1 sn sonra dashboard'a geç
-    setTimeout(() => {
+    try {
+      setLoading(true);
+      const { status, canAskAgain } = await Notifications.requestPermissionsAsync();
+      if (status === 'granted') {
+        navigation.replace('Main', { firstName: route?.params?.firstName });
+        return;
+      }
+
+      if (!canAskAgain) {
+        Alert.alert(
+          'Bildirim izni kapalı',
+          'Bildirim almak için telefon ayarlarından Kiram uygulamasında Bildirimler iznini açın.',
+          [
+            { text: 'Şimdi Değil', style: 'cancel' },
+            { text: 'Ayarlara Git', onPress: () => Linking.openSettings() },
+          ]
+        );
+      } else {
+        Alert.alert('Bildirim izni verilmedi', 'Daha sonra Ayarlar ekranından tekrar açabilirsiniz.');
+      }
+    } finally {
       setLoading(false);
-      navigation.replace('Main');
-    }, 800);
+    }
   };
 
   const handleSkip = () => {
