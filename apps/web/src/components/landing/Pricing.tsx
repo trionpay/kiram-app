@@ -20,25 +20,28 @@ export function Pricing() {
 
         <FadeIn delay={100}>
           <div className="bg-white rounded-3xl p-8 md:p-12 border border-border shadow-lg">
-            {/* Önce cebinden çıkacak tutar — ana mesaj */}
-            <div className="rounded-2xl border-2 border-accent/25 bg-accent/5 p-6 md:p-8 mb-8">
-              <p className="text-text-secondary text-sm font-semibold uppercase tracking-wide mb-4">
-                Örnek hesaplama
-              </p>
-              <div className="flex justify-between items-center mb-3">
-                <span className="text-text-secondary">Kira tutarı</span>
-                <span className="text-text-primary font-medium tabular-nums">₺10.000</span>
+            {/* İlk bakışta daha yumuşak örnek kutusu */}
+            <div className="rounded-2xl border border-border bg-surface p-6 md:p-7 mb-8">
+              <div className="mb-4 flex flex-wrap items-center gap-2">
+                <p className="text-text-secondary text-sm font-semibold uppercase tracking-wide">Kısa örnek</p>
+                <span className="rounded-full bg-accent/10 px-2.5 py-1 text-[11px] font-semibold text-accent">
+                  Ödemeden önce net tutarı görürsün
+                </span>
               </div>
-              <div className="flex justify-between items-center mb-4">
-                <span className="text-text-secondary">Hizmet bedeli (%1,5)</span>
-                <span className="text-text-primary font-medium tabular-nums">₺150</span>
-              </div>
-              <div className="border-t border-primary/10 pt-4 mt-2">
-                <div className="flex justify-between items-baseline gap-4">
-                  <span className="text-text-primary font-bold text-lg">Ödeyeceğin toplam</span>
-                  <span className="text-primary font-bold text-2xl md:text-3xl tabular-nums">
-                    ₺10.150
-                  </span>
+              <div className="space-y-3">
+                <div className="flex justify-between items-center">
+                  <span className="text-text-secondary">Kira tutarı</span>
+                  <span className="text-text-primary font-semibold tabular-nums">₺10.000</span>
+                </div>
+                <div className="flex justify-between items-center">
+                  <span className="text-text-secondary">Ek hizmet bedeli (%1,5)</span>
+                  <span className="text-text-primary font-semibold tabular-nums">₺150</span>
+                </div>
+                <div className="border-t border-border pt-3 mt-1">
+                  <div className="flex justify-between items-center gap-4">
+                    <span className="text-text-primary font-semibold">Toplam</span>
+                    <span className="text-primary font-bold text-xl tabular-nums">₺10.150</span>
+                  </div>
                 </div>
               </div>
             </div>

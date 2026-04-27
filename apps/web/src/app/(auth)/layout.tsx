@@ -17,7 +17,7 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
         <div className="space-y-4">
           <div className="w-9 h-0.5 bg-accent rounded-full" />
           <h1 className="text-3xl font-bold text-white leading-snug">
-            Kira, aidat, fatura<br />tek yerden öde.
+            Kira ve aidat<br />tek yerden ode.
           </h1>
           <p className="text-white/50 text-base leading-relaxed">
             Ödemeleriniz güvende,<br />deneyim sizinle.

@@ -1,24 +1,18 @@
 'use client';
 
 import { useEffect, useMemo, useState } from 'react';
+import { useSearchParams } from 'next/navigation';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
 import { Switch } from '@/components/ui/Switch';
 import { getBillProvidersForCategorySync } from '@/lib/billing/billProviders';
 import { validateBillSubscriber } from '@/lib/billing/validateBillSubscriber';
 
-type PaymentType = 'rent' | 'bill';
+type PaymentType = 'rent' | 'dues';
 type Step = 'type' | 'recipient' | 'amount' | 'card' | 'confirm' | 'result';
 type ResultStatus = 'success' | 'failed' | 'insufficient';
 
-const BILL_CATEGORIES = [
-  { id: 'electricity', label: 'Elektrik', emoji: '⚡' },
-  { id: 'gas', label: 'Doğalgaz', emoji: '🔥' },
-  { id: 'water', label: 'Su', emoji: '💧' },
-  { id: 'internet', label: 'İnternet', emoji: '📶' },
-  { id: 'phone', label: 'Telefon', emoji: '📱' },
-  { id: 'dues', label: 'Aidat', emoji: '🏢' },
-];
+const BILL_CATEGORIES = [{ id: 'dues', label: 'Aidat', emoji: '🏢' }];
 
 type SavedCard = { id: string; last4: string; brand: string; holder: string };
 
@@ -32,9 +26,22 @@ type SavedBillSubscriber = {
   ref: string;
 };
 
+type SavedRentRecipient = {
+  id: string;
+  nickname: string;
+  accountHolder: string;
+  iban: string;
+};
+
 const INITIAL_SAVED_CARDS: SavedCard[] = [
   { id: '1', last4: '4242', brand: 'Visa', holder: 'AHMET YILMAZ' },
   { id: '2', last4: '1881', brand: 'Mastercard', holder: 'AHMET YILMAZ' },
+];
+
+const INITIAL_SAVED_RENT_RECIPIENTS: SavedRentRecipient[] = [
+  { id: 'r1', nickname: 'Ev Sahibi', accountHolder: 'Ahmet Yılmaz', iban: 'TR170001200945200058000001' },
+  { id: 'r2', nickname: 'Site Yönetimi', accountHolder: 'Site Yönetimi A Blok', iban: 'TR330006100519786457841326' },
+  { id: 'r3', nickname: 'Apartman Aidatı', accountHolder: 'Apartman Yönetimi', iban: 'TR980001001745380073509972' },
 ];
 
 function guessCardBrand(digits: string): string {
@@ -114,6 +121,10 @@ function formatTryFromNormalized(normalized: string): string {
   return d ? `₺${d}` : '';
 }
 
+function formatIbanForDisplay(value: string): string {
+  return value.replace(/\s/g, '').match(/.{1,4}/g)?.join(' ') ?? value;
+}
+
 function StepBar({ current }: { current: number }) {
   const last = PAYMENT_STEPS.length - 1;
   return (
@@ -168,6 +179,7 @@ function StepBar({ current }: { current: number }) {
 }
 
 export default function PaymentPage() {
+  const searchParams = useSearchParams();
   const [step, setStep] = useState<Step>('type');
   const [paymentType, setPaymentType] = useState<PaymentType>('rent');
   /** Kira/havale: TR sabit; yalnızca sonraki 24 karakter (tam TR IBAN = 26) */
@@ -183,6 +195,8 @@ export default function PaymentPage() {
   const [saveBillSubscriber, setSaveBillSubscriber] = useState(false);
   const [amount, setAmount] = useState('');
   const [description, setDescription] = useState('');
+  const [savedRentRecipients] = useState<SavedRentRecipient[]>(INITIAL_SAVED_RENT_RECIPIENTS);
+  const [savedRecipientsOpen, setSavedRecipientsOpen] = useState(false);
   const [savedCards, setSavedCards] = useState<SavedCard[]>(INITIAL_SAVED_CARDS);
   const [selectedCard, setSelectedCard] = useState('1');
   const [addCardOpen, setAddCardOpen] = useState(false);
@@ -194,6 +208,14 @@ export default function PaymentPage() {
   const [result, setResult] = useState<ResultStatus>('success');
 
   useEffect(() => {
+    const typeParam = searchParams.get('type');
+    if (typeParam === 'rent' || typeParam === 'dues') {
+      setPaymentType(typeParam);
+      setStep('recipient');
+    }
+  }, [searchParams]);
+
+  useEffect(() => {
     if (!addCardOpen) return;
     const onKey = (e: KeyboardEvent) => {
       if (e.key === 'Escape') setAddCardOpen(false);
@@ -203,7 +225,7 @@ export default function PaymentPage() {
   }, [addCardOpen]);
 
   const billProviders = useMemo(() => {
-    if (paymentType !== 'bill' || !billCategory) return [];
+    if (paymentType !== 'dues' || !billCategory) return [];
     return getBillProvidersForCategorySync(billCategory);
   }, [paymentType, billCategory]);
 
@@ -269,7 +291,7 @@ export default function PaymentPage() {
     await new Promise(r => setTimeout(r, 1200));
     setLoading(false);
     if (
-      paymentType === 'bill' &&
+      paymentType === 'dues' &&
       saveBillSubscriber &&
       billCategory &&
       billProviderId &&
@@ -406,7 +428,7 @@ export default function PaymentPage() {
         ) : null}
         <div className="min-w-0 flex-1">
           <h1 className="text-2xl font-bold text-text-primary">Ödeme Yap</h1>
-          <p className="mt-1 text-sm text-text-secondary">Kira, aidat veya fatura ödemesi yapın.</p>
+          <p className="mt-1 text-sm text-text-secondary">Kira ve aidat odemesi yapin.</p>
         </div>
       </div>
 
@@ -419,7 +441,7 @@ export default function PaymentPage() {
           <div className="grid grid-cols-2 gap-3">
             {([
               { value: 'rent', emoji: '🏠', label: 'Kira / Havale', desc: 'IBAN ile ödeme' },
-              { value: 'bill', emoji: '📋', label: 'Fatura / Aidat', desc: 'Kurum ödemesi' },
+              { value: 'dues', emoji: '🏢', label: 'Aidat', desc: 'Site / yonetim odemesi' },
             ] as const).map(opt => (
               <button
                 key={opt.value}
@@ -460,13 +482,64 @@ export default function PaymentPage() {
 
           {paymentType === 'rent' ? (
             <div className="space-y-4">
+              {savedRentRecipients.length > 0 ? (
+                <div className="rounded-2xl border border-border bg-surface/70 p-4">
+                  <button
+                    type="button"
+                    onClick={() => setSavedRecipientsOpen(prev => !prev)}
+                    className="flex w-full items-center justify-between rounded-xl border border-border bg-elevated px-3 py-2.5 text-left transition-colors hover:border-primary/40"
+                    aria-expanded={savedRecipientsOpen}
+                  >
+                    <div>
+                      <p className="text-sm font-semibold text-text-primary">Kayıtlı alıcılardan seç</p>
+                      <p className="mt-0.5 text-xs text-text-secondary">{savedRentRecipients.length} kayıtlı alıcı</p>
+                    </div>
+                    <span className={`text-text-tertiary transition-transform ${savedRecipientsOpen ? 'rotate-180' : ''}`}>
+                      ▾
+                    </span>
+                  </button>
+                  {savedRecipientsOpen ? (
+                    <div className="mt-3 space-y-2">
+                      {savedRentRecipients.map(r => {
+                        const rest = normalizeTrIbanRest(r.iban);
+                        const selected = ibanRest === rest;
+                        return (
+                          <button
+                            key={r.id}
+                            type="button"
+                            onClick={() => {
+                              setIbanRest(rest);
+                              setIbanName(r.accountHolder);
+                              setSavedRecipientsOpen(false);
+                            }}
+                            className={`w-full rounded-xl border px-3 py-2.5 text-left transition-colors ${
+                              selected
+                                ? 'border-primary bg-primary/5'
+                                : 'border-border bg-elevated hover:border-primary/40'
+                            }`}
+                          >
+                            <p className="text-sm font-semibold text-text-primary">{r.nickname}</p>
+                            <p className="mt-0.5 text-xs text-text-secondary">{r.accountHolder}</p>
+                            <p className="mt-0.5 text-[11px] text-text-tertiary">
+                              {formatIbanForDisplay(r.iban)}
+                            </p>
+                          </button>
+                        );
+                      })}
+                    </div>
+                  ) : null}
+                </div>
+              ) : null}
               <Input
                 label="IBAN"
                 hint="Sadece Türkiye IBAN kabul edilir. TR otomatik eklenir; 24 karakter girin (toplam 26)."
                 placeholder="00 0000 0000 0000 0000 0000 00"
                 prefix={<span className="font-semibold tracking-wide text-text-primary">TR</span>}
                 value={ibanRest}
-                onChange={e => setIbanRest(normalizeTrIbanRest(e.target.value))}
+                onChange={e => {
+                  setIbanRest(normalizeTrIbanRest(e.target.value));
+                  if (ibanName) setIbanName('');
+                }}
                 autoCapitalize="characters"
                 spellCheck={false}
                 inputMode="text"
@@ -553,7 +626,7 @@ export default function PaymentPage() {
                   </select>
                 </div>
                 <p className="text-xs text-text-tertiary">
-                  Liste fatura bayii API üzerinden gelecek; şu an örnek veri kullanılıyor.
+                  Liste aidat kurum API uzerinden gelecek; su an ornek veri kullaniliyor.
                 </p>
               </div>
               <Input
@@ -562,7 +635,7 @@ export default function PaymentPage() {
                 hint={
                   billRefError
                     ? undefined
-                    : 'Devam Et ile kurumda kayıt kontrolü yapılır (fatura bayii API).'
+                    : 'Devam Et ile kurum kaydi kontrol edilir (aidat kurum API).'
                 }
                 error={billRefError || undefined}
                 value={billRef}
@@ -577,12 +650,12 @@ export default function PaymentPage() {
                 checked={saveBillSubscriber}
                 onCheckedChange={setSaveBillSubscriber}
                 label="Abone bilgilerimi kaydet"
-                description="Sonraki fatura ödemelerinde hızlı doldurmak için bu cihazda saklanır (hesap bağlandığında sunucuya taşınır)."
+                description="Sonraki aidat odemelerinde hizli doldurmak icin bu cihazda saklanir (hesap baglandiginda sunucuya tasinir)."
               />
             </div>
           )}
 
-          {paymentType === 'bill' && billRecipientError ? (
+          {paymentType === 'dues' && billRecipientError ? (
             <div
               role="alert"
               className="rounded-2xl border border-error/35 bg-red-50 px-4 py-3 text-sm text-error"
@@ -595,7 +668,7 @@ export default function PaymentPage() {
             className="w-full"
             size="lg"
             onClick={() => void handleRecipientContinue()}
-            loading={paymentType === 'bill' && billValidateLoading}
+            loading={paymentType === 'dues' && billValidateLoading}
             disabled={
               paymentType === 'rent'
                 ? ibanRest.length !== TR_IBAN_REST_LEN
@@ -640,7 +713,7 @@ export default function PaymentPage() {
                     : 'Kira / havale ödemesi'
                 : billCompany
                   ? `Kurum: ${billCompany}`
-                  : 'Fatura / kurum ödemesi'}
+                  : 'Aidat / kurum odemesi'}
             </p>
           </div>
 
@@ -721,7 +794,7 @@ export default function PaymentPage() {
             <div className="space-y-3">
               {[
                 { label: 'Alıcı', value: paymentType === 'rent' ? (ibanName || 'Hesap sahibi') : billCompany },
-                { label: 'Ödeme tipi', value: paymentType === 'rent' ? 'Kira / Havale' : 'Fatura / Aidat' },
+                { label: 'Ödeme tipi', value: paymentType === 'rent' ? 'Kira / Havale' : 'Aidat' },
                 { label: 'Kart', value: `•••• ${savedCards.find(c => c.id === selectedCard)?.last4}` },
                 ...(description ? [{ label: 'Açıklama', value: description }] : []),
               ].map(row => (

@@ -4,7 +4,7 @@ import { FadeIn } from './FadeIn';
 
 const STATS = [
   { value: '50K+', label: 'Aktif Kullanıcı' },
-  { value: '₺120M+', label: 'İşlem Hacmi' },
+  { value: '256-bit', label: 'SSL Güvenliği' },
   { value: '%99+', label: 'Başarılı ödeme oranı' },
   { value: '4.8', label: 'App Store Puanı', suffix: '⭐' },
 ];

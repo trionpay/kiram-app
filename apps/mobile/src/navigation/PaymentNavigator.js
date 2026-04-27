@@ -2,7 +2,6 @@ import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { PaymentTypeScreen } from '../screens/payment/PaymentTypeScreen';
 import { PaymentAmountScreen } from '../screens/payment/PaymentAmountScreen';
-import { BillPaymentScreen } from '../screens/payment/BillPaymentScreen';
 import { PaymentSummaryScreen } from '../screens/payment/PaymentSummaryScreen';
 import { CardInputScreen } from '../screens/payment/CardInputScreen';
 import { ThreeDSecureScreen } from '../screens/payment/ThreeDSecureScreen';
@@ -24,8 +23,6 @@ export function PaymentNavigator() {
       <Stack.Screen name="PaymentType" component={PaymentTypeScreen} />
       {/* Kira & Aidat akışı */}
       <Stack.Screen name="PaymentAmount" component={PaymentAmountScreen} />
-      {/* Fatura ödeme akışı */}
-      <Stack.Screen name="BillPayment" component={BillPaymentScreen} />
       {/* Ortak son adımlar */}
       <Stack.Screen name="PaymentSummary" component={PaymentSummaryScreen} />
       <Stack.Screen name="CardInput" component={CardInputScreen} />

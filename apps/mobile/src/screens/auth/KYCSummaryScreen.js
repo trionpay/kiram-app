@@ -11,7 +11,6 @@ import { colors, typography, spacing, screenPaddingHorizontal } from '../../them
 const PURPOSE_LABELS = {
   rent: '🏠 Kira Ödemesi',
   dues: '🏢 Aidat Ödemesi',
-  bills: '⚡ Fatura Ödemesi',
   all: '✨ Hepsi',
 };
 const PROFILE_FIRST_NAME_KEY = 'kiram_profile_first_name_v1';

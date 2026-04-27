@@ -140,7 +140,7 @@ export function Topbar() {
 
   return (
     <>
-      <header className="sticky top-0 z-40 bg-background/90 backdrop-blur-md border-b border-border px-4 sm:px-6 h-16 flex items-center gap-2 sm:gap-4 min-w-0">
+      <header className="sticky top-0 z-40 bg-gradient-to-r from-white/92 via-primary/10 to-white/92 backdrop-blur-md border-b border-border px-4 sm:px-6 h-16 flex items-center gap-2 sm:gap-4 min-w-0">
         {/* Hamburger — mobilde dar alanda küçülmesin, logo üstüne binmesin */}
         <button
           type="button"
@@ -158,7 +158,7 @@ export function Topbar() {
           <button
             type="button"
             onClick={handleBack}
-            className="shrink-0 z-20 w-10 h-10 flex items-center justify-center rounded-lg hover:bg-surface transition-colors text-text-primary text-lg font-medium leading-none"
+            className="lg:hidden shrink-0 z-20 w-10 h-10 flex items-center justify-center rounded-lg hover:bg-surface transition-colors text-text-primary text-lg font-medium leading-none"
             aria-label="Geri"
           >
             ←
@@ -171,7 +171,7 @@ export function Topbar() {
           className="lg:hidden relative z-10 flex shrink-0 items-center min-w-0 overflow-hidden max-w-[min(200px,50vw)]"
           aria-label="Genel bakış"
         >
-          <TrionPayLogo width={88} color="#0C1929" accentColor="#5FE00B" />
+          <TrionPayLogo width={88} color="#244B8E" accentColor="#2E6FD6" />
         </Link>
 
         {/* Mobil: sayfa adı (Genel bakış ana içerikte; tekrar etmesin) */}
@@ -207,7 +207,7 @@ export function Topbar() {
             <button
               type="button"
               onClick={() => setNotificationsOpen((o) => !o)}
-              className="w-9 h-9 rounded-xl hover:bg-surface flex items-center justify-center transition-colors relative"
+              className="w-9 h-9 rounded-xl border border-border hover:bg-surface flex items-center justify-center transition-colors relative"
               aria-label="Bildirimler"
               aria-expanded={notificationsOpen}
               aria-haspopup="dialog"
@@ -301,8 +301,8 @@ export function Topbar() {
 
           {/* Avatar */}
           <Link href="/profile">
-            <div className="w-9 h-9 rounded-xl bg-primary flex items-center justify-center cursor-pointer hover:opacity-80 transition-opacity">
-              <span className="text-white text-xs font-bold">AY</span>
+            <div className="w-9 h-9 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center cursor-pointer hover:bg-primary/15 transition-colors">
+              <span className="text-primary text-xs font-bold">AY</span>
             </div>
           </Link>
         </div>
@@ -319,7 +319,7 @@ export function Topbar() {
               aria-hidden
             />
             <div
-              className="lg:hidden fixed inset-y-0 left-0 z-[200] w-[min(85vw,288px)] bg-primary shadow-2xl flex flex-col"
+              className="lg:hidden fixed inset-y-0 left-0 z-[200] w-[min(85vw,288px)] bg-elevated shadow-2xl flex flex-col border-r border-border"
               role="dialog"
               aria-modal="true"
               aria-label="Uygulama menüsü"

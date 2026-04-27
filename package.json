@@ -4,9 +4,13 @@
   "description": "Trion Pay / Kiram.com — Mobil + Web fintech platformu. Monorepo.",
   "scripts": {
     "dev:web": "npm run dev --workspace=apps/web",
-    "build:web": "npm run build --workspace=apps/web"
+    "build:web": "npm run build --workspace=apps/web",
+    "dev:api": "npm run dev --workspace=apps/api",
+    "build:api": "npm run build --workspace=apps/api",
+    "typecheck:api": "npm run typecheck --workspace=apps/api"
   },
   "workspaces": [
+    "apps/api",
     "apps/web",
     "apps/admin",
     "packages/*"

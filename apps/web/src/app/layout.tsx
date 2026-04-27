@@ -9,8 +9,8 @@ const dmSans = DM_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "Kiram — Kira, aidat ve fatura ödemeleri",
-  description: "Kira, aidat ve fatura ödemelerinizi tek yerden, güvenle yapın.",
+  title: "Kiram — Kira ve aidat odemeleri",
+  description: "Kira ve aidat odemelerinizi tek yerden, guvenle yapin.",
 };
 
 export default function RootLayout({

@@ -1,20 +1,20 @@
 export type TransactionStatus = 'success' | 'failed' | 'pending';
 
 /** Ödeme türü — liste ve raporlarda rozet/ikon ile gösterilir */
-export type TransactionPaymentKind = 'rent' | 'bill' | 'dues' | 'other';
+export type TransactionPaymentKind = 'rent' | 'dues';
 
 export interface AdminTransactionRow {
   id: string;
   userId: string;
   userLabel: string;
-  /** İşlem tutarı (alıcıya giden / fatura tutarı) TRY */
+  /** İşlem tutarı (alıcıya giden tutar) TRY */
   amountTry: number;
   /** Hizmet bedeli (komisyon) TRY — Blueprint dekont / admin ciro */
   feeTry: number;
   status: TransactionStatus;
   createdAt: string;
   paymentKind: TransactionPaymentKind;
-  /** Kira: maskeli IBAN; fatura: kurum + abone/tesisat kısaltması */
+  /** Kira: maskeli IBAN; aidat: kurum/yönetim kısaltması */
   recipientDetail: string;
   /** İşlem notu (bekleme nedeni vb.); isteğe bağlı */
   note?: string;
@@ -40,8 +40,8 @@ export const initialMockTransactions: AdminTransactionRow[] = [
     feeTry: 13.36,
     status: 'success',
     createdAt: '2025-03-25T10:03:00',
-    paymentKind: 'bill',
-    recipientDetail: 'İGDAŞ · Abone …4821',
+    paymentKind: 'dues',
+    recipientDetail: 'Site Yönetimi A Blok · Aidat',
   },
   {
     id: 't3',
@@ -73,8 +73,8 @@ export const initialMockTransactions: AdminTransactionRow[] = [
     feeTry: 5.25,
     status: 'failed',
     createdAt: '2025-03-24T08:00:00',
-    paymentKind: 'bill',
-    recipientDetail: 'Başkent EDAŞ · Sayaç …9910',
+    paymentKind: 'dues',
+    recipientDetail: 'Apartman Yönetimi C Blok · Aidat',
   },
   {
     id: 't6',
@@ -96,8 +96,8 @@ export const initialMockTransactions: AdminTransactionRow[] = [
     feeTry: 11.25,
     status: 'pending',
     createdAt: '2025-03-25T14:18:00',
-    paymentKind: 'bill',
-    recipientDetail: 'İSKİ · Abone …7732',
+    paymentKind: 'dues',
+    recipientDetail: 'Site Yönetimi B Blok · Aidat',
     note: 'Webhook işleniyor',
   },
 ];

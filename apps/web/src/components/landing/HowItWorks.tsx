@@ -13,7 +13,7 @@ const STEPS = [
     number: '02',
     icon: '📝',
     title: 'Alıcı Ekle',
-    description: 'Ev sahibi, site yönetimi veya kurum bilgilerini kaydet.',
+    description: 'Ev sahibi veya site yönetimi bilgilerini bir kez kaydet.',
   },
   {
     number: '03',
@@ -23,9 +23,9 @@ const STEPS = [
   },
   {
     number: '04',
-    icon: '✅',
-    title: 'Dekont Al',
-    description: 'Anında dijital dekont ile ödemeni belgele.',
+    icon: '📊',
+    title: 'Takip Et',
+    description: 'Durum, geçmiş ve dekontları panel üzerinden anında izle.',
   },
 ];
 
@@ -36,10 +36,10 @@ export function HowItWorks() {
         <FadeIn>
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-bold text-text-primary mb-4">
-              Nasıl Çalışır?
+              4 adımda tamamla
             </h2>
             <p className="text-text-secondary max-w-2xl mx-auto">
-              4 kolay adımda ödemeni tamamla.
+              Kira ve aidat ödemesi için net, modern ve hızlı akış.
             </p>
           </div>
         </FadeIn>

@@ -7,7 +7,6 @@ import { colors, typography, spacing, screenPaddingHorizontal } from '../../them
 const OPTIONS = [
   { id: 'rent', icon: '🏠', title: 'Kira Ödemesi', subtitle: 'Ev sahibime düzenli kira ödemek istiyorum' },
   { id: 'dues', icon: '🏢', title: 'Aidat Ödemesi', subtitle: 'Apartman veya site yönetimine aidat ödemek istiyorum' },
-  { id: 'bills', icon: '⚡', title: 'Fatura Ödemesi', subtitle: 'Elektrik, su, doğalgaz, internet faturalarımı ödemek istiyorum' },
   { id: 'all', icon: '✨', title: 'Hepsi', subtitle: 'Tüm ev giderlerimi tek yerden yönetmek istiyorum' },
 ];
 

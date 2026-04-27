@@ -7,7 +7,7 @@ import { colors, typography, spacing, screenPaddingHorizontal } from '../../them
 // Mock işlemler
 const MOCK_TRANSACTIONS = [
   { id: '1', name: 'Apartman Yönetimi', amount: '2.500,00', status: 'success', date: 'Bugün, 10:32' },
-  { id: '2', name: 'Elektrik Faturası', amount: '480,00', status: 'success', date: 'Dün, 14:15' },
+  { id: '2', name: 'Apartman Aidatı', amount: '850,00', status: 'success', date: 'Dün, 14:15' },
   { id: '3', name: 'Kira Ödemesi', amount: '12.000,00', status: 'failed', date: '15 Mar' },
 ];
 
@@ -57,7 +57,7 @@ export function DashboardScreen({ navigation }) {
             { icon: '↗', label: 'Gönder' },
             { icon: '📋', label: 'Alıcılar' },
             { icon: '🗂', label: 'Geçmiş' },
-            { icon: '⚡', label: 'Fatura' },
+            { icon: '🏢', label: 'Aidat' },
           ].map((item) => (
             <TouchableOpacity key={item.label} style={styles.quickItem}>
               <View style={styles.quickIcon}>

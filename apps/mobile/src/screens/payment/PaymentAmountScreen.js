@@ -127,7 +127,7 @@ export function PaymentAmountScreen({ navigation, route }) {
           </TouchableOpacity>
 
           <Text style={styles.title}>Yeni Ödeme</Text>
-          <Text style={styles.subtitle}>Kredi kartınla kira, aidat ve fatura öde.</Text>
+          <Text style={styles.subtitle}>Kredi kartınla kira ve aidat öde.</Text>
 
           <View style={styles.section}>
             <Text style={styles.label}>Gönderilecek Tutar</Text>

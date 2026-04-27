@@ -6,7 +6,7 @@ import { FadeIn } from './FadeIn';
 const FAQS = [
   {
     q: 'Kiram nedir?',
-    a: 'Kiram, kira, aidat ve fatura ödemelerinizi kredi kartıyla yapmanızı sağlayan bir ödeme platformudur. Ev sahibinize veya site yönetimine kolayca ödeme yapabilirsiniz.',
+    a: 'Kiram, kira ve aidat odemelerinizi kredi kartiyla yapmanizi saglayan bir odeme platformudur. Ev sahibinize veya site yonetimine kolayca odeme yapabilirsiniz.',
   },
   {
     q: 'Hangi kartlarla ödeme yapabilirim?',

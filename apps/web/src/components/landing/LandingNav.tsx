@@ -36,9 +36,6 @@ export function LandingNav() {
           <a href="#how-it-works" className={`text-sm font-medium transition-colors ${scrolled ? 'text-text-secondary hover:text-text-primary' : 'text-white/70 hover:text-white'}`}>
             Nasıl Çalışır
           </a>
-          <a href="#pricing" className={`text-sm font-medium transition-colors ${scrolled ? 'text-text-secondary hover:text-text-primary' : 'text-white/70 hover:text-white'}`}>
-            Fiyatlandırma
-          </a>
           <a href="#faq" className={`text-sm font-medium transition-colors ${scrolled ? 'text-text-secondary hover:text-text-primary' : 'text-white/70 hover:text-white'}`}>
             SSS
           </a>
@@ -94,7 +91,6 @@ export function LandingNav() {
           <div className="px-6 py-4 space-y-3">
             <a href="#features" className="block text-text-secondary hover:text-text-primary py-2">Özellikler</a>
             <a href="#how-it-works" className="block text-text-secondary hover:text-text-primary py-2">Nasıl Çalışır</a>
-            <a href="#pricing" className="block text-text-secondary hover:text-text-primary py-2">Fiyatlandırma</a>
             <a href="#faq" className="block text-text-secondary hover:text-text-primary py-2">SSS</a>
             <div className="pt-3 border-t border-border space-y-2">
               <Link href="/login" className="block text-center py-2.5 text-text-secondary">Giriş Yap</Link>

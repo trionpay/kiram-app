@@ -1,7 +1,7 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
-import { useSearchParams } from 'next/navigation';
+import { useMemo, useState } from 'react';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import {
   initialMockTransactions,
   type AdminTransactionRow,
@@ -16,9 +16,7 @@ type Filter = 'all' | TransactionStatus;
 
 const TYPE_CHIP: Record<TransactionPaymentKind, string> = {
   rent: 'border-sky-200 bg-sky-50 text-sky-950',
-  bill: 'border-teal-200 bg-teal-50 text-teal-950',
   dues: 'border-violet-200 bg-violet-50 text-violet-950',
-  other: 'border-border bg-surface text-text-secondary',
 };
 
 function formatTry(n: number) {
@@ -65,15 +63,23 @@ function transactionSearchHay(r: AdminTransactionRow): string {
 }
 
 export function AdminTransactionsClient() {
+  const router = useRouter();
+  const pathname = usePathname();
   const searchParams = useSearchParams();
   const durumParam = searchParams.get('durum');
-  const [rows] = useState<AdminTransactionRow[]>(initialMockTransactions);
-  const [filter, setFilter] = useState<Filter>(() => transactionFilterFromDurumParam(durumParam));
+  const rows: AdminTransactionRow[] = initialMockTransactions;
+  const filter: Filter = transactionFilterFromDurumParam(durumParam);
   const [query, setQuery] = useState('');
-
-  useEffect(() => {
-    setFilter(transactionFilterFromDurumParam(durumParam));
-  }, [durumParam]);
+  const handleFilterChange = (next: Filter) => {
+    const params = new URLSearchParams(searchParams.toString());
+    if (next === 'all') {
+      params.delete('durum');
+    } else {
+      params.set('durum', next);
+    }
+    const qs = params.toString();
+    router.replace(qs ? `${pathname}?${qs}` : pathname);
+  };
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -89,7 +95,7 @@ export function AdminTransactionsClient() {
       <div>
         <h2 className="text-2xl font-bold text-text-primary">İşlem logları</h2>
         <p className="mt-1 text-sm text-text-secondary">
-          İşlem tipi (kira / fatura / aidat), alıcı bilgisi, tutar ve hizmet bedeli; durum filtreleri ve arama (mock).
+          İşlem tipi (kira / aidat), alıcı bilgisi, tutar ve hizmet bedeli; durum filtreleri ve arama (mock).
           Özet kartından geldiyseniz filtre URL ile uygulanır. Üretimde API sayfalaması önerilir.
         </p>
       </div>
@@ -107,7 +113,7 @@ export function AdminTransactionsClient() {
             <button
               key={key}
               type="button"
-              onClick={() => setFilter(key)}
+              onClick={() => handleFilterChange(key)}
               className={`
                 rounded-xl px-4 py-2 text-sm font-semibold transition-colors
                 ${

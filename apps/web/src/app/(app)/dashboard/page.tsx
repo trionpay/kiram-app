@@ -32,14 +32,15 @@ const STATS: DashboardStatCard[] = [
   },
   {
     label: 'Bekleyen',
-    hint: 'Onay veya tahsilat bekleyen işlemlerin toplam tutarı.',
+    hint: 'Periyodik kira tahsilatina kalan sure ve bekleyen odemelerin toplam tutari.',
     value: '₺12.000',
-    change: '1 işlem',
+    change: '7 gün kaldı',
+    changeNote: 'Periyodik kira · 1 bekleyen işlem',
     deltaTone: 'neutral',
   },
   {
-    label: 'Kayıtlı alıcı',
-    hint: 'Ödeme yapabileceğiniz kayıtlı IBAN / alıcı sayısı.',
+    label: 'Kayıtlı ödeme hesabı',
+    hint: 'Ödeme yapabileceğiniz kayıtlı IBAN / hesap sayısı.',
     value: '4',
     change: 'aktif',
     deltaTone: 'neutral',
@@ -50,8 +51,8 @@ const RECENT_RECIPIENTS = [
   { id: '1', nickname: 'Apartman', emoji: '🏢', color: '#5B7FA6' },
   { id: '2', nickname: 'Ev Sahibi', emoji: '🏠', color: '#4A9B7F' },
   { id: '3', nickname: 'Site Yön.', emoji: '🏡', color: '#B56B6B' },
-  { id: '4', nickname: 'Elektrik', emoji: '⚡', color: '#B8894A' },
-  { id: '5', nickname: 'Su İdaresi', emoji: '💧', color: '#6B7FA6' },
+  { id: '4', nickname: 'Aidat Merkezi', emoji: '🧾', color: '#B8894A' },
+  { id: '5', nickname: 'Kira Ofisi', emoji: '🏘️', color: '#6B7FA6' },
 ];
 
 /** Dashboard üst bölümü — ödeme ekranına hızlı kısayol (mock sıklık sırası) */
@@ -70,13 +71,13 @@ const RECENT_TRANSACTIONS = [
   },
   {
     id: '2',
-    title: 'Doğalgaz',
-    subtitle: 'İGDAŞ',
-    amount: '₺320',
+    title: 'Site Aidatı',
+    subtitle: 'B Blok',
+    amount: '₺620',
     status: 'success',
     date: '12 Oca',
-    icon: '🔥',
-    iconTint: '#C2410C',
+    icon: '🏢',
+    iconTint: '#5B7FA6',
   },
   {
     id: '3',
@@ -90,13 +91,13 @@ const RECENT_TRANSACTIONS = [
   },
   {
     id: '4',
-    title: 'İnternet',
-    subtitle: 'Türk Telekom',
-    amount: '₺199',
+    title: 'Apartman Aidatı',
+    subtitle: 'C Blok',
+    amount: '₺790',
     status: 'success',
     date: '8 Oca',
-    icon: '📶',
-    iconTint: '#0369A1',
+    icon: '🧾',
+    iconTint: '#7C3AED',
   },
 ] as const;
 
@@ -109,26 +110,36 @@ const STATUS_BADGE: Record<string, React.ReactNode> = {
 export default function DashboardPage() {
   return (
     <div className="space-y-8">
-      {/* Sayfa başlığı: hiyerarşi (Pastel — zayıf “Ana Sayfa” yerine belirgin başlık) */}
-      <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-start">
-        <div className="min-w-0">
-          <h1 className="text-2xl font-bold tracking-tight text-text-primary sm:text-3xl">Genel bakış</h1>
-          <p className="mt-2 text-base text-text-secondary">
-            Hoş geldiniz, Ahmet 👋 İşte hesabınızın özeti.
-          </p>
+      {/* Welcome kartı — daha net CTA hiyerarşisi */}
+      <div className="rounded-3xl border border-border bg-gradient-to-r from-primary/15 via-white to-accent/10 p-6 sm:p-7 shadow-[0_8px_30px_rgba(36,75,142,0.10)]">
+        <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
+          <div className="min-w-0">
+            <h1 className="text-2xl font-bold tracking-tight text-text-primary sm:text-3xl">Hoş geldiniz, Ahmet</h1>
+            <p className="mt-2 text-sm sm:text-base text-text-secondary">
+              Bu hafta <strong className="text-text-primary font-semibold">1 bekleyen ödeme</strong> bulunuyor.
+            </p>
+          </div>
+          <div className="flex items-center gap-2">
+            <Link
+              href="/payment"
+              className="inline-flex items-center justify-center rounded-2xl bg-primary px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-primary-light"
+            >
+              Ödeme Yap
+            </Link>
+            <Link
+              href="/history?durum=pending"
+              className="inline-flex items-center justify-center rounded-2xl border border-border bg-elevated px-4 py-2.5 text-sm font-semibold text-text-primary transition-colors hover:bg-surface"
+            >
+              Bekleyenleri Gör
+            </Link>
+          </div>
         </div>
-        <Link
-          href="/payment"
-          className="hidden sm:inline-flex items-center gap-2 bg-primary text-white font-semibold text-sm px-5 py-2.5 rounded-2xl hover:bg-primary-light transition-colors active:scale-[0.98]"
-        >
-          <span className="text-accent">↗</span> Yeni Ödeme
-        </Link>
       </div>
 
       {/* Stats — etiket + kısa açıklama; gider artışı yeşil gösterilmez */}
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">
         {STATS.map(stat => (
-          <div key={stat.label} className="rounded-2xl border border-border bg-elevated p-5">
+          <div key={stat.label} className="rounded-2xl border border-border bg-elevated p-5 shadow-sm">
             <p className="text-xs font-semibold text-text-primary">{stat.label}</p>
             <p className="mt-1 text-[11px] leading-snug text-text-secondary">{stat.hint}</p>
             <p className="mt-3 text-2xl font-bold tabular-nums text-text-primary">{stat.value}</p>
@@ -175,7 +186,7 @@ export default function DashboardPage() {
               <Link
                 key={r.id}
                 href="/payment"
-                className="inline-flex items-center gap-2 rounded-xl border border-border bg-surface px-3 py-2.5 text-sm font-semibold text-text-primary transition-colors hover:border-accent hover:bg-accent/5"
+                className="inline-flex items-center gap-2 rounded-xl border border-border bg-surface px-3 py-2.5 text-sm font-semibold text-text-primary transition-colors hover:border-primary/40 hover:bg-primary/5"
               >
                 <span
                   className="flex h-8 w-8 items-center justify-center rounded-lg text-base"

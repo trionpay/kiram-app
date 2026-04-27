@@ -7,7 +7,7 @@ export function Hero() {
     <section
       className="relative min-h-screen flex items-center overflow-hidden"
       style={{
-        background: 'linear-gradient(135deg, #1E3A5F 0%, #152D4A 50%, #0C1929 100%)',
+        background: 'linear-gradient(135deg, #244B8E 0%, #1A3E78 52%, #112F5B 100%)',
       }}
     >
       {/* Dekoratif elementler */}
@@ -31,23 +31,21 @@ export function Hero() {
           {/* Sol: İçerik */}
           <div className="text-center lg:text-left">
             {/* Badge */}
-            <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/10 rounded-full px-4 py-1.5 mb-6">
+            <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/15 rounded-full px-4 py-1.5 mb-6">
               <span className="w-2 h-2 bg-accent rounded-full animate-pulse" />
-              <span className="text-white/80 text-sm font-medium">Türkiye&apos;nin ödeme platformu</span>
+              <span className="text-white/85 text-sm font-medium">Kira ve aidat için odaklı ödeme deneyimi</span>
             </div>
 
             {/* Başlık */}
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white leading-tight mb-6">
-              Kira, aidat ve
+              Kira ve aidatı
               <br />
-              faturalarını
-              <br />
-              <span className="text-accent">tek yerden</span> öde.
+              <span className="text-accent">kartınla öde,</span> süreci takip et.
             </h1>
 
             {/* Açıklama */}
-            <p className="text-lg text-white/60 max-w-md mx-auto lg:mx-0 mb-8 leading-relaxed">
-              Ev sahibine kira, siteye aidat, kurumlara fatura — hepsini kredi kartınla, tek uygulamadan, saniyeler içinde.
+            <p className="text-lg text-white/70 max-w-xl mx-auto lg:mx-0 mb-8 leading-relaxed">
+              Ev sahibine kira ve site yönetimine aidat ödemeni tek akışta tamamla; işlem durumunu, dekontlarını ve geçmişini her an kontrol et.
             </p>
 
             {/* CTA: tek birincil aksiyon (web kayıt); mağaza linkleri ikincil outline */}
@@ -85,8 +83,8 @@ export function Hero() {
             </div>
 
             {/* Alt not */}
-            <p className="mt-6 text-white/40 text-sm">
-              Ücretsiz hesap oluştur, hemen kullanmaya başla.
+            <p className="mt-6 text-white/50 text-sm">
+              Modern arayüz, hızlı akış, güçlü güvenlik.
             </p>
           </div>
 
@@ -115,7 +113,7 @@ export function Hero() {
                     {/* Hero card mini */}
                     <div
                       className="rounded-2xl p-5"
-                      style={{ background: 'linear-gradient(135deg, #1E3A5F, #0C1929)' }}
+                      style={{ background: 'linear-gradient(135deg, #26539B, #173B73)' }}
                     >
                       <p className="text-white/50 text-xs mb-1">Toplam ödeme</p>
                       <p className="text-white font-bold text-2xl">₺14.850</p>
@@ -140,8 +138,8 @@ export function Hero() {
                     {/* İşlem satırları */}
                     <div className="space-y-2">
                       {[
-                        { title: 'Apartman Aidatı', amount: '₺850' },
-                        { title: 'Doğalgaz', amount: '₺320' },
+                        { title: 'Apartman Aidati', amount: '₺850' },
+                        { title: 'Site Aidati', amount: '₺320' },
                       ].map((tx, i) => (
                         <div key={i} className="flex items-center justify-between bg-surface rounded-xl px-4 py-3">
                           <div className="flex items-center gap-3">

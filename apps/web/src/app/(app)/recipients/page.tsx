@@ -18,7 +18,7 @@ const INITIAL: Recipient[] = [
   { id: '1', nickname: 'Apartman', iban: 'TR33 0006 1005 1978 6457 8413 26', type: 'company', emoji: '🏢', color: '#5B7FA6', lastPaid: '15 Oca' },
   { id: '2', nickname: 'Ev Sahibi', iban: 'TR17 0001 2009 4520 0058 0000 01', type: 'person', emoji: '🏠', color: '#4A9B7F', lastPaid: '1 Oca' },
   { id: '3', nickname: 'Site Yön.', iban: 'TR26 0004 6009 1488 0000 0187 69', type: 'company', emoji: '🏡', color: '#B56B6B', lastPaid: '20 Ara' },
-  { id: '4', nickname: 'Elektrik', iban: 'TR98 0001 0017 4538 0073 5099 72', type: 'company', emoji: '⚡', color: '#B8894A' },
+  { id: '4', nickname: 'Aidat Merkezi', iban: 'TR98 0001 0017 4538 0073 5099 72', type: 'company', emoji: '🧾', color: '#B8894A' },
 ];
 
 const EMOJIS = ['🏠', '🏢', '🏡', '⚡', '💧', '🔥', '📱', '💰', '🔑', '👤'];

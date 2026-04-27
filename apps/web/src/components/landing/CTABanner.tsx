@@ -16,7 +16,7 @@ export function CTABanner() {
             Ev ödemelerini kolaylaştır
           </h2>
           <p className="text-white/70 mb-8 max-w-xl mx-auto">
-            Hemen ücretsiz hesap oluştur, kira ve faturalarını kredi kartınla ödemeye başla.
+            Hemen ucretsiz hesap olustur, kira ve aidatini kredi kartinla odemeye basla.
           </p>
           <div className="flex flex-col items-center w-full max-w-md mx-auto">
             <p className="text-white/50 text-xs font-medium mb-2">Önerilen: web’de hesap aç</p>

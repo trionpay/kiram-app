@@ -12,7 +12,7 @@ const PROFILE_FIRST_NAME_KEY = 'kiram_profile_first_name_v1';
 
 const MOCK_TXS = [
   { id: 'TRP10293847', name: 'Apartman Yönetimi', iban: 'TR33 0006 1005 1978 6457 8413 26', amount: 2500, fee: 37.5, total: 2537.5, status: 'success', createdAt: '2026-03-17T10:32:00', date: '17 Mar 2026', time: '10:32', description: 'Nisan 2026 kirası' },
-  { id: 'TRP10293612', name: 'Elektrik Faturası', iban: 'TR52 0001 0017 4523 1850 3000 01', amount: 480, fee: 7.2, total: 487.2, status: 'success', createdAt: '2026-03-16T14:15:00', date: '16 Mar 2026', time: '14:15', description: '' },
+  { id: 'TRP10293612', name: 'Apartman Aidatı', iban: 'TR52 0001 0017 4523 1850 3000 01', amount: 850, fee: 12.75, total: 862.75, status: 'success', createdAt: '2026-03-16T14:15:00', date: '16 Mar 2026', time: '14:15', description: '' },
   { id: 'TRP10293401', name: 'Kira Ödemesi', iban: 'TR62 0013 4000 0147 4012 8100 09', amount: 12000, fee: 180, total: 12180, status: 'failed', createdAt: '2026-03-15T11:05:00', date: '15 Mar 2026', time: '', description: 'Mart 2026 kirası' },
 ];
 
@@ -20,7 +20,7 @@ const RECENT_RECIPIENTS = [
   { id: '1', nickname: 'Apartman', name: 'Apartman Yönetimi', iban: 'TR33 0006 1005 1978 6457 8413 26', initial: 'A', emoji: '🏢', color: '#5B7FA6' },
   { id: '2', nickname: 'Ev Sahibi', name: 'Ev Sahibi', iban: 'TR52 0001 0017 4523 1850 3000 01', initial: 'E', emoji: '🏠', color: '#4A9B7F' },
   { id: '3', nickname: 'Site', name: 'Site Yönetimi', iban: 'TR62 0013 4000 0147 4012 8100 09', initial: 'S', emoji: '🏡', color: '#B56B6B' },
-  { id: '4', nickname: 'Elektrik', name: 'Elektrik Faturası', iban: 'TR11 0001 0011 8250 3000 2100 09', initial: 'E', emoji: '⚡', color: '#B8894A' },
+  { id: '4', nickname: 'Aidat', name: 'Site Aidatı', iban: 'TR11 0001 0011 8250 3000 2100 09', initial: 'A', emoji: '🏢', color: '#B8894A' },
 ];
 
 const formatMoneyTr = (value) => {
@@ -93,7 +93,7 @@ export function DashboardScreen({ navigation, route }) {
           <View style={styles.heroDecorCircle2} />
           <View style={styles.heroTop}>
             <View>
-              <Text style={styles.heroTitle}>Kira, aidat, fatura</Text>
+              <Text style={styles.heroTitle}>Kira ve aidat</Text>
               <Text style={styles.heroTitle}>tek yerden öde.</Text>
             </View>
             <TrionPayLogo width={65} color="#FFFFFF" accentColor="#5FE00B" />

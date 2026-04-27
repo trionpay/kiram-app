@@ -11,13 +11,6 @@ const TYPES = [
     subtitle: 'Ev sahibi veya apartman yönetimine IBAN ile ödeme',
     screen: 'PaymentAmount',
   },
-  {
-    id: 'bill',
-    icon: '⚡',
-    title: 'Fatura Öde',
-    subtitle: 'Elektrik, su, doğalgaz, internet ve telekomünikasyon',
-    screen: 'BillPayment',
-  },
 ];
 
 export function PaymentTypeScreen({ navigation }) {

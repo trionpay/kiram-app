@@ -1,5 +1,5 @@
 /**
- * Fatura bayii API: abone / referans doğrulama (borç sorgusu öncesi veya aynı uç).
+ * Aidat kurum API: abone / referans doğrulama.
  * Üretimde gerçek HTTP yanıtına map edilir; şimdilik deterministik mock.
  */
 

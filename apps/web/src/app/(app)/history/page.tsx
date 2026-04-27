@@ -12,7 +12,7 @@ interface Transaction {
   subtitle: string;
   amount: number;
   fee: number;
-  type: 'bill' | 'rent';
+  type: 'dues' | 'rent';
   status: 'success' | 'pending' | 'failed';
   date: string;
   time: string;
@@ -21,14 +21,14 @@ interface Transaction {
 }
 
 const TRANSACTIONS: Transaction[] = [
-  { id: 'TRX-2501-0015', title: 'Apartman Aidatı', subtitle: 'Ocak 2025', amount: 850, fee: 12.75, type: 'bill', status: 'success', date: '15 Oca 2025', time: '09:42', iban: 'TR33 0006 1005 1978 6457 8413 26' },
-  { id: 'TRX-2501-0012', title: 'Doğalgaz', subtitle: 'İGDAŞ', amount: 320, fee: 4.80, type: 'bill', status: 'success', date: '12 Oca 2025', time: '14:18', iban: 'TR17 0001 2009 4520 0058 0000 01' },
+  { id: 'TRX-2501-0015', title: 'Apartman Aidatı', subtitle: 'Ocak 2025', amount: 850, fee: 12.75, type: 'dues', status: 'success', date: '15 Oca 2025', time: '09:42', iban: 'TR33 0006 1005 1978 6457 8413 26' },
+  { id: 'TRX-2501-0012', title: 'Site Aidatı', subtitle: 'A Blok', amount: 620, fee: 9.30, type: 'dues', status: 'success', date: '12 Oca 2025', time: '14:18', iban: 'TR17 0001 2009 4520 0058 0000 01' },
   { id: 'TRX-2502-0001', title: 'Kira', subtitle: 'Ev Sahibi — Şubat', amount: 12000, fee: 180, type: 'rent', status: 'pending', date: '1 Şub 2025', time: '10:00', iban: 'TR26 0004 6009 1488 0000 0187 69', description: 'Şubat 2025 kirası' },
-  { id: 'TRX-2501-0008', title: 'İnternet', subtitle: 'Türk Telekom', amount: 199, fee: 2.99, type: 'bill', status: 'success', date: '8 Oca 2025', time: '11:05', iban: 'TR98 0001 0017 4538 0073 5099 72' },
-  { id: 'TRX-2501-0007', title: 'Elektrik', subtitle: 'TEDAŞ', amount: 445, fee: 6.68, type: 'bill', status: 'success', date: '7 Oca 2025', time: '16:30', iban: 'TR12 0003 2000 0000 0027 5041 67' },
+  { id: 'TRX-2501-0008', title: 'Apartman Aidatı', subtitle: 'Bina Yönetimi', amount: 740, fee: 11.10, type: 'dues', status: 'success', date: '8 Oca 2025', time: '11:05', iban: 'TR98 0001 0017 4538 0073 5099 72' },
+  { id: 'TRX-2501-0007', title: 'Site Aidatı', subtitle: 'Site Yönetimi', amount: 930, fee: 13.95, type: 'dues', status: 'success', date: '7 Oca 2025', time: '16:30', iban: 'TR12 0003 2000 0000 0027 5041 67' },
   { id: 'TRX-2501-0001', title: 'Kira', subtitle: 'Ev Sahibi — Ocak', amount: 12000, fee: 180, type: 'rent', status: 'success', date: '1 Oca 2025', time: '09:00', iban: 'TR26 0004 6009 1488 0000 0187 69', description: 'Ocak 2025 kirası' },
-  { id: 'TRX-2412-0003', title: 'Su', subtitle: 'İSKİ', amount: 185, fee: 2.78, type: 'bill', status: 'failed', date: '3 Ara 2024', time: '13:22', iban: 'TR45 0006 7010 0000 0059 3902 49' },
-  { id: 'TRX-2412-0015', title: 'Apartman Aidatı', subtitle: 'Aralık 2024', amount: 850, fee: 12.75, type: 'bill', status: 'success', date: '15 Ara 2024', time: '10:11', iban: 'TR33 0006 1005 1978 6457 8413 26' },
+  { id: 'TRX-2412-0003', title: 'Apartman Aidatı', subtitle: 'C Blok', amount: 790, fee: 11.85, type: 'dues', status: 'failed', date: '3 Ara 2024', time: '13:22', iban: 'TR45 0006 7010 0000 0059 3902 49' },
+  { id: 'TRX-2412-0015', title: 'Apartman Aidatı', subtitle: 'Aralık 2024', amount: 850, fee: 12.75, type: 'dues', status: 'success', date: '15 Ara 2024', time: '10:11', iban: 'TR33 0006 1005 1978 6457 8413 26' },
 ];
 
 const FILTERS: { value: Filter; label: string }[] = [
@@ -44,7 +44,7 @@ const STATUS_BADGE: Record<string, React.ReactNode> = {
   failed: <Badge variant="error">Başarısız</Badge>,
 };
 
-const TYPE_EMOJI: Record<string, string> = { rent: '🏠', bill: '📋' };
+const TYPE_EMOJI: Record<string, string> = { rent: '🏠', dues: '📋' };
 
 const fmt = (n: number) => n.toFixed(2).replace('.', ',');
 
