@@ -180,8 +180,12 @@ function StepBar({ current }: { current: number }) {
 
 export default function PaymentPage() {
   const searchParams = useSearchParams();
-  const [step, setStep] = useState<Step>('type');
-  const [paymentType, setPaymentType] = useState<PaymentType>('rent');
+  const initialTypeParam = searchParams.get('type');
+  const initialPaymentType: PaymentType = initialTypeParam === 'dues' ? 'dues' : 'rent';
+  const initialStep: Step = initialTypeParam === 'rent' || initialTypeParam === 'dues' ? 'recipient' : 'type';
+
+  const [step, setStep] = useState<Step>(initialStep);
+  const [paymentType, setPaymentType] = useState<PaymentType>(initialPaymentType);
   /** Kira/havale: TR sabit; yalnızca sonraki 24 karakter (tam TR IBAN = 26) */
   const [ibanRest, setIbanRest] = useState('');
   const [ibanName, setIbanName] = useState('');
@@ -206,14 +210,6 @@ export default function PaymentPage() {
   const [newCardCvv, setNewCardCvv] = useState('');
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<ResultStatus>('success');
-
-  useEffect(() => {
-    const typeParam = searchParams.get('type');
-    if (typeParam === 'rent' || typeParam === 'dues') {
-      setPaymentType(typeParam);
-      setStep('recipient');
-    }
-  }, [searchParams]);
 
   useEffect(() => {
     if (!addCardOpen) return;
