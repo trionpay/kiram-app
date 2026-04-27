@@ -14,6 +14,7 @@ npm run dev
 
 - `supabase/migrations/0001_core_schema.sql`
 - `supabase/migrations/0002_rls_policies.sql`
+- `supabase/migrations/0003_idempotency_keys.sql`
 
 After migrations, insert demo users (required for current bearer-token auth mapping):
 
@@ -35,6 +36,7 @@ on conflict (id) do nothing;
 - Global rate limit (`120 req/min`)
 - Strict env validation (`zod`)
 - Role-based guard (`user` / `admin`) with bearer token
+- Idempotency-Key enforcement for payment create and admin broadcast create
 - Centralized error format
 
 ## Initial Endpoints
