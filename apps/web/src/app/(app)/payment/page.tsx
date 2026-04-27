@@ -1,7 +1,6 @@
 'use client';
 
 import { useEffect, useMemo, useState } from 'react';
-import { useSearchParams } from 'next/navigation';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
 import { Switch } from '@/components/ui/Switch';
@@ -179,13 +178,15 @@ function StepBar({ current }: { current: number }) {
 }
 
 export default function PaymentPage() {
-  const searchParams = useSearchParams();
-  const initialTypeParam = searchParams.get('type');
-  const initialPaymentType: PaymentType = initialTypeParam === 'dues' ? 'dues' : 'rent';
-  const initialStep: Step = initialTypeParam === 'rent' || initialTypeParam === 'dues' ? 'recipient' : 'type';
-
-  const [step, setStep] = useState<Step>(initialStep);
-  const [paymentType, setPaymentType] = useState<PaymentType>(initialPaymentType);
+  const [step, setStep] = useState<Step>(() => {
+    if (typeof window === 'undefined') return 'type';
+    const typeParam = new URLSearchParams(window.location.search).get('type');
+    return typeParam === 'rent' || typeParam === 'dues' ? 'recipient' : 'type';
+  });
+  const [paymentType, setPaymentType] = useState<PaymentType>(() => {
+    if (typeof window === 'undefined') return 'rent';
+    return new URLSearchParams(window.location.search).get('type') === 'dues' ? 'dues' : 'rent';
+  });
   /** Kira/havale: TR sabit; yalnızca sonraki 24 karakter (tam TR IBAN = 26) */
   const [ibanRest, setIbanRest] = useState('');
   const [ibanName, setIbanName] = useState('');

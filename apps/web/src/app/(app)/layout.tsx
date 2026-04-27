@@ -1,3 +1,4 @@
+import { Suspense } from 'react';
 import { Sidebar } from '@/components/layout/Sidebar';
 import { Topbar } from '@/components/layout/Topbar';
 
@@ -6,7 +7,9 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
     <div className="flex h-screen bg-background overflow-hidden">
       {/* Sabit sol sidebar — sadece desktop */}
       <aside className="hidden lg:flex lg:flex-col lg:w-72 xl:w-80 flex-shrink-0 bg-elevated border-r border-border overflow-hidden">
-        <Sidebar />
+        <Suspense fallback={<div className="h-full" />}>
+          <Sidebar />
+        </Suspense>
       </aside>
 
       {/* Sağ taraf: topbar + içerik */}

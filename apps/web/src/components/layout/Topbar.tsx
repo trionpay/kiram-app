@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { Suspense, useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
@@ -324,7 +324,9 @@ export function Topbar() {
               aria-modal="true"
               aria-label="Uygulama menüsü"
             >
-              <Sidebar onClose={() => setSidebarOpen(false)} />
+              <Suspense fallback={<div className="h-full" />}>
+                <Sidebar onClose={() => setSidebarOpen(false)} />
+              </Suspense>
             </div>
           </>,
           document.body
