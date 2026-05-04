@@ -6,6 +6,7 @@ import { Input } from '@/components/ui/Input';
 import { Switch } from '@/components/ui/Switch';
 import { getBillProvidersForCategorySync } from '@/lib/billing/billProviders';
 import { validateBillSubscriber } from '@/lib/billing/validateBillSubscriber';
+import type { ApiRecipient, PaymentQuoteResponse } from '@kiram/shared-types';
 
 type PaymentType = 'rent' | 'dues';
 type Step = 'type' | 'recipient' | 'amount' | 'card' | 'confirm' | 'result';
@@ -200,8 +201,10 @@ export default function PaymentPage() {
   const [saveBillSubscriber, setSaveBillSubscriber] = useState(false);
   const [amount, setAmount] = useState('');
   const [description, setDescription] = useState('');
-  const [savedRentRecipients] = useState<SavedRentRecipient[]>(INITIAL_SAVED_RENT_RECIPIENTS);
+  const [savedRentRecipients, setSavedRentRecipients] = useState<SavedRentRecipient[]>(INITIAL_SAVED_RENT_RECIPIENTS);
   const [savedRecipientsOpen, setSavedRecipientsOpen] = useState(false);
+  const [savedRecipientsLoading, setSavedRecipientsLoading] = useState(false);
+  const [savedRecipientsError, setSavedRecipientsError] = useState('');
   const [savedCards, setSavedCards] = useState<SavedCard[]>(INITIAL_SAVED_CARDS);
   const [selectedCard, setSelectedCard] = useState('1');
   const [addCardOpen, setAddCardOpen] = useState(false);
@@ -211,6 +214,9 @@ export default function PaymentPage() {
   const [newCardCvv, setNewCardCvv] = useState('');
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<ResultStatus>('success');
+  const [paymentError, setPaymentError] = useState('');
+  const [quote, setQuote] = useState<PaymentQuoteResponse | null>(null);
+  const [quoteLoading, setQuoteLoading] = useState(false);
 
   useEffect(() => {
     if (!addCardOpen) return;
@@ -220,6 +226,84 @@ export default function PaymentPage() {
     document.addEventListener('keydown', onKey);
     return () => document.removeEventListener('keydown', onKey);
   }, [addCardOpen]);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    const loadSavedRecipients = async () => {
+      setSavedRecipientsLoading(true);
+      setSavedRecipientsError('');
+      try {
+        const res = await fetch('/api/internal/recipients', { cache: 'no-store' });
+        const payload = await res.json();
+        if (!res.ok) {
+          throw new Error(payload?.error?.message ?? 'Kayıtlı alıcılar alınamadı.');
+        }
+
+        if (cancelled) return;
+        const mapped = ((payload?.items ?? []) as ApiRecipient[]).map(item => ({
+          id: item.id,
+          nickname: item.nickname,
+          accountHolder: item.accountHolder,
+          iban: item.iban,
+        }));
+        setSavedRentRecipients(mapped);
+      } catch (error) {
+        if (!cancelled) {
+          setSavedRecipientsError(error instanceof Error ? error.message : 'Kayıtlı alıcılar alınamadı.');
+        }
+      } finally {
+        if (!cancelled) setSavedRecipientsLoading(false);
+      }
+    };
+
+    void loadSavedRecipients();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  useEffect(() => {
+    if (step !== 'amount' || paymentType !== 'rent' || ibanRest.length !== TR_IBAN_REST_LEN) {
+      setQuote(null);
+      setQuoteLoading(false);
+      return;
+    }
+
+    const numericAmount = parseTurkishAmountToNumber(amount);
+    if (!amount.trim() || Number.isNaN(numericAmount) || numericAmount <= 0) {
+      setQuote(null);
+      return;
+    }
+
+    let cancelled = false;
+    const timer = window.setTimeout(async () => {
+      setQuoteLoading(true);
+      try {
+        const res = await fetch('/api/internal/payments/quote', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            paymentType: 'rent',
+            amountTry: numericAmount,
+            recipientIban: `TR${ibanRest}`,
+          }),
+        });
+        const payload = await res.json();
+        if (!res.ok) throw new Error();
+        if (!cancelled) setQuote(payload as PaymentQuoteResponse);
+      } catch {
+        if (!cancelled) setQuote(null);
+      } finally {
+        if (!cancelled) setQuoteLoading(false);
+      }
+    }, 250);
+
+    return () => {
+      cancelled = true;
+      window.clearTimeout(timer);
+    };
+  }, [step, paymentType, ibanRest, amount]);
 
   const billProviders = useMemo(() => {
     if (paymentType !== 'dues' || !billCategory) return [];
@@ -284,8 +368,40 @@ export default function PaymentPage() {
   };
 
   const handleConfirmPay = async () => {
+    setPaymentError('');
     setLoading(true);
-    await new Promise(r => setTimeout(r, 1200));
+    try {
+      if (paymentType === 'rent') {
+        const numericAmount = parseTurkishAmountToNumber(amount);
+        const res = await fetch('/api/internal/payments', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Idempotency-Key': crypto.randomUUID(),
+          },
+          body: JSON.stringify({
+            paymentType: 'rent',
+            amountTry: numericAmount,
+            recipientIban: `TR${ibanRest}`,
+            cardToken: `demo-card-${selectedCard}`,
+            description: description.trim() || undefined,
+          }),
+        });
+        const payload = await res.json();
+        if (!res.ok) {
+          throw new Error(payload?.error?.message ?? 'Ödeme oluşturulamadı.');
+        }
+      } else {
+        await new Promise(r => setTimeout(r, 700));
+      }
+    } catch (error) {
+      setLoading(false);
+      setResult('failed');
+      setPaymentError(error instanceof Error ? error.message : 'Ödeme sırasında hata oluştu.');
+      setStep('result');
+      return;
+    }
+
     setLoading(false);
     if (
       paymentType === 'dues' &&
@@ -334,6 +450,9 @@ export default function PaymentPage() {
     setNewCardNumber('');
     setNewCardExpiry('');
     setNewCardCvv('');
+    setPaymentError('');
+    setQuote(null);
+    setQuoteLoading(false);
   };
 
   const openAddCardModal = () => {
@@ -373,6 +492,9 @@ export default function PaymentPage() {
               ? `${formatTryFromNormalized(amount)} tutarındaki ödemeniz başarıyla gerçekleşti.`
               : 'Ödeme işlemi sırasında bir sorun oluştu.'}
           </p>
+          {!isSuccess && paymentError ? (
+            <p className="mt-2 text-sm text-error">{paymentError}</p>
+          ) : null}
         </div>
         {isSuccess && (
           <div className="bg-surface rounded-2xl p-4 text-left space-y-3">
@@ -489,7 +611,9 @@ export default function PaymentPage() {
                   >
                     <div>
                       <p className="text-sm font-semibold text-text-primary">Kayıtlı alıcılardan seç</p>
-                      <p className="mt-0.5 text-xs text-text-secondary">{savedRentRecipients.length} kayıtlı alıcı</p>
+                      <p className="mt-0.5 text-xs text-text-secondary">
+                        {savedRecipientsLoading ? 'Yükleniyor...' : `${savedRentRecipients.length} kayıtlı alıcı`}
+                      </p>
                     </div>
                     <span className={`text-text-tertiary transition-transform ${savedRecipientsOpen ? 'rotate-180' : ''}`}>
                       ▾
@@ -497,6 +621,11 @@ export default function PaymentPage() {
                   </button>
                   {savedRecipientsOpen ? (
                     <div className="mt-3 space-y-2">
+                      {savedRecipientsError ? (
+                        <p className="rounded-xl border border-error/35 bg-red-50 px-3 py-2 text-xs text-error">
+                          {savedRecipientsError}
+                        </p>
+                      ) : null}
                       {savedRentRecipients.map(r => {
                         const rest = normalizeTrIbanRest(r.iban);
                         const selected = ibanRest === rest;
@@ -712,6 +841,15 @@ export default function PaymentPage() {
                   ? `Kurum: ${billCompany}`
                   : 'Aidat / kurum odemesi'}
             </p>
+            {paymentType === 'rent' ? (
+              quoteLoading ? (
+                <p className="mt-2 text-xs text-text-tertiary">Hizmet bedeli hesaplanıyor...</p>
+              ) : quote ? (
+                <p className="mt-2 text-xs text-text-secondary">
+                  Hizmet bedeli: ₺{quote.feeTry.toLocaleString('tr-TR')} · Toplam: ₺{quote.totalTry.toLocaleString('tr-TR')}
+                </p>
+              ) : null
+            ) : null}
           </div>
 
           <Button
@@ -793,6 +931,12 @@ export default function PaymentPage() {
                 { label: 'Alıcı', value: paymentType === 'rent' ? (ibanName || 'Hesap sahibi') : billCompany },
                 { label: 'Ödeme tipi', value: paymentType === 'rent' ? 'Kira / Havale' : 'Aidat' },
                 { label: 'Kart', value: `•••• ${savedCards.find(c => c.id === selectedCard)?.last4}` },
+                ...(quote && paymentType === 'rent'
+                  ? [
+                      { label: 'Hizmet bedeli', value: `₺${quote.feeTry.toLocaleString('tr-TR')}` },
+                      { label: 'Toplam', value: `₺${quote.totalTry.toLocaleString('tr-TR')}` },
+                    ]
+                  : []),
                 ...(description ? [{ label: 'Açıklama', value: description }] : []),
               ].map(row => (
                 <div key={row.label} className="flex justify-between text-sm">

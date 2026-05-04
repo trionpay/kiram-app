@@ -10,7 +10,7 @@ export function CTABanner() {
       <div className="max-w-4xl mx-auto px-6 text-center">
         <FadeIn>
           <div className="flex justify-center mb-6">
-            <TrionPayLogo width={140} color="#FFFFFF" accentColor="#5FE00B" />
+            <TrionPayLogo width={170} variant="vertical" />
           </div>
           <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
             Ev ödemelerini kolaylaştır

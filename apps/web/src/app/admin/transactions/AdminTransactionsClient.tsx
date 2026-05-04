@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import {
   initialMockTransactions,
@@ -67,7 +67,9 @@ export function AdminTransactionsClient() {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const durumParam = searchParams.get('durum');
-  const rows: AdminTransactionRow[] = initialMockTransactions;
+  const [rows, setRows] = useState<AdminTransactionRow[]>(initialMockTransactions);
+  const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState('');
   const filter: Filter = transactionFilterFromDurumParam(durumParam);
   const [query, setQuery] = useState('');
   const handleFilterChange = (next: Filter) => {
@@ -90,13 +92,43 @@ export function AdminTransactionsClient() {
     });
   }, [rows, filter, query]);
 
+  useEffect(() => {
+    let cancelled = false;
+
+    const loadTransactions = async () => {
+      setLoading(true);
+      setLoadError('');
+      try {
+        const res = await fetch('/api/internal/admin/transactions?limit=200', { cache: 'no-store' });
+        const payload = await res.json();
+        if (!res.ok) {
+          throw new Error(payload?.error?.message ?? 'Admin işlem listesi alınamadı.');
+        }
+        if (!cancelled) {
+          setRows((payload?.items ?? []) as AdminTransactionRow[]);
+        }
+      } catch (error) {
+        if (!cancelled) {
+          setLoadError(error instanceof Error ? error.message : 'Admin işlem listesi alınamadı.');
+        }
+      } finally {
+        if (!cancelled) setLoading(false);
+      }
+    };
+
+    void loadTransactions();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
   return (
     <div className="space-y-6">
       <div>
         <h2 className="text-2xl font-bold text-text-primary">İşlem logları</h2>
         <p className="mt-1 text-sm text-text-secondary">
-          İşlem tipi (kira / aidat), alıcı bilgisi, tutar ve hizmet bedeli; durum filtreleri ve arama (mock).
-          Özet kartından geldiyseniz filtre URL ile uygulanır. Üretimde API sayfalaması önerilir.
+          İşlem tipi (kira / aidat), alıcı bilgisi, tutar ve hizmet bedeli; durum filtreleri ve arama.
+          Özet kartından geldiyseniz filtre URL ile uygulanır.
         </p>
       </div>
 
@@ -153,7 +185,19 @@ export function AdminTransactionsClient() {
               </tr>
             </thead>
             <tbody>
-              {filtered.length === 0 ? (
+              {loading ? (
+                <tr>
+                  <td colSpan={7} className="px-4 py-8 text-center text-text-secondary">
+                    İşlemler yükleniyor...
+                  </td>
+                </tr>
+              ) : loadError ? (
+                <tr>
+                  <td colSpan={7} className="px-4 py-8 text-center text-error">
+                    {loadError}
+                  </td>
+                </tr>
+              ) : filtered.length === 0 ? (
                 <tr>
                   <td colSpan={7} className="px-4 py-8 text-center text-text-secondary">
                     Kayıt bulunamadı.

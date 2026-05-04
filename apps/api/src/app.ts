@@ -13,6 +13,19 @@ export function buildApp(): FastifyInstance {
   const app = Fastify({
     logger: {
       level: config.LOG_LEVEL,
+      redact: {
+        paths: [
+          "req.headers.authorization",
+          "request.headers.authorization",
+          "headers.authorization",
+          "*.authorization",
+          "*.INTERNAL_USER_TOKEN",
+          "*.INTERNAL_ADMIN_TOKEN",
+          "*.SUPABASE_SERVICE_ROLE_KEY",
+          "*.cardToken"
+        ],
+        censor: "[REDACTED]"
+      },
       transport:
         config.NODE_ENV === "development"
           ? {

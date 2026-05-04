@@ -11,6 +11,10 @@ const dmSans = DM_Sans({
 export const metadata: Metadata = {
   title: "Kiram — Kira ve aidat odemeleri",
   description: "Kira ve aidat odemelerinizi tek yerden, guvenle yapin.",
+  icons: {
+    icon: "/icon.png",
+    shortcut: "/icon.png"
+  }
 };
 
 export default function RootLayout({

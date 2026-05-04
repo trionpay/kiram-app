@@ -34,9 +34,12 @@ on conflict (id) do nothing;
 
 - Helmet HTTP security headers
 - Global rate limit (`120 req/min`)
+- Endpoint-level stricter rate limits for payment/admin write operations
 - Strict env validation (`zod`)
 - Role-based guard (`user` / `admin`) with bearer token
 - Idempotency-Key enforcement for payment create and admin broadcast create
+- Audit log write for critical admin/user actions
+- Sensitive field redaction in application logs (`authorization`, secrets, cardToken)
 - Centralized error format
 
 ## Initial Endpoints
@@ -44,8 +47,10 @@ on conflict (id) do nothing;
 - `GET /health`
 - `GET /api/v1`
 - `GET /api/v1/recipients` (auth: user)
+- `GET /api/v1/payments` (auth: user)
 - `POST /api/v1/payments/quote` (auth: user)
 - `POST /api/v1/payments` (auth: user)
+- `GET /api/v1/admin/transactions` (auth: admin)
 - `GET /api/v1/admin/transactions/summary` (auth: admin)
 - `POST /api/v1/admin/broadcasts` (auth: admin)
 

@@ -40,7 +40,7 @@ const formatDateTr = (isoDate) => new Intl.DateTimeFormat('tr-TR', {
 export function DashboardScreen({ navigation, route }) {
   const [selectedTx, setSelectedTx] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [profileName, setProfileName] = useState('Deniz');
+  const [profileName, setProfileName] = useState('Baran');
   const transactions = MOCK_TXS;
 
   useEffect(() => {
@@ -73,6 +73,9 @@ export function DashboardScreen({ navigation, route }) {
             <Text style={styles.greeting}>Merhaba 👋</Text>
             <Text style={styles.name}>{profileName}</Text>
           </View>
+          <View style={styles.topCenterLogo}>
+            <TrionPayLogo width={68} variant="vertical" />
+          </View>
           <TouchableOpacity
             style={styles.avatar}
             onPress={() => navigation.navigate('Profile')}
@@ -93,10 +96,9 @@ export function DashboardScreen({ navigation, route }) {
           <View style={styles.heroDecorCircle2} />
           <View style={styles.heroTop}>
             <View>
-              <Text style={styles.heroTitle}>Kira ve aidat</Text>
+              <Text style={styles.heroTitle}>Kira ve aidatını</Text>
               <Text style={styles.heroTitle}>tek yerden öde.</Text>
             </View>
-            <TrionPayLogo width={65} color="#FFFFFF" accentColor="#5FE00B" />
           </View>
           <TouchableOpacity
             style={styles.heroBtn}
@@ -219,10 +221,18 @@ const styles = StyleSheet.create({
 
   /* Üst */
   topRow: {
+    position: 'relative',
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     marginBottom: spacing.xl,
+  },
+  topCenterLogo: {
+    position: 'absolute',
+    left: '50%',
+    transform: [{ translateX: -34 }],
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   greeting: { ...typography.bodySmall, color: colors.textSecondary },
   name: { ...typography.h2, color: colors.textPrimary, marginTop: 2 },

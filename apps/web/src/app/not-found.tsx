@@ -48,7 +48,7 @@ export default function NotFound() {
       </main>
 
       <footer className="py-6 text-center text-text-tertiary text-sm border-t border-border">
-        <p>© {new Date().getFullYear()} TrionPay · Kiram</p>
+        <p>© {new Date().getFullYear()} Kiram</p>
       </footer>
     </div>
   );

@@ -1,8 +1,9 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
+import type { ApiRecipient } from '@kiram/shared-types';
 
 interface Recipient {
   id: string;
@@ -34,8 +35,47 @@ export default function RecipientsPage() {
   const [search, setSearch] = useState('');
   const [modalOpen, setModalOpen] = useState(false);
   const [editTarget, setEditTarget] = useState<Recipient | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState('');
 
   const [form, setForm] = useState({ nickname: '', iban: '', type: 'person' as 'person' | 'company', emoji: '👤', color: COLORS[0] });
+
+  useEffect(() => {
+    let cancelled = false;
+
+    const fetchRecipients = async () => {
+      setLoading(true);
+      setLoadError('');
+      try {
+        const res = await fetch('/api/internal/recipients', { cache: 'no-store' });
+        const payload = await res.json();
+        if (!res.ok) {
+          throw new Error(payload?.error?.message ?? 'Alıcılar getirilemedi.');
+        }
+        if (cancelled) return;
+        const items: Recipient[] = ((payload?.items ?? []) as ApiRecipient[]).map((item, index) => ({
+          id: item.id,
+          nickname: item.nickname || item.accountHolder,
+          iban: item.iban,
+          type: item.paymentType === 'dues' ? 'company' : 'person',
+          emoji: EMOJIS[index % EMOJIS.length],
+          color: COLORS[index % COLORS.length],
+        }));
+        setRecipients(items);
+      } catch (error) {
+        if (!cancelled) {
+          setLoadError(error instanceof Error ? error.message : 'Alıcılar getirilemedi.');
+        }
+      } finally {
+        if (!cancelled) setLoading(false);
+      }
+    };
+
+    void fetchRecipients();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   const filtered = recipients.filter(r =>
     r.nickname.toLowerCase().includes(search.toLowerCase()) ||
@@ -93,7 +133,15 @@ export default function RecipientsPage() {
 
       {/* Liste */}
       <div className="bg-elevated rounded-3xl border border-border divide-y divide-border overflow-hidden">
-        {filtered.length === 0 ? (
+        {loading ? (
+          <div className="py-16 text-center">
+            <p className="text-text-secondary font-medium">Alıcılar yükleniyor...</p>
+          </div>
+        ) : loadError ? (
+          <div className="py-16 text-center px-6">
+            <p className="text-error font-medium">{loadError}</p>
+          </div>
+        ) : filtered.length === 0 ? (
           <div className="py-16 text-center">
             <p className="text-4xl mb-3">👥</p>
             <p className="text-text-secondary font-medium">Alıcı bulunamadı</p>

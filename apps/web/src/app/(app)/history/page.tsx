@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Badge } from '@/components/ui/Badge';
 import { Button } from '@/components/ui/Button';
 
@@ -18,6 +18,17 @@ interface Transaction {
   time: string;
   iban: string;
   description?: string;
+}
+
+interface ApiHistoryItem {
+  id: string;
+  paymentType: 'dues' | 'rent';
+  status: 'success' | 'pending' | 'failed';
+  amountTry: number;
+  feeTry: number;
+  totalTry: number;
+  description?: string;
+  createdAt: string;
 }
 
 const TRANSACTIONS: Transaction[] = [
@@ -131,15 +142,65 @@ export default function HistoryPage() {
   const [filter, setFilter] = useState<Filter>('all');
   const [search, setSearch] = useState('');
   const [selectedTx, setSelectedTx] = useState<Transaction | null>(null);
+  const [transactions, setTransactions] = useState<Transaction[]>(TRANSACTIONS);
+  const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState('');
 
-  const filtered = TRANSACTIONS.filter(tx => {
+  useEffect(() => {
+    let cancelled = false;
+
+    const loadHistory = async () => {
+      setLoading(true);
+      setLoadError('');
+      try {
+        const res = await fetch('/api/internal/history?limit=100', { cache: 'no-store' });
+        const payload = await res.json();
+        if (!res.ok) {
+          throw new Error(payload?.error?.message ?? 'İşlem geçmişi alınamadı.');
+        }
+        if (cancelled) return;
+
+        const items: Transaction[] = ((payload?.items ?? []) as ApiHistoryItem[]).map((item) => {
+          const dateObj = new Date(item.createdAt);
+          return {
+            id: item.id,
+            title: item.paymentType === 'rent' ? 'Kira Ödemesi' : 'Aidat Ödemesi',
+            subtitle: item.description || (item.paymentType === 'rent' ? 'Kira işlemi' : 'Aidat işlemi'),
+            amount: item.amountTry,
+            fee: item.feeTry,
+            type: item.paymentType,
+            status: item.status,
+            date: new Intl.DateTimeFormat('tr-TR', { dateStyle: 'medium' }).format(dateObj),
+            time: new Intl.DateTimeFormat('tr-TR', { timeStyle: 'short' }).format(dateObj),
+            iban: '-',
+            description: item.description,
+          };
+        });
+
+        setTransactions(items);
+      } catch (error) {
+        if (!cancelled) {
+          setLoadError(error instanceof Error ? error.message : 'İşlem geçmişi alınamadı.');
+        }
+      } finally {
+        if (!cancelled) setLoading(false);
+      }
+    };
+
+    void loadHistory();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  const filtered = transactions.filter(tx => {
     if (filter !== 'all' && tx.status !== filter) return false;
     if (search && !tx.title.toLowerCase().includes(search.toLowerCase())) return false;
     return true;
   });
 
-  const totalSuccess = TRANSACTIONS.filter(t => t.status === 'success').reduce((s, t) => s + t.amount, 0);
-  const totalPending = TRANSACTIONS.filter(t => t.status === 'pending').reduce((s, t) => s + t.amount, 0);
+  const totalSuccess = transactions.filter(t => t.status === 'success').reduce((s, t) => s + t.amount, 0);
+  const totalPending = transactions.filter(t => t.status === 'pending').reduce((s, t) => s + t.amount, 0);
 
   return (
     <>
@@ -152,9 +213,9 @@ export default function HistoryPage() {
         {/* Özet kartları */}
         <div className="grid grid-cols-3 gap-4">
           {[
-            { label: 'Toplam Ödeme', value: `₺${(totalSuccess / 1000).toFixed(1)}k`, sub: `${TRANSACTIONS.filter(t => t.status === 'success').length} işlem` },
-            { label: 'Bekleyen', value: `₺${totalPending.toLocaleString('tr-TR')}`, sub: `${TRANSACTIONS.filter(t => t.status === 'pending').length} işlem` },
-            { label: 'Başarısız', value: `${TRANSACTIONS.filter(t => t.status === 'failed').length}`, sub: 'işlem' },
+            { label: 'Toplam Ödeme', value: `₺${(totalSuccess / 1000).toFixed(1)}k`, sub: `${transactions.filter(t => t.status === 'success').length} işlem` },
+            { label: 'Bekleyen', value: `₺${totalPending.toLocaleString('tr-TR')}`, sub: `${transactions.filter(t => t.status === 'pending').length} işlem` },
+            { label: 'Başarısız', value: `${transactions.filter(t => t.status === 'failed').length}`, sub: 'işlem' },
           ].map(stat => (
             <div key={stat.label} className="bg-elevated rounded-2xl p-4 border border-border">
               <p className="text-text-tertiary text-xs mb-1">{stat.label}</p>
@@ -191,7 +252,15 @@ export default function HistoryPage() {
 
         {/* Tablo */}
         <div className="bg-elevated rounded-3xl border border-border overflow-hidden">
-          {filtered.length === 0 ? (
+          {loading ? (
+            <div className="py-16 text-center">
+              <p className="text-text-secondary font-medium">İşlem geçmişi yükleniyor...</p>
+            </div>
+          ) : loadError ? (
+            <div className="py-16 text-center px-6">
+              <p className="text-error font-medium">{loadError}</p>
+            </div>
+          ) : filtered.length === 0 ? (
             <div className="py-16 text-center">
               <p className="text-4xl mb-3">🔍</p>
               <p className="text-text-secondary font-medium">Sonuç bulunamadı</p>

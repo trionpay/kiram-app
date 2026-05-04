@@ -89,7 +89,7 @@ export function Footer() {
 
           <div className="flex flex-col gap-4 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between">
             <p className="text-text-secondary text-sm order-2 sm:order-1">
-              © 2026 TrionPay. Tüm hakları saklıdır.
+              © 2026 Kiram. Tüm hakları saklıdır.
             </p>
             <nav
               className="order-1 flex flex-wrap items-center gap-x-3 gap-y-2 text-sm text-text-tertiary sm:order-2 sm:justify-end"

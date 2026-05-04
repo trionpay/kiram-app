@@ -10,7 +10,7 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
       >
         {/* Logo */}
         <div>
-          <TrionPayLogo width={130} color="#FFFFFF" accentColor="#5FE00B" />
+          <TrionPayLogo width={160} variant="vertical" />
         </div>
 
         {/* Tagline */}

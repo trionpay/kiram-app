@@ -1,7 +1,8 @@
 import { FastifyInstance } from "fastify";
 import { z } from "zod";
+import { writeAuditLog } from "../repositories/auditLogRepository.js";
 import { getIdempotentResult, saveIdempotentResult } from "../repositories/idempotencyRepository.js";
-import { createPayment, quotePayment } from "../repositories/paymentsRepository.js";
+import { createPayment, listPaymentsByUser, quotePayment } from "../repositories/paymentsRepository.js";
 
 const paymentTypeSchema = z.enum(["rent", "dues"]);
 
@@ -20,12 +21,64 @@ const createPaymentBodySchema = z.object({
 });
 
 const idempotencyKeySchema = z.string().trim().min(10).max(128);
+const listPaymentsQuerySchema = z.object({
+  status: z.enum(["success", "pending", "failed"]).optional(),
+  search: z.string().trim().max(64).optional(),
+  limit: z.coerce.number().int().min(1).max(100).default(50)
+});
 
 export async function paymentRoutes(app: FastifyInstance) {
+  app.get(
+    "/payments",
+    {
+      preHandler: app.requireRole("user"),
+      config: {
+        rateLimit: {
+          max: 60,
+          timeWindow: "1 minute"
+        }
+      }
+    },
+    async (request, reply) => {
+      const parsed = listPaymentsQuerySchema.safeParse(request.query);
+      if (!parsed.success) {
+        return reply.code(400).send({
+          error: {
+            code: "BAD_REQUEST",
+            message: "Geçersiz sorgu parametresi."
+          }
+        });
+      }
+
+      const items = await listPaymentsByUser(request.authUser!.id, parsed.data);
+      try {
+        await writeAuditLog({
+          actorUserId: request.authUser!.id,
+          actorRole: "user",
+          action: "payments_listed",
+          entity: "transactions",
+          metadata: {
+            count: items.length,
+            status: parsed.data.status ?? null
+          }
+        });
+      } catch (error) {
+        request.log.warn({ err: error }, "audit_log_failed");
+      }
+      return { items };
+    }
+  );
+
   app.post(
     "/payments/quote",
     {
-      preHandler: app.requireRole("user")
+      preHandler: app.requireRole("user"),
+      config: {
+        rateLimit: {
+          max: 40,
+          timeWindow: "1 minute"
+        }
+      }
     },
     async (request, reply) => {
       const parsed = quoteBodySchema.safeParse(request.body);
@@ -45,7 +98,13 @@ export async function paymentRoutes(app: FastifyInstance) {
   app.post(
     "/payments",
     {
-      preHandler: app.requireRole("user")
+      preHandler: app.requireRole("user"),
+      config: {
+        rateLimit: {
+          max: 20,
+          timeWindow: "1 minute"
+        }
+      }
     },
     async (request, reply) => {
       const idempotencyKeyParsed = idempotencyKeySchema.safeParse(request.headers["idempotency-key"]);
@@ -89,6 +148,23 @@ export async function paymentRoutes(app: FastifyInstance) {
         },
         "payment_created"
       );
+
+      try {
+        await writeAuditLog({
+          actorUserId: request.authUser!.id,
+          actorRole: "user",
+          action: "payment_created",
+          entity: "transactions",
+          entityId: created.transactionId,
+          metadata: {
+            paymentType: created.paymentType,
+            amountTry: created.amountTry,
+            feeTry: created.feeTry
+          }
+        });
+      } catch (error) {
+        request.log.warn({ err: error }, "audit_log_failed");
+      }
 
       await saveIdempotentResult(scope, idempotencyKeyParsed.data, 201, created);
       return reply.code(201).send(created);

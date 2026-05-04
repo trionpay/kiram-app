@@ -61,7 +61,7 @@ export function AdminLoginForm() {
         style={{ background: 'linear-gradient(135deg, #102A43, #0C1929, #061018)' }}
       >
         <div>
-          <TrionPayLogo width={130} color="#FFFFFF" accentColor="#5FE00B" />
+          <TrionPayLogo width={160} variant="vertical" />
         </div>
         <div className="space-y-4">
           <div className="w-9 h-0.5 bg-accent rounded-full" />

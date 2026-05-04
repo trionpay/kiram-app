@@ -57,7 +57,7 @@ export function SplashScreen({ navigation }) {
       <View style={styles.content}>
         {/* Logo */}
         <Animated.View style={[styles.logoWrapper, { opacity: logoOpacity, transform: [{ scale: logoScale }] }]}>
-          <TrionPayLogo width={SCREEN_W * 0.48} color="#FFFFFF" accentColor="#5FE00B" />
+          <TrionPayLogo width={SCREEN_W * 0.48} variant="vertical-white" />
         </Animated.View>
 
         {/* Alt bilgi */}

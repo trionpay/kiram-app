@@ -177,6 +177,32 @@ export function Hero() {
                   <p className="text-[10px] text-white/70">Güvenli ödeme</p>
                 </div>
               </div>
+
+              {/* Yaşam tarzı görselleri: kira/aidat ödeme anı hissiyatı */}
+              <div className="absolute -left-24 top-8 hidden xl:flex w-48 h-64 rounded-2xl overflow-hidden border border-white/20 shadow-xl">
+                <div
+                  className="w-full h-full bg-cover bg-center"
+                  style={{
+                    backgroundImage:
+                      "url('https://images.unsplash.com/photo-1556740738-b6a63e27c4df?auto=format&fit=crop&w=900&q=80')",
+                  }}
+                />
+                <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/70 to-transparent p-3">
+                  <p className="text-white text-[11px] font-semibold">Kartla hızlı ödeme</p>
+                </div>
+              </div>
+              <div className="absolute -right-24 bottom-8 hidden xl:flex w-48 h-64 rounded-2xl overflow-hidden border border-white/20 shadow-xl">
+                <div
+                  className="w-full h-full bg-cover bg-center"
+                  style={{
+                    backgroundImage:
+                      "url('https://images.unsplash.com/photo-1563013544-824ae1b704d3?auto=format&fit=crop&w=900&q=80')",
+                  }}
+                />
+                <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/70 to-transparent p-3">
+                  <p className="text-white text-[11px] font-semibold">Online kira takibi</p>
+                </div>
+              </div>
             </div>
           </div>
         </div>
