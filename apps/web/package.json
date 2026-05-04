@@ -4,8 +4,8 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "prebuild": "npm_config_optional=true npm install --no-save @tailwindcss/oxide-linux-x64-gnu@4.2.1 || npm_config_optional=true npm install --no-save @tailwindcss/oxide-linux-x64-musl@4.2.1 || true",
-    "build": "next build",
+    "prebuild": "node ./scripts/ensure-oxide.cjs",
+    "build": "npx -y node@20.19.0 ../../node_modules/next/dist/bin/next build",
     "start": "next start",
     "lint": "eslint"
   },
