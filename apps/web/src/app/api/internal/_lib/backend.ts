@@ -3,6 +3,13 @@ const INTERNAL_USER_TOKEN = process.env.INTERNAL_USER_TOKEN || '';
 const INTERNAL_ADMIN_TOKEN = process.env.INTERNAL_ADMIN_TOKEN || '';
 
 type Role = 'user' | 'admin';
+type BackendPayload = {
+  error?: {
+    message?: string;
+    [key: string]: unknown;
+  };
+  [key: string]: unknown;
+} | null;
 
 export function getBackendBaseUrl() {
   if (!API_BASE_URL) {
@@ -33,10 +40,10 @@ export async function backendRequest(path: string, init: RequestInit = {}, role:
   });
 
   const text = await response.text();
-  let payload: any = null;
+  let payload: BackendPayload = null;
   if (text) {
     try {
-      payload = JSON.parse(text);
+      payload = JSON.parse(text) as BackendPayload;
     } catch {
       payload = { message: text };
     }
