@@ -175,7 +175,7 @@ export function Hero() {
               </div>
 
               {/* Yaşam tarzı görselleri: kira/aidat ödeme anı hissiyatı */}
-              <div className="absolute -left-24 top-8 hidden xl:flex w-48 h-64 rounded-2xl overflow-hidden border border-white/20 shadow-xl">
+              <div className="absolute -left-56 top-2 hidden xl:flex w-44 h-60 rounded-2xl overflow-hidden border border-white/20 shadow-xl">
                 <div
                   className="w-full h-full bg-cover bg-center"
                   style={{
@@ -187,7 +187,7 @@ export function Hero() {
                   <p className="text-white text-[11px] font-semibold">Kartla hızlı ödeme</p>
                 </div>
               </div>
-              <div className="absolute -right-24 bottom-8 hidden xl:flex w-48 h-64 rounded-2xl overflow-hidden border border-white/20 shadow-xl">
+              <div className="absolute -right-56 bottom-2 hidden xl:flex w-44 h-60 rounded-2xl overflow-hidden border border-white/20 shadow-xl">
                 <div
                   className="w-full h-full bg-cover bg-center"
                   style={{
