@@ -18,7 +18,7 @@ const FAQS = [
   },
   {
     q: 'Hizmet bedeli ne kadar?',
-    a: 'İşlem başına %1,5 hizmet bedeli alınmaktadır. Gizli ücret yoktur.',
+    a: 'Şeffaf ücretlendirme uygulanır, gizli masraf yoktur.',
   },
   {
     q: 'Güvenli mi?',
