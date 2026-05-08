@@ -1,4 +1,3 @@
-import Link from 'next/link';
 import { TrionPayLogo } from '@/components/ui/TrionPayLogo';
 
 const LINKS = {
@@ -72,21 +71,6 @@ export function Footer() {
         </div>
 
         <div className="border-t border-border pt-8 flex flex-col gap-6">
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 rounded-xl border border-dashed border-border bg-surface/50 px-4 py-3">
-            <p className="text-text-tertiary text-xs leading-relaxed max-w-xl">
-              <span className="font-semibold text-text-secondary">Geçici (QA):</span>{' '}
-              İnceleme araçları ve iç ekip için yönetim paneli girişi. Canlıya çıkmadan önce bu
-              bağlantı kaldırılmalı veya yalnızca staging ortamında gösterilmelidir.
-            </p>
-            <Link
-              href="/admin/login"
-              rel="nofollow"
-              className="inline-flex shrink-0 items-center justify-center rounded-xl bg-primary px-4 py-2.5 text-sm font-semibold text-white hover:opacity-90 transition-opacity"
-            >
-              Yönetim paneli
-            </Link>
-          </div>
-
           <div className="flex flex-col gap-4 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between">
             <p className="text-text-secondary text-sm order-2 sm:order-1">
               © 2026 Kiram. Tüm hakları saklıdır.

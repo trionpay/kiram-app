@@ -12,8 +12,8 @@ export const metadata: Metadata = {
   title: "Kiram — Kira ve aidat odemeleri",
   description: "Kira ve aidat odemelerinizi tek yerden, guvenle yapin.",
   icons: {
-    icon: "/icon.png",
-    shortcut: "/icon.png"
+    icon: "/icon.svg",
+    shortcut: "/icon.svg"
   }
 };
 

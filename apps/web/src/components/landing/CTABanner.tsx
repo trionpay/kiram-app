@@ -10,16 +10,15 @@ export function CTABanner() {
       <div className="max-w-4xl mx-auto px-6 text-center">
         <FadeIn>
           <div className="flex justify-center mb-6">
-            <TrionPayLogo width={170} variant="vertical" />
+            <TrionPayLogo width={210} variant="horizontal-white" />
           </div>
           <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
             Ev ödemelerini kolaylaştır
           </h2>
           <p className="text-white/70 mb-8 max-w-xl mx-auto">
-            Hemen ucretsiz hesap olustur, kira ve aidatini kredi kartinla odemeye basla.
+            Hemen hesap oluştur, kira ve aidat ödemeni kredi kartınla başlat.
           </p>
           <div className="flex flex-col items-center w-full max-w-md mx-auto">
-            <p className="text-white/50 text-xs font-medium mb-2">Önerilen: web’de hesap aç</p>
             <Link
               href="/login"
               className="inline-flex w-full items-center justify-center gap-2 bg-accent hover:bg-accent-dark text-white font-bold text-base px-8 py-4 rounded-2xl transition-all hover:scale-[1.02] active:scale-[0.98] shadow-lg shadow-accent/30"
