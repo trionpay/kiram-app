@@ -47,11 +47,6 @@ export function Features() {
             <p className="text-text-secondary max-w-2xl mx-auto text-base leading-relaxed">
               Genel bir ödeme uygulaması değil; doğrudan kira ve aidat akışını hızlandıran odaklı ürün deneyimi.
             </p>
-            <p className="text-text-tertiary max-w-2xl mx-auto text-sm leading-relaxed mt-3">
-              <span className="font-semibold text-text-secondary">Kiram</span>, Trion Pay güvencesiyle{' '}
-              <span className="font-semibold text-text-secondary">kiram.com</span> üzerinden sunduğumuz ürün
-              adıdır — aynı deneyimi tek çatı altında toplar.
-            </p>
           </div>
         </FadeIn>
 

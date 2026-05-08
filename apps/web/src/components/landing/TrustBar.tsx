@@ -3,10 +3,10 @@
 import { FadeIn } from './FadeIn';
 
 const STATS = [
-  { value: '50K+', label: 'Aktif Kullanıcı' },
+  { value: 'Hızlı', label: 'Ödeme' },
   { value: '256-bit', label: 'SSL Güvenliği' },
-  { value: '%99+', label: 'Başarılı ödeme oranı' },
-  { value: '4.8', label: 'App Store Puanı', suffix: '⭐' },
+  { value: 'Anlık', label: 'İşlem takibi' },
+  { value: 'Tek akış', label: 'Kira + aidat' },
 ];
 
 export function TrustBar() {

@@ -82,10 +82,6 @@ export function Hero() {
               </div>
             </div>
 
-            {/* Alt not */}
-            <p className="mt-6 text-white/50 text-sm">
-              Modern arayüz, hızlı akış, güçlü güvenlik.
-            </p>
           </div>
 
           {/* Sağ: Mockup / UI Preview */}
