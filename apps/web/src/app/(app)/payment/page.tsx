@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { Suspense, useEffect, useMemo, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
@@ -179,7 +179,7 @@ function StepBar({ current }: { current: number }) {
   );
 }
 
-export default function PaymentPage() {
+function PaymentPageContent() {
   const searchParams = useSearchParams();
   const [step, setStep] = useState<Step>('type');
   const [paymentType, setPaymentType] = useState<PaymentType>('rent');
@@ -211,7 +211,6 @@ export default function PaymentPage() {
   const [result, setResult] = useState<ResultStatus>('success');
   const [paymentError, setPaymentError] = useState('');
   const [quote, setQuote] = useState<PaymentQuoteResponse | null>(null);
-  const [quoteLoading, setQuoteLoading] = useState(false);
 
   useEffect(() => {
     const typeParam = searchParams.get('type');
@@ -220,7 +219,6 @@ export default function PaymentPage() {
       setStep('recipient');
       setPaymentError('');
       setQuote(null);
-      setQuoteLoading(false);
       setSavedRecipientsOpen(false);
       if (typeParam === 'rent') {
         setBillCategory('');
@@ -289,7 +287,6 @@ export default function PaymentPage() {
   useEffect(() => {
     if (step !== 'amount' || paymentType !== 'rent' || ibanRest.length !== TR_IBAN_REST_LEN) {
       setQuote(null);
-      setQuoteLoading(false);
       return;
     }
 
@@ -301,7 +298,6 @@ export default function PaymentPage() {
 
     let cancelled = false;
     const timer = window.setTimeout(async () => {
-      setQuoteLoading(true);
       try {
         const res = await fetch('/api/internal/payments/quote', {
           method: 'POST',
@@ -317,8 +313,6 @@ export default function PaymentPage() {
         if (!cancelled) setQuote(payload as PaymentQuoteResponse);
       } catch {
         if (!cancelled) setQuote(null);
-      } finally {
-        if (!cancelled) setQuoteLoading(false);
       }
     }, 250);
 
@@ -475,7 +469,6 @@ export default function PaymentPage() {
     setNewCardCvv('');
     setPaymentError('');
     setQuote(null);
-    setQuoteLoading(false);
   };
 
   const openAddCardModal = () => {
@@ -1054,5 +1047,13 @@ export default function PaymentPage() {
         </div>
       ) : null}
     </div>
+  );
+}
+
+export default function PaymentPage() {
+  return (
+    <Suspense fallback={<div className="max-w-xl mx-auto space-y-6" />}>
+      <PaymentPageContent />
+    </Suspense>
   );
 }
