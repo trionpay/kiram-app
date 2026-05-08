@@ -18,8 +18,8 @@ export function LandingNav() {
     <nav
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
         scrolled
-          ? 'bg-white/95 backdrop-blur-md border-b border-border shadow-sm'
-          : 'bg-transparent'
+          ? 'bg-white/95 backdrop-blur-md border-b border-primary/10 shadow-sm'
+          : 'bg-white/88 backdrop-blur-md border-b border-primary/10'
       }`}
     >
       <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
@@ -30,13 +30,13 @@ export function LandingNav() {
 
         {/* Desktop Menu */}
         <div className="hidden md:flex items-center gap-8">
-          <a href="#features" className={`text-sm font-medium transition-colors ${scrolled ? 'text-text-secondary hover:text-text-primary' : 'text-white/70 hover:text-white'}`}>
+          <a href="#features" className="text-sm font-medium transition-colors text-text-secondary hover:text-text-primary">
             Özellikler
           </a>
-          <a href="#how-it-works" className={`text-sm font-medium transition-colors ${scrolled ? 'text-text-secondary hover:text-text-primary' : 'text-white/70 hover:text-white'}`}>
+          <a href="#how-it-works" className="text-sm font-medium transition-colors text-text-secondary hover:text-text-primary">
             Nasıl Çalışır
           </a>
-          <a href="#faq" className={`text-sm font-medium transition-colors ${scrolled ? 'text-text-secondary hover:text-text-primary' : 'text-white/70 hover:text-white'}`}>
+          <a href="#faq" className="text-sm font-medium transition-colors text-text-secondary hover:text-text-primary">
             SSS
           </a>
         </div>
@@ -45,19 +45,13 @@ export function LandingNav() {
         <div className="hidden md:flex items-center gap-3">
           <Link
             href="/login"
-            className={`text-sm font-medium px-4 py-2 rounded-xl transition-colors ${
-              scrolled ? 'text-text-secondary hover:text-text-primary' : 'text-white/80 hover:text-white'
-            }`}
+            className="text-sm font-medium px-4 py-2 rounded-xl transition-colors text-text-secondary hover:text-text-primary"
           >
             Giriş Yap
           </Link>
           <Link
             href="/login"
-            className={`text-sm font-semibold px-4 py-2 rounded-xl border-2 transition-colors ${
-              scrolled
-                ? 'border-primary/20 text-primary hover:bg-primary/5'
-                : 'border-white/50 text-white hover:bg-white/10'
-            }`}
+            className="text-sm font-semibold px-4 py-2 rounded-xl border-2 border-primary/25 text-primary transition-colors hover:bg-primary/5"
           >
             Hemen Başla
           </Link>
@@ -73,7 +67,7 @@ export function LandingNav() {
             height="24"
             viewBox="0 0 24 24"
             fill="none"
-            stroke={scrolled ? '#1E3A5F' : '#FFFFFF'}
+            stroke="#1E3A5F"
             strokeWidth="2"
           >
             {menuOpen ? (

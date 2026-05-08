@@ -7,7 +7,7 @@ export function Hero() {
     <section
       className="relative min-h-screen flex items-center overflow-hidden"
       style={{
-        background: 'linear-gradient(135deg, #244B8E 0%, #1A3E78 52%, #112F5B 100%)',
+        background: 'linear-gradient(135deg, #2A4BB5 0%, #2543A5 52%, #1F3A8E 100%)',
       }}
     >
       {/* Dekoratif elementler */}
@@ -40,7 +40,7 @@ export function Hero() {
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white leading-tight mb-6">
               Kira ve aidatı
               <br />
-              <span className="text-accent">kartınla öde,</span> süreci takip et.
+              <span className="text-white [text-shadow:0_1px_6px_rgba(0,0,0,0.22)]">kartınla öde,</span> süreci takip et.
             </h1>
 
             {/* Açıklama */}

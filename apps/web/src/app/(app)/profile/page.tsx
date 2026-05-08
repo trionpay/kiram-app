@@ -151,7 +151,7 @@ export default function ProfilePage() {
   };
 
   return (
-    <div className="space-y-8 max-w-xl">
+    <div className="space-y-8 max-w-xl mx-auto">
       <div>
         <h1 className="text-2xl font-bold text-text-primary">Profil</h1>
         <p className="text-text-secondary text-sm mt-1">Hesap bilgileriniz ve ayarlar</p>

@@ -6,11 +6,11 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
       {/* Sol panel — hero */}
       <div
         className="hidden lg:flex lg:w-[480px] xl:w-[520px] flex-shrink-0 flex-col justify-between p-12"
-        style={{ background: 'linear-gradient(135deg, #102A43, #0C1929, #061018)' }}
+        style={{ background: 'linear-gradient(135deg, #2B5F95, #1F4C79, #173B5D)' }}
       >
         {/* Logo */}
         <div>
-          <TrionPayLogo width={160} variant="vertical" />
+          <TrionPayLogo width={172} variant="horizontal" className="brightness-0 invert" />
         </div>
 
         {/* Tagline */}
@@ -19,7 +19,7 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
           <h1 className="text-3xl font-bold text-white leading-snug">
             Kira ve aidat<br />tek yerden ode.
           </h1>
-          <p className="text-white/50 text-base leading-relaxed">
+          <p className="text-white/75 text-base leading-relaxed">
             Ödemeleriniz güvende,<br />deneyim sizinle.
           </p>
         </div>

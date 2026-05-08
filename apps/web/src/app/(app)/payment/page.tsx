@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useMemo, useState } from 'react';
+import { useSearchParams } from 'next/navigation';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
 import { Switch } from '@/components/ui/Switch';
@@ -179,15 +180,9 @@ function StepBar({ current }: { current: number }) {
 }
 
 export default function PaymentPage() {
-  const [step, setStep] = useState<Step>(() => {
-    if (typeof window === 'undefined') return 'type';
-    const typeParam = new URLSearchParams(window.location.search).get('type');
-    return typeParam === 'rent' || typeParam === 'dues' ? 'recipient' : 'type';
-  });
-  const [paymentType, setPaymentType] = useState<PaymentType>(() => {
-    if (typeof window === 'undefined') return 'rent';
-    return new URLSearchParams(window.location.search).get('type') === 'dues' ? 'dues' : 'rent';
-  });
+  const searchParams = useSearchParams();
+  const [step, setStep] = useState<Step>('type');
+  const [paymentType, setPaymentType] = useState<PaymentType>('rent');
   /** Kira/havale: TR sabit; yalnızca sonraki 24 karakter (tam TR IBAN = 26) */
   const [ibanRest, setIbanRest] = useState('');
   const [ibanName, setIbanName] = useState('');
@@ -217,6 +212,34 @@ export default function PaymentPage() {
   const [paymentError, setPaymentError] = useState('');
   const [quote, setQuote] = useState<PaymentQuoteResponse | null>(null);
   const [quoteLoading, setQuoteLoading] = useState(false);
+
+  useEffect(() => {
+    const typeParam = searchParams.get('type');
+    if (typeParam === 'rent' || typeParam === 'dues') {
+      setPaymentType(typeParam);
+      setStep('recipient');
+      setPaymentError('');
+      setQuote(null);
+      setQuoteLoading(false);
+      setSavedRecipientsOpen(false);
+      if (typeParam === 'rent') {
+        setBillCategory('');
+        setBillProviderId('');
+        setBillCompany('');
+        setBillRef('');
+        setBillRefError('');
+        setBillRecipientError('');
+        setSaveBillSubscriber(false);
+      } else {
+        setBillCategory('dues');
+        setIbanRest('');
+        setIbanName('');
+      }
+      return;
+    }
+
+    setStep('type');
+  }, [searchParams]);
 
   useEffect(() => {
     if (!addCardOpen) return;
@@ -575,6 +598,8 @@ export default function PaymentPage() {
                     setBillRefError('');
                     setBillRecipientError('');
                     setSaveBillSubscriber(false);
+                  } else {
+                    setBillCategory('dues');
                   }
                 }}
                 className={`
@@ -841,15 +866,6 @@ export default function PaymentPage() {
                   ? `Kurum: ${billCompany}`
                   : 'Aidat / kurum odemesi'}
             </p>
-            {paymentType === 'rent' ? (
-              quoteLoading ? (
-                <p className="mt-2 text-xs text-text-tertiary">Hizmet bedeli hesaplanıyor...</p>
-              ) : quote ? (
-                <p className="mt-2 text-xs text-text-secondary">
-                  Hizmet bedeli: ₺{quote.feeTry.toLocaleString('tr-TR')} · Toplam: ₺{quote.totalTry.toLocaleString('tr-TR')}
-                </p>
-              ) : null
-            ) : null}
           </div>
 
           <Button
