@@ -85,7 +85,7 @@ export function Hero() {
           </div>
 
           {/* Sağ: Mockup / UI Preview */}
-          <div className="relative flex justify-center lg:justify-end">
+          <div className="relative flex justify-center lg:justify-center xl:justify-end">
             <div className="relative">
               {/* Telefon çerçevesi — geniş ve temiz */}
               <div className="w-[300px] sm:w-[340px] bg-gradient-to-b from-gray-800 to-gray-900 rounded-[3rem] p-3 shadow-2xl shadow-black/50">
