@@ -19,7 +19,6 @@ export function TrustBar() {
               <div key={i} className="text-center">
                 <p className="text-3xl md:text-4xl font-bold text-primary">
                   {stat.value}
-                  {stat.suffix && <span className="ml-1">{stat.suffix}</span>}
                 </p>
                 <p className="mt-2 text-sm font-medium text-primary/70">{stat.label}</p>
               </div>
