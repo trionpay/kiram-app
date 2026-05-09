@@ -1,17 +1,23 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { backendRequest } from '../_lib/backend';
+
+const mockRecipients = [
+  { id: 'r1', nickname: 'Ev Sahibi', accountHolder: 'Ahmet Yılmaz', iban: 'TR170001200945200058000001', paymentType: 'rent' },
+  { id: 'r2', nickname: 'Site Yönetimi', accountHolder: 'Site Yönetimi A Blok', iban: 'TR330006100519786457841326', paymentType: 'dues' },
+  { id: 'r3', nickname: 'Apartman Aidatı', accountHolder: 'Apartman Yönetimi', iban: 'TR980001001745380073509972', paymentType: 'dues' },
+];
 
 export async function GET(req: NextRequest) {
   const search = req.nextUrl.searchParams.get('search');
-  const suffix = search ? `?search=${encodeURIComponent(search)}` : '';
-  const result = await backendRequest(`/api/v1/recipients${suffix}`, {}, 'user');
 
-  if (!result.ok) {
-    return NextResponse.json(
-      { error: result.payload?.error ?? { message: 'Alıcılar alınamadı.' } },
-      { status: result.status }
+  let items = [...mockRecipients];
+  if (search) {
+    const q = search.toLowerCase();
+    items = items.filter(r =>
+      r.nickname.toLowerCase().includes(q) ||
+      r.accountHolder.toLowerCase().includes(q) ||
+      r.iban.toLowerCase().includes(q)
     );
   }
 
-  return NextResponse.json(result.payload, { status: 200 });
+  return NextResponse.json({ items }, { status: 200 });
 }

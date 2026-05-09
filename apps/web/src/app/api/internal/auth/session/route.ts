@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getBackendBaseUrl } from '../../_lib/backend';
+import { validateSession } from '@/lib/auth/otp-store';
 import { WEB_SESSION_COOKIE } from '@/lib/auth/constants';
 
 export async function GET(req: NextRequest) {
@@ -8,30 +8,15 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ error: { message: 'Oturum bulunamadı.' } }, { status: 401 });
   }
 
-  const response = await fetch(`${getBackendBaseUrl()}/api/v1/auth/session`, {
-    method: 'GET',
-    headers: { Authorization: `Bearer ${token}` },
-    cache: 'no-store',
-  });
-
-  const text = await response.text();
-  let payload: unknown = null;
-  if (text) {
-    try {
-      payload = JSON.parse(text);
-    } catch {
-      payload = { error: { message: 'Oturum yanıtı okunamadı.' } };
-    }
+  const user = validateSession(token);
+  if (!user) {
+    const res = NextResponse.json(
+      { error: { code: 'SESSION_INVALID', message: 'Oturum geçersiz veya süresi dolmuş.' } },
+      { status: 401 }
+    );
+    res.cookies.set({ name: WEB_SESSION_COOKIE, value: '', path: '/', maxAge: 0 });
+    return res;
   }
 
-  const res = NextResponse.json(payload, { status: response.status });
-  if (!response.ok) {
-    res.cookies.set({
-      name: WEB_SESSION_COOKIE,
-      value: '',
-      path: '/',
-      maxAge: 0,
-    });
-  }
-  return res;
+  return NextResponse.json({ ok: true, user }, { status: 200 });
 }

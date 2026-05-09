@@ -1,24 +1,22 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getBackendBaseUrl } from '../../_lib/backend';
+import { requestOtp } from '@/lib/auth/otp-store';
 
 export async function POST(req: NextRequest) {
-  const body = await req.text();
-  const response = await fetch(`${getBackendBaseUrl()}/api/v1/auth/otp/request`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body,
-    cache: 'no-store',
-  });
-
-  const text = await response.text();
-  let payload: unknown = null;
-  if (text) {
-    try {
-      payload = JSON.parse(text);
-    } catch {
-      payload = { error: { message: 'OTP yanıtı okunamadı.' } };
-    }
+  let body: { phone?: string };
+  try {
+    body = await req.json();
+  } catch {
+    return NextResponse.json({ error: { message: 'Geçersiz istek.' } }, { status: 400 });
   }
 
-  return NextResponse.json(payload, { status: response.status });
+  const phone = (body.phone ?? '').trim();
+  if (!/^5\d{9}$/.test(phone)) {
+    return NextResponse.json(
+      { error: { code: 'VALIDATION_ERROR', message: 'Telefon formatı geçersiz.' } },
+      { status: 400 }
+    );
+  }
+
+  const result = requestOtp(phone);
+  return NextResponse.json(result, { status: 200 });
 }
