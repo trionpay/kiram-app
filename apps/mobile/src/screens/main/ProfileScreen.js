@@ -48,7 +48,8 @@ export function ProfileScreen({ navigation }) {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
 
   const resetToAuth = () => {
-    navigation.dispatch(
+    const root = navigation.getParent()?.getParent();
+    (root ?? navigation).dispatch(
       CommonActions.reset({ index: 0, routes: [{ name: 'Auth' }] })
     );
   };
