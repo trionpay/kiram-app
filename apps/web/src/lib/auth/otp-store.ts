@@ -1,4 +1,5 @@
 import { randomInt, randomUUID } from 'crypto';
+import { getSupabase } from '@/lib/supabase';
 
 type OtpRecord = {
   code: string;
@@ -8,7 +9,7 @@ type OtpRecord = {
 
 type SessionRecord = {
   phone: string;
-  userId: string | null;
+  userId: string;
   expiresAt: number;
 };
 
@@ -49,6 +50,26 @@ export function resolveDemoOtp(phone: string) {
   return null;
 }
 
+async function findUserByPhone(phone: string): Promise<{ id: string; fullName: string | null } | null> {
+  const supabase = getSupabase();
+  if (!supabase) return null;
+
+  const { data, error } = await supabase
+    .from('users')
+    .select('id, full_name')
+    .eq('phone', `+90${phone}`)
+    .limit(1)
+    .maybeSingle();
+
+  if (error) {
+    console.error('[auth] user lookup failed:', error.message);
+    return null;
+  }
+
+  if (!data) return null;
+  return { id: data.id as string, fullName: (data.full_name as string | null) ?? null };
+}
+
 function cleanup() {
   const now = Date.now();
   for (const [k, v] of otpStore.entries()) {
@@ -85,7 +106,7 @@ type VerifyResult =
   | { ok: true; sessionToken: string; expiresInSeconds: number; user: { id: string; phone: string; isTestUser: boolean }; nextStep: 'dashboard' | 'onboarding' }
   | { ok: false; status: number; error: { code: string; message: string } };
 
-export function verifyOtp(rawPhone: string, code: string): VerifyResult {
+export async function verifyOtp(rawPhone: string, code: string): Promise<VerifyResult> {
   cleanup();
   const phone = normalizePhone(rawPhone);
   const record = otpStore.get(phone);
@@ -103,14 +124,21 @@ export function verifyOtp(rawPhone: string, code: string): VerifyResult {
     return { ok: false, status: 401, error: { code: 'OTP_INVALID', message: 'Doğrulama kodu hatalı.' } };
   }
 
-  const demo = resolveDemoOtp(phone);
-  const isSignupFlow = demo?.kind === 'signup' || (!demo && false);
-
   otpStore.delete(phone);
+
+  const demo = resolveDemoOtp(phone);
+  const existingUser = await findUserByPhone(phone);
+
+  const isDemoSignup = demo?.kind === 'signup';
+  const isNewUser = !existingUser && !demo;
+  const isSignupFlow = isDemoSignup || isNewUser;
+
+  const userId = existingUser?.id ?? DEFAULT_USER_ID;
+
   const sessionToken = randomUUID();
   sessionStore.set(sessionToken, {
     phone,
-    userId: DEFAULT_USER_ID,
+    userId,
     expiresAt: Date.now() + SESSION_TTL_MS,
   });
 
@@ -118,7 +146,7 @@ export function verifyOtp(rawPhone: string, code: string): VerifyResult {
     ok: true,
     sessionToken,
     expiresInSeconds: Math.floor(SESSION_TTL_MS / 1000),
-    user: { id: DEFAULT_USER_ID, phone: `+90${phone}`, isTestUser: Boolean(demo) },
+    user: { id: userId, phone: `+90${phone}`, isTestUser: Boolean(demo) },
     nextStep: isSignupFlow ? 'onboarding' : 'dashboard',
   };
 }
@@ -130,5 +158,5 @@ export function validateSession(token: string) {
     sessionStore.delete(token);
     return null;
   }
-  return { id: session.userId ?? DEFAULT_USER_ID, phone: `+90${session.phone}` };
+  return { id: session.userId, phone: `+90${session.phone}` };
 }

@@ -101,12 +101,16 @@ export default function OnboardingPage() {
   const handleConfirm = async () => {
     setLoading(true);
     try {
-      await new Promise(r => setTimeout(r, 1200));
-      const sessionRes = await fetch('/api/internal/auth/session', { cache: 'no-store' });
-      if (sessionRes.ok) {
+      const res = await fetch('/api/internal/auth/complete-onboarding', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ firstName, lastName, city, tckn, birthDate, purposes }),
+      });
+      if (res.ok) {
         window.location.href = '/dashboard';
       } else {
-        router.push('/login');
+        const payload = await res.json().catch(() => ({}));
+        alert(payload?.error?.message ?? 'Hesap oluşturulamadı.');
       }
     } finally {
       setLoading(false);

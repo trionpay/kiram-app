@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { verifyOtp } from '@/lib/auth/otp-store';
-import { WEB_SESSION_COOKIE } from '@/lib/auth/constants';
 
 export async function POST(req: NextRequest) {
   let body: { phone?: string; code?: string };
@@ -32,15 +31,5 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: result.error }, { status: result.status });
   }
 
-  const res = NextResponse.json(result, { status: 200 });
-  res.cookies.set({
-    name: WEB_SESSION_COOKIE,
-    value: result.sessionToken,
-    httpOnly: true,
-    sameSite: 'lax',
-    secure: process.env.NODE_ENV === 'production',
-    path: '/',
-    maxAge: result.expiresInSeconds,
-  });
-  return res;
+  return NextResponse.json(result, { status: 200 });
 }
