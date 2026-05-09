@@ -58,6 +58,27 @@ const STATUS_BADGE: Record<string, React.ReactNode> = {
 const TYPE_EMOJI: Record<string, string> = { rent: '🏠', dues: '📋' };
 
 const fmt = (n: number) => n.toFixed(2).replace('.', ',');
+const FALLBACK_LOAD_ERROR = 'İşlem geçmişi şu anda yüklenemiyor. Lütfen birazdan tekrar deneyin.';
+
+function parseJsonSafely(text: string) {
+  if (!text) return null;
+  try {
+    return JSON.parse(text) as Record<string, unknown>;
+  } catch {
+    return null;
+  }
+}
+
+function formatDateTime(value: string) {
+  const dateObj = new Date(value);
+  if (Number.isNaN(dateObj.getTime())) {
+    return { date: '-', time: '-' };
+  }
+  return {
+    date: new Intl.DateTimeFormat('tr-TR', { dateStyle: 'medium' }).format(dateObj),
+    time: new Intl.DateTimeFormat('tr-TR', { timeStyle: 'short' }).format(dateObj),
+  };
+}
 
 function TransactionDetailPanel({ tx, onClose }: { tx: Transaction; onClose: () => void }) {
   const isSuccess = tx.status === 'success';
@@ -154,14 +175,27 @@ export default function HistoryPage() {
       setLoadError('');
       try {
         const res = await fetch('/api/internal/history?limit=100', { cache: 'no-store' });
-        const payload = await res.json();
+        const rawBody = await res.text();
+        const payload = parseJsonSafely(rawBody);
         if (!res.ok) {
-          throw new Error(payload?.error?.message ?? 'İşlem geçmişi alınamadı.');
+          const message =
+            payload && typeof payload === 'object' && 'error' in payload
+              ? (payload.error as { message?: string })?.message
+              : undefined;
+          throw new Error(message ?? FALLBACK_LOAD_ERROR);
+        }
+        const contentType = res.headers.get('content-type') ?? '';
+        if (!contentType.includes('application/json') || !payload) {
+          throw new Error(FALLBACK_LOAD_ERROR);
         }
         if (cancelled) return;
 
-        const items: Transaction[] = ((payload?.items ?? []) as ApiHistoryItem[]).map((item) => {
-          const dateObj = new Date(item.createdAt);
+        const rawItems =
+          payload && typeof payload === 'object' && 'items' in payload
+            ? (payload.items as ApiHistoryItem[])
+            : [];
+        const items: Transaction[] = rawItems.map((item) => {
+          const formatted = formatDateTime(item.createdAt);
           return {
             id: item.id,
             title: item.paymentType === 'rent' ? 'Kira Ödemesi' : 'Aidat Ödemesi',
@@ -170,8 +204,8 @@ export default function HistoryPage() {
             fee: item.feeTry,
             type: item.paymentType,
             status: item.status,
-            date: new Intl.DateTimeFormat('tr-TR', { dateStyle: 'medium' }).format(dateObj),
-            time: new Intl.DateTimeFormat('tr-TR', { timeStyle: 'short' }).format(dateObj),
+            date: formatted.date,
+            time: formatted.time,
             iban: '-',
             description: item.description,
           };
@@ -180,7 +214,7 @@ export default function HistoryPage() {
         setTransactions(items);
       } catch (error) {
         if (!cancelled) {
-          setLoadError(error instanceof Error ? error.message : 'İşlem geçmişi alınamadı.');
+          setLoadError(error instanceof Error ? error.message : FALLBACK_LOAD_ERROR);
         }
       } finally {
         if (!cancelled) setLoading(false);

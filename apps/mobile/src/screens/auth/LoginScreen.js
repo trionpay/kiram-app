@@ -3,9 +3,13 @@ import { View, Text, TextInput, StyleSheet, TouchableOpacity, KeyboardAvoidingVi
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Button } from '../../components/Button';
 import { colors, typography, spacing, screenPaddingHorizontal } from '../../theme';
+import { requestOtp } from '../../services/authApi';
 
 export function LoginScreen({ navigation }) {
   const [phone, setPhone] = useState('');
+  const [mode, setMode] = useState('login');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
 
   const handleChange = (text) => {
     const digits = text.replace(/\D/g, '');
@@ -25,8 +29,20 @@ export function LoginScreen({ navigation }) {
           <TouchableOpacity onPress={() => navigation.goBack()} style={styles.back}>
             <Text style={styles.backArrow}>←</Text>
           </TouchableOpacity>
+          <View style={styles.modeRow}>
+            <TouchableOpacity style={[styles.modeBtn, mode === 'login' && styles.modeBtnActive]} onPress={() => setMode('login')}>
+              <Text style={[styles.modeText, mode === 'login' && styles.modeTextActive]}>Giriş Yap</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={[styles.modeBtn, mode === 'signup' && styles.modeBtnActive]} onPress={() => setMode('signup')}>
+              <Text style={[styles.modeText, mode === 'signup' && styles.modeTextActive]}>Kayıt Ol</Text>
+            </TouchableOpacity>
+          </View>
           <Text style={styles.title}>Telefon{'\n'}numaranız</Text>
-          <Text style={styles.subtitle}>Hesabınıza giriş yapmak için telefon numaranızı girin.</Text>
+          <Text style={styles.subtitle}>
+            {mode === 'login'
+              ? 'Hesabınıza giriş yapmak için telefon numaranızı girin.'
+              : 'Yeni hesap oluşturmak için telefon numaranızı girin.'}
+          </Text>
           <View style={styles.inputRow}>
             <View style={styles.prefix}>
               <Text style={styles.flag}>🇹🇷</Text>
@@ -45,9 +61,30 @@ export function LoginScreen({ navigation }) {
             />
           </View>
           <Text style={styles.hint}>Numaranıza tek kullanımlık doğrulama kodu gönderilecektir.</Text>
+          {error ? <Text style={styles.error}>{error}</Text> : null}
         </ScrollView>
         <View style={styles.footer}>
-          <Button title="Kodu Gönder" onPress={() => navigation.navigate('OTP', { phone })} disabled={phone.length < 10} />
+          <Button
+            title={mode === 'login' ? 'Giriş Kodu Gönder' : 'Kayıt Kodu Gönder'}
+            onPress={async () => {
+              setError('');
+              setLoading(true);
+              try {
+                const payload = await requestOtp(phone, mode);
+                navigation.navigate('OTP', {
+                  phone,
+                  intent: mode,
+                  expiresInSeconds: payload?.expiresInSeconds ?? 60,
+                });
+              } catch (err) {
+                setError(err instanceof Error ? err.message : 'Kod gönderilemedi.');
+              } finally {
+                setLoading(false);
+              }
+            }}
+            disabled={phone.length < 10}
+            loading={loading}
+          />
         </View>
       </KeyboardAvoidingView>
     </SafeAreaView>
@@ -59,6 +96,11 @@ const styles = StyleSheet.create({
   scroll: { flexGrow: 1, paddingHorizontal: screenPaddingHorizontal, paddingTop: spacing.lg, paddingBottom: spacing.xl },
   back: { alignSelf: 'flex-start', marginBottom: spacing.xl },
   backArrow: { fontSize: 24, color: colors.textPrimary },
+  modeRow: { flexDirection: 'row', backgroundColor: colors.surface, borderRadius: 12, padding: 4, marginBottom: spacing.lg },
+  modeBtn: { flex: 1, paddingVertical: 10, borderRadius: 10, alignItems: 'center' },
+  modeBtnActive: { backgroundColor: colors.backgroundElevated, borderWidth: 1, borderColor: colors.border },
+  modeText: { ...typography.label, color: colors.textSecondary },
+  modeTextActive: { color: colors.textPrimary },
   title: { ...typography.h1, color: colors.textPrimary, marginBottom: spacing.sm },
   subtitle: { ...typography.body, color: colors.textSecondary, marginBottom: spacing.xl },
   inputRow: { flexDirection: 'row', alignItems: 'center', backgroundColor: colors.backgroundElevated, borderWidth: 1.5, borderColor: colors.border, borderRadius: 14, paddingHorizontal: spacing.md, height: 58 },
@@ -68,5 +110,6 @@ const styles = StyleSheet.create({
   divider: { width: 1.5, height: 22, backgroundColor: colors.border, marginRight: spacing.sm },
   input: { flex: 1, ...typography.bodyLarge, color: colors.textPrimary, letterSpacing: 1 },
   hint: { ...typography.bodySmall, color: colors.textTertiary, marginTop: spacing.md },
+  error: { ...typography.bodySmall, color: colors.error, marginTop: spacing.sm },
   footer: { paddingHorizontal: screenPaddingHorizontal, paddingBottom: 12, paddingTop: spacing.sm },
 });

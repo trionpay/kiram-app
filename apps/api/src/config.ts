@@ -13,7 +13,14 @@ const envSchema = z.object({
   INTERNAL_ADMIN_USER_ID: z.string().uuid().default("11111111-1111-1111-1111-111111111111"),
   INTERNAL_USER_ID: z.string().uuid().default("22222222-2222-2222-2222-222222222222"),
   INTERNAL_ADMIN_TOKEN: z.string().min(16).default("change-me-admin-token"),
-  INTERNAL_USER_TOKEN: z.string().min(16).default("change-me-user-token")
+  INTERNAL_USER_TOKEN: z.string().min(16).default("change-me-user-token"),
+  AUTH_TEST_LOGIN_PHONE: z.string().trim().regex(/^5\d{9}$/).optional(),
+  AUTH_TEST_LOGIN_CODE: z.string().trim().regex(/^\d{6}$/).optional(),
+  AUTH_TEST_SIGNUP_PHONE: z.string().trim().regex(/^5\d{9}$/).optional(),
+  AUTH_TEST_SIGNUP_CODE: z.string().trim().regex(/^\d{6}$/).optional(),
+  AUTH_TEST_PHONE: z.string().trim().regex(/^5\d{9}$/).optional(),
+  AUTH_TEST_CODE: z.string().trim().regex(/^\d{6}$/).optional(),
+  OTP_TTL_SECONDS: z.coerce.number().int().min(60).max(900).default(180)
 });
 
 const parsed = envSchema.safeParse(process.env);

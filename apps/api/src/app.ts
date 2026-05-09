@@ -8,6 +8,7 @@ import { healthRoutes } from "./routes/health.js";
 import { recipientRoutes } from "./routes/recipients.js";
 import { paymentRoutes } from "./routes/payments.js";
 import { adminRoutes } from "./routes/admin.js";
+import { authRoutes } from "./routes/auth.js";
 
 export function buildApp(): FastifyInstance {
   const app = Fastify({
@@ -93,4 +94,5 @@ async function apiV1Routes(app: FastifyInstance) {
   app.register(recipientRoutes);
   app.register(paymentRoutes);
   app.register(adminRoutes);
+  app.register(authRoutes);
 }

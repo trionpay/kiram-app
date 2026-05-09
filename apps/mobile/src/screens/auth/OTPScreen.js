@@ -3,14 +3,18 @@ import { View, Text, TextInput, StyleSheet, TouchableOpacity, KeyboardAvoidingVi
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Button } from '../../components/Button';
 import { colors, typography, spacing, screenPaddingHorizontal } from '../../theme';
+import { requestOtp, verifyOtp } from '../../services/authApi';
 
 const CODE_LENGTH = 6;
 
 export function OTPScreen({ route, navigation }) {
   const phone = route?.params?.phone ?? '';
+  const intent = route?.params?.intent === 'signup' ? 'signup' : 'login';
+  const initialCountdown = route?.params?.expiresInSeconds ?? 60;
   const [code, setCode] = useState('');
-  const [countdown, setCountdown] = useState(60);
+  const [countdown, setCountdown] = useState(initialCountdown);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
   const inputRef = useRef(null);
 
   useEffect(() => {
@@ -22,15 +26,26 @@ export function OTPScreen({ route, navigation }) {
   const handleChange = (text) => {
     const digits = text.replace(/\D/g, '').slice(0, CODE_LENGTH);
     setCode(digits);
-    if (digits.length === CODE_LENGTH) verify(digits);
+    if (digits.length === CODE_LENGTH) {
+      void verify(digits);
+    }
   };
 
-  const verify = (c = code) => {
+  const verify = async (c = code) => {
+    setError('');
     setLoading(true);
-    // Mock: API bağlandığında backend yeni/mevcut kullanıcı kontrolü yapacak.
-    // Şimdilik her doğrulama KYC akışına yönlendiriyor (yeni kullanıcı senaryosu).
-    // Mevcut kullanıcı için: navigation.replace('Main')
-    setTimeout(() => { setLoading(false); navigation.replace('KYCName'); }, 1000);
+    try {
+      const payload = await verifyOtp(phone, c, intent);
+      if (payload?.nextStep === 'onboarding') {
+        navigation.replace('KYCName');
+      } else {
+        navigation.getParent()?.replace('Main');
+      }
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Kod doğrulanamadı.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   const boxes = Array.from({ length: CODE_LENGTH }, (_, i) => code[i] ?? '');
@@ -63,12 +78,33 @@ export function OTPScreen({ route, navigation }) {
           <View style={styles.resendRow}>
             {countdown > 0
               ? <Text style={styles.resendWait}>Kodu tekrar gönder <Text style={styles.timer}>{countdown}s</Text></Text>
-              : <TouchableOpacity onPress={() => { setCountdown(60); setCode(''); }}><Text style={styles.resendBtn}>Kodu tekrar gönder</Text></TouchableOpacity>
+              : (
+                <TouchableOpacity
+                  onPress={async () => {
+                    try {
+                      setError('');
+                      const payload = await requestOtp(phone, intent);
+                      setCountdown(payload?.expiresInSeconds ?? 60);
+                      setCode('');
+                    } catch (err) {
+                      setError(err instanceof Error ? err.message : 'Kod tekrar gönderilemedi.');
+                    }
+                  }}
+                >
+                  <Text style={styles.resendBtn}>Kodu tekrar gönder</Text>
+                </TouchableOpacity>
+              )
             }
           </View>
+          {error ? <Text style={styles.error}>{error}</Text> : null}
         </View>
         <View style={styles.footer}>
-          <Button title="Doğrula" onPress={() => verify()} disabled={code.length < CODE_LENGTH} loading={loading} />
+          <Button
+            title={intent === 'signup' ? 'Kayıt Adımına Geç' : 'Doğrula'}
+            onPress={() => void verify()}
+            disabled={code.length < CODE_LENGTH}
+            loading={loading}
+          />
         </View>
       </KeyboardAvoidingView>
     </SafeAreaView>
@@ -94,5 +130,6 @@ const styles = StyleSheet.create({
   resendWait: { ...typography.body, color: colors.textTertiary },
   timer: { color: colors.accent, fontWeight: '600' },
   resendBtn: { ...typography.label, color: colors.accent },
+  error: { ...typography.bodySmall, color: colors.error, marginTop: spacing.sm, textAlign: 'center' },
   footer: { paddingHorizontal: screenPaddingHorizontal, paddingBottom: 12, paddingTop: spacing.sm },
 });

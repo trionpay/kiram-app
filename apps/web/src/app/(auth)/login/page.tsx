@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/Button';
 
 type Step = 'phone' | 'otp';
+type AuthMode = 'login' | 'signup';
 
 function formatPhone(digits: string) {
   if (digits.length <= 3) return digits;
@@ -15,10 +16,12 @@ function formatPhone(digits: string) {
 export default function LoginPage() {
   const router = useRouter();
   const [step, setStep] = useState<Step>('phone');
+  const [mode, setMode] = useState<AuthMode>('login');
   const [phone, setPhone] = useState('');
   const [otp, setOtp] = useState(['', '', '', '', '', '']);
   const [loading, setLoading] = useState(false);
   const [countdown, setCountdown] = useState(0);
+  const [error, setError] = useState('');
 
   const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const digits = e.target.value.replace(/\D/g, '').slice(0, 10);
@@ -26,17 +29,32 @@ export default function LoginPage() {
   };
 
   const handleSendCode = async () => {
+    setError('');
     setLoading(true);
-    await new Promise(r => setTimeout(r, 800));
-    setLoading(false);
-    setStep('otp');
-    setCountdown(60);
-    const interval = setInterval(() => {
-      setCountdown(c => {
-        if (c <= 1) { clearInterval(interval); return 0; }
-        return c - 1;
+    try {
+      const res = await fetch('/api/internal/auth/request-otp', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ phone, intent: mode }),
       });
-    }, 1000);
+      const payload = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        throw new Error(payload?.error?.message ?? 'Kod gönderilemedi.');
+      }
+
+      setStep('otp');
+      setCountdown(Math.max(0, payload?.expiresInSeconds ?? 60));
+      const interval = setInterval(() => {
+        setCountdown(c => {
+          if (c <= 1) { clearInterval(interval); return 0; }
+          return c - 1;
+        });
+      }, 1000);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Kod gönderilemedi.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleOtpChange = (index: number, value: string) => {
@@ -58,10 +76,29 @@ export default function LoginPage() {
   };
 
   const handleVerify = async () => {
+    setError('');
     setLoading(true);
-    await new Promise(r => setTimeout(r, 900));
-    setLoading(false);
-    router.push('/dashboard');
+    try {
+      const code = otp.join('');
+      const res = await fetch('/api/internal/auth/verify-otp', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ phone, code, intent: mode }),
+      });
+      const payload = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        throw new Error(payload?.error?.message ?? 'Kod doğrulanamadı.');
+      }
+      if (payload?.nextStep === 'onboarding') {
+        router.push('/onboarding');
+      } else {
+        router.push('/dashboard');
+      }
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Kod doğrulanamadı.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   const isOtpComplete = otp.every(d => d !== '');
@@ -111,8 +148,9 @@ export default function LoginPage() {
           disabled={!isOtpComplete}
           loading={loading}
         >
-          Giriş Yap
+          {mode === 'login' ? 'Giriş Yap' : 'Kayıtla Devam Et'}
         </Button>
+        {error ? <p className="text-error text-sm text-center">{error}</p> : null}
 
         <div className="text-center">
           {countdown > 0 ? (
@@ -135,10 +173,28 @@ export default function LoginPage() {
   return (
     <div className="space-y-8">
       <div>
+        <div className="inline-flex rounded-2xl bg-surface p-1 border border-border mb-5">
+          <button
+            onClick={() => setMode('login')}
+            className={`px-4 py-2 rounded-xl text-sm font-semibold ${mode === 'login' ? 'bg-elevated text-text-primary border border-border' : 'text-text-secondary'}`}
+          >
+            Giriş Yap
+          </button>
+          <button
+            onClick={() => setMode('signup')}
+            className={`px-4 py-2 rounded-xl text-sm font-semibold ${mode === 'signup' ? 'bg-elevated text-text-primary border border-border' : 'text-text-secondary'}`}
+          >
+            Kayıt Ol
+          </button>
+        </div>
         <h2 className="text-3xl font-bold text-text-primary mb-2">
           Telefon<br />numaranız
         </h2>
-        <p className="text-text-secondary">Hesabınıza giriş yapmak için telefon numaranızı girin.</p>
+        <p className="text-text-secondary">
+          {mode === 'login'
+            ? 'Hesabınıza giriş yapmak için telefon numaranızı girin.'
+            : 'Yeni hesap oluşturmak için telefon numaranızı girin.'}
+        </p>
       </div>
 
       <div className="space-y-4">
@@ -169,8 +225,9 @@ export default function LoginPage() {
         disabled={phone.length < 10}
         loading={loading}
       >
-        Kodu Gönder
+        {mode === 'login' ? 'Giriş Kodu Gönder' : 'Kayıt Kodu Gönder'}
       </Button>
+      {error ? <p className="text-error text-sm text-center">{error}</p> : null}
     </div>
   );
 }

@@ -50,6 +50,9 @@ on conflict (id) do nothing;
 - `GET /api/v1/payments` (auth: user)
 - `POST /api/v1/payments/quote` (auth: user)
 - `POST /api/v1/payments` (auth: user)
+- `POST /api/v1/auth/otp/request` (public)
+- `POST /api/v1/auth/otp/verify` (public)
+- `GET /api/v1/auth/session` (auth: session token)
 - `GET /api/v1/admin/transactions` (auth: admin)
 - `GET /api/v1/admin/transactions/summary` (auth: admin)
 - `POST /api/v1/admin/broadcasts` (auth: admin)
@@ -60,3 +63,5 @@ on conflict (id) do nothing;
 - Supabase helper is present and ready to be wired into repositories.
 - Repository layer writes/reads Supabase when env is configured, otherwise safe mock fallback is used.
 - Do not expose `SUPABASE_SERVICE_ROLE_KEY` to client apps.
+- Demo auth için opsiyonel envler: `AUTH_TEST_LOGIN_PHONE/CODE` ve `AUTH_TEST_SIGNUP_PHONE/CODE` (legacy: `AUTH_TEST_PHONE/CODE` login fallback).
+- TODO: replace temporary in-memory OTP/session state with persistent store + signed JWT/refresh flow before scale-out.

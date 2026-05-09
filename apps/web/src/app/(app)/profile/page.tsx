@@ -250,7 +250,10 @@ export default function ProfilePage() {
       <Button
         variant="outline"
         className="w-full !border-error !text-error hover:!bg-error hover:!border-error hover:!text-white"
-        onClick={() => (window.location.href = '/login')}
+        onClick={async () => {
+          await fetch('/api/internal/auth/logout', { method: 'POST' });
+          window.location.href = '/login';
+        }}
       >
         Çıkış Yap
       </Button>

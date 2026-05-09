@@ -1,8 +1,15 @@
 import { Suspense } from 'react';
 import { Sidebar } from '@/components/layout/Sidebar';
 import { Topbar } from '@/components/layout/Topbar';
+import { redirect } from 'next/navigation';
+import { validateUserSession } from '@/lib/auth/session';
 
-export default function AppLayout({ children }: { children: React.ReactNode }) {
+export default async function AppLayout({ children }: { children: React.ReactNode }) {
+  const user = await validateUserSession();
+  if (!user) {
+    redirect('/login');
+  }
+
   return (
     <div className="flex h-screen bg-background overflow-hidden">
       {/* Sabit sol sidebar — sadece desktop */}
