@@ -14,16 +14,12 @@ function readAdminEmailCookie(request: NextRequest): string | null {
   }
 }
 
+const USER_ROUTES = ['/dashboard', '/payment', '/recipients', '/history', '/profile'];
+
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  if (
-    pathname === '/dashboard' ||
-    pathname === '/payment' ||
-    pathname === '/recipients' ||
-    pathname === '/history' ||
-    pathname === '/profile'
-  ) {
+  if (USER_ROUTES.includes(pathname)) {
     const sessionToken = request.cookies.get(WEB_SESSION_COOKIE)?.value;
     if (!sessionToken) {
       const url = request.nextUrl.clone();
@@ -31,24 +27,27 @@ export function middleware(request: NextRequest) {
       url.searchParams.set('from', pathname);
       return NextResponse.redirect(url);
     }
+    return NextResponse.next();
   }
 
   if (pathname === '/admin/login') {
     return NextResponse.next();
   }
 
-  const session = request.cookies.get(ADMIN_SESSION_COOKIE)?.value;
-  const email = readAdminEmailCookie(request);
+  if (pathname.startsWith('/admin')) {
+    const session = request.cookies.get(ADMIN_SESSION_COOKIE)?.value;
+    const email = readAdminEmailCookie(request);
 
-  if (
-    session !== ADMIN_SESSION_VALUE ||
-    !email ||
-    !isAllowedMockAdminEmail(email)
-  ) {
-    const url = request.nextUrl.clone();
-    url.pathname = '/admin/login';
-    url.searchParams.set('from', pathname);
-    return NextResponse.redirect(url);
+    if (
+      session !== ADMIN_SESSION_VALUE ||
+      !email ||
+      !isAllowedMockAdminEmail(email)
+    ) {
+      const url = request.nextUrl.clone();
+      url.pathname = '/admin/login';
+      url.searchParams.set('from', pathname);
+      return NextResponse.redirect(url);
+    }
   }
 
   return NextResponse.next();
