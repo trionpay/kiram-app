@@ -102,7 +102,12 @@ export default function OnboardingPage() {
     setLoading(true);
     try {
       await new Promise(r => setTimeout(r, 1200));
-      router.push('/dashboard');
+      const sessionRes = await fetch('/api/internal/auth/session', { cache: 'no-store' });
+      if (sessionRes.ok) {
+        window.location.href = '/dashboard';
+      } else {
+        router.push('/login');
+      }
     } finally {
       setLoading(false);
     }
