@@ -9,7 +9,6 @@ const CODE_LENGTH = 6;
 
 export function OTPScreen({ route, navigation }) {
   const phone = route?.params?.phone ?? '';
-  const intent = route?.params?.intent === 'signup' ? 'signup' : 'login';
   const initialCountdown = route?.params?.expiresInSeconds ?? 60;
   const [code, setCode] = useState('');
   const [countdown, setCountdown] = useState(initialCountdown);
@@ -35,7 +34,7 @@ export function OTPScreen({ route, navigation }) {
     setError('');
     setLoading(true);
     try {
-      const payload = await verifyOtp(phone, c, intent);
+      const payload = await verifyOtp(phone, c);
       if (payload?.nextStep === 'onboarding') {
         navigation.replace('KYCName');
       } else {
@@ -83,7 +82,7 @@ export function OTPScreen({ route, navigation }) {
                   onPress={async () => {
                     try {
                       setError('');
-                      const payload = await requestOtp(phone, intent);
+                      const payload = await requestOtp(phone);
                       setCountdown(payload?.expiresInSeconds ?? 60);
                       setCode('');
                     } catch (err) {
@@ -99,12 +98,7 @@ export function OTPScreen({ route, navigation }) {
           {error ? <Text style={styles.error}>{error}</Text> : null}
         </View>
         <View style={styles.footer}>
-          <Button
-            title={intent === 'signup' ? 'Kayıt Adımına Geç' : 'Doğrula'}
-            onPress={() => void verify()}
-            disabled={code.length < CODE_LENGTH}
-            loading={loading}
-          />
+          <Button title="Devam Et" onPress={() => void verify()} disabled={code.length < CODE_LENGTH} loading={loading} />
         </View>
       </KeyboardAvoidingView>
     </SafeAreaView>

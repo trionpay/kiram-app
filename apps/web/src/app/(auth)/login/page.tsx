@@ -5,7 +5,6 @@ import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/Button';
 
 type Step = 'phone' | 'otp';
-type AuthMode = 'login' | 'signup';
 
 function formatPhone(digits: string) {
   if (digits.length <= 3) return digits;
@@ -16,7 +15,6 @@ function formatPhone(digits: string) {
 export default function LoginPage() {
   const router = useRouter();
   const [step, setStep] = useState<Step>('phone');
-  const [mode, setMode] = useState<AuthMode>('login');
   const [phone, setPhone] = useState('');
   const [otp, setOtp] = useState(['', '', '', '', '', '']);
   const [loading, setLoading] = useState(false);
@@ -35,7 +33,7 @@ export default function LoginPage() {
       const res = await fetch('/api/internal/auth/request-otp', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ phone, intent: mode }),
+        body: JSON.stringify({ phone }),
       });
       const payload = await res.json().catch(() => ({}));
       if (!res.ok) {
@@ -83,7 +81,7 @@ export default function LoginPage() {
       const res = await fetch('/api/internal/auth/verify-otp', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ phone, code, intent: mode }),
+        body: JSON.stringify({ phone, code }),
       });
       const payload = await res.json().catch(() => ({}));
       if (!res.ok) {
@@ -148,7 +146,7 @@ export default function LoginPage() {
           disabled={!isOtpComplete}
           loading={loading}
         >
-          {mode === 'login' ? 'Giriş Yap' : 'Kayıtla Devam Et'}
+          Devam Et
         </Button>
         {error ? <p className="text-error text-sm text-center">{error}</p> : null}
 
@@ -173,28 +171,10 @@ export default function LoginPage() {
   return (
     <div className="space-y-8">
       <div>
-        <div className="inline-flex rounded-2xl bg-surface p-1 border border-border mb-5">
-          <button
-            onClick={() => setMode('login')}
-            className={`px-4 py-2 rounded-xl text-sm font-semibold ${mode === 'login' ? 'bg-elevated text-text-primary border border-border' : 'text-text-secondary'}`}
-          >
-            Giriş Yap
-          </button>
-          <button
-            onClick={() => setMode('signup')}
-            className={`px-4 py-2 rounded-xl text-sm font-semibold ${mode === 'signup' ? 'bg-elevated text-text-primary border border-border' : 'text-text-secondary'}`}
-          >
-            Kayıt Ol
-          </button>
-        </div>
         <h2 className="text-3xl font-bold text-text-primary mb-2">
           Telefon<br />numaranız
         </h2>
-        <p className="text-text-secondary">
-          {mode === 'login'
-            ? 'Hesabınıza giriş yapmak için telefon numaranızı girin.'
-            : 'Yeni hesap oluşturmak için telefon numaranızı girin.'}
-        </p>
+        <p className="text-text-secondary">Giriş yapmak veya yeni hesap oluşturmak için telefon numaranızı girin.</p>
       </div>
 
       <div className="space-y-4">
@@ -225,7 +205,7 @@ export default function LoginPage() {
         disabled={phone.length < 10}
         loading={loading}
       >
-        {mode === 'login' ? 'Giriş Kodu Gönder' : 'Kayıt Kodu Gönder'}
+        Kodu Gönder
       </Button>
       {error ? <p className="text-error text-sm text-center">{error}</p> : null}
     </div>

@@ -29,10 +29,10 @@ async function request(path, body) {
   return payload;
 }
 
-export function requestOtp(phone, intent = 'login') {
-  return request('/api/v1/auth/otp/request', { phone, intent });
+export function requestOtp(phone) {
+  return request('/api/v1/auth/otp/request', { phone });
 }
 
-export function verifyOtp(phone, code, intent = 'login') {
-  return request('/api/v1/auth/otp/verify', { phone, code, intent });
+export function verifyOtp(phone, code) {
+  return request('/api/v1/auth/otp/verify', { phone, code });
 }

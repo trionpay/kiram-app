@@ -5,21 +5,18 @@ import { config } from "../config.js";
 import { getSupabaseAdminClient } from "../lib/supabase.js";
 
 const requestOtpBodySchema = z.object({
-  phone: z.string().trim().regex(/^5\d{9}$/, "Telefon formatı geçersiz."),
-  intent: z.enum(["login", "signup"]).default("login")
+  phone: z.string().trim().regex(/^5\d{9}$/, "Telefon formatı geçersiz.")
 });
 
 const verifyOtpBodySchema = z.object({
   phone: z.string().trim().regex(/^5\d{9}$/, "Telefon formatı geçersiz."),
-  code: z.string().trim().regex(/^\d{6}$/, "Kod 6 haneli olmalıdır."),
-  intent: z.enum(["login", "signup"]).default("login")
+  code: z.string().trim().regex(/^\d{6}$/, "Kod 6 haneli olmalıdır.")
 });
 
 type OtpRecord = {
   code: string;
   expiresAt: number;
   attemptsLeft: number;
-  intent: "login" | "signup";
 };
 
 type SessionRecord = {
@@ -104,25 +101,11 @@ export async function authRoutes(app: FastifyInstance) {
       }
 
       const phone = normalizePhone(parsed.data.phone);
-      const intent = parsed.data.intent;
       const demoOtp = resolveDemoOtp(phone);
-      const userId = await findExistingUserByPhone(phone);
-      const hasSupabase = Boolean(getSupabaseAdminClient());
-
-      if (!demoOtp && intent === "login" && hasSupabase && !userId) {
-        return reply.code(404).send({
-          error: { code: "ACCOUNT_NOT_FOUND", message: "Bu telefon numarası için hesap bulunamadı." }
-        });
-      }
-      if (!demoOtp && intent === "signup" && hasSupabase && userId) {
-        return reply.code(409).send({
-          error: { code: "ACCOUNT_EXISTS", message: "Bu telefon numarası zaten kayıtlı. Lütfen giriş yapın." }
-        });
-      }
 
       const code = demoOtp?.code ?? String(randomInt(100000, 999999));
       const expiresAt = Date.now() + config.OTP_TTL_SECONDS * 1000;
-      otpStore.set(phone, { code, expiresAt, attemptsLeft: OTP_ATTEMPT_LIMIT, intent });
+      otpStore.set(phone, { code, expiresAt, attemptsLeft: OTP_ATTEMPT_LIMIT });
 
       if (!demoOtp) {
         request.log.info({ phone: `+90${phone}`, code }, "otp_code_generated");
@@ -133,8 +116,7 @@ export async function authRoutes(app: FastifyInstance) {
         channel: "sms",
         maskedPhone: maskPhone(phone),
         expiresInSeconds: config.OTP_TTL_SECONDS,
-        isTestPhone: Boolean(demoOtp),
-        intent
+        isTestPhone: Boolean(demoOtp)
       });
     }
   );
@@ -158,7 +140,6 @@ export async function authRoutes(app: FastifyInstance) {
 
       const phone = normalizePhone(parsed.data.phone);
       const code = parsed.data.code;
-      const intent = parsed.data.intent;
       const otpRecord = otpStore.get(phone);
 
       if (!otpRecord || otpRecord.expiresAt <= Date.now()) {
@@ -180,28 +161,10 @@ export async function authRoutes(app: FastifyInstance) {
         });
       }
 
-      if (otpRecord.intent !== intent) {
-        return reply.code(400).send({
-          error: { code: "OTP_INTENT_MISMATCH", message: "Lütfen işlemi tekrar başlatın." }
-        });
-      }
-
       const userId = await findExistingUserByPhone(phone);
       const demoOtp = resolveDemoOtp(phone);
-      const hasSupabase = Boolean(getSupabaseAdminClient());
       const isExistingUser = Boolean(userId);
-      const isSignupFlow = intent === "signup" || demoOtp?.kind === "signup";
-
-      if (!demoOtp && intent === "login" && hasSupabase && !isExistingUser) {
-        return reply.code(403).send({
-          error: { code: "ACCOUNT_REQUIRED", message: "Bu numara için üyelik kaydı bulunamadı." }
-        });
-      }
-      if (!demoOtp && intent === "signup" && hasSupabase && isExistingUser) {
-        return reply.code(409).send({
-          error: { code: "ACCOUNT_EXISTS", message: "Bu telefon numarası zaten kayıtlı. Lütfen giriş yapın." }
-        });
-      }
+      const isSignupFlow = demoOtp?.kind === "signup" || (!demoOtp && !isExistingUser);
 
       otpStore.delete(phone);
       const sessionToken = randomUUID();

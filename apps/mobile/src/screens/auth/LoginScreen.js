@@ -7,7 +7,6 @@ import { requestOtp } from '../../services/authApi';
 
 export function LoginScreen({ navigation }) {
   const [phone, setPhone] = useState('');
-  const [mode, setMode] = useState('login');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
@@ -29,20 +28,8 @@ export function LoginScreen({ navigation }) {
           <TouchableOpacity onPress={() => navigation.goBack()} style={styles.back}>
             <Text style={styles.backArrow}>←</Text>
           </TouchableOpacity>
-          <View style={styles.modeRow}>
-            <TouchableOpacity style={[styles.modeBtn, mode === 'login' && styles.modeBtnActive]} onPress={() => setMode('login')}>
-              <Text style={[styles.modeText, mode === 'login' && styles.modeTextActive]}>Giriş Yap</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={[styles.modeBtn, mode === 'signup' && styles.modeBtnActive]} onPress={() => setMode('signup')}>
-              <Text style={[styles.modeText, mode === 'signup' && styles.modeTextActive]}>Kayıt Ol</Text>
-            </TouchableOpacity>
-          </View>
           <Text style={styles.title}>Telefon{'\n'}numaranız</Text>
-          <Text style={styles.subtitle}>
-            {mode === 'login'
-              ? 'Hesabınıza giriş yapmak için telefon numaranızı girin.'
-              : 'Yeni hesap oluşturmak için telefon numaranızı girin.'}
-          </Text>
+          <Text style={styles.subtitle}>Giriş yapmak veya yeni hesap oluşturmak için telefon numaranızı girin.</Text>
           <View style={styles.inputRow}>
             <View style={styles.prefix}>
               <Text style={styles.flag}>🇹🇷</Text>
@@ -65,15 +52,14 @@ export function LoginScreen({ navigation }) {
         </ScrollView>
         <View style={styles.footer}>
           <Button
-            title={mode === 'login' ? 'Giriş Kodu Gönder' : 'Kayıt Kodu Gönder'}
+            title="Kodu Gönder"
             onPress={async () => {
               setError('');
               setLoading(true);
               try {
-                const payload = await requestOtp(phone, mode);
+                const payload = await requestOtp(phone);
                 navigation.navigate('OTP', {
                   phone,
-                  intent: mode,
                   expiresInSeconds: payload?.expiresInSeconds ?? 60,
                 });
               } catch (err) {
@@ -96,11 +82,6 @@ const styles = StyleSheet.create({
   scroll: { flexGrow: 1, paddingHorizontal: screenPaddingHorizontal, paddingTop: spacing.lg, paddingBottom: spacing.xl },
   back: { alignSelf: 'flex-start', marginBottom: spacing.xl },
   backArrow: { fontSize: 24, color: colors.textPrimary },
-  modeRow: { flexDirection: 'row', backgroundColor: colors.surface, borderRadius: 12, padding: 4, marginBottom: spacing.lg },
-  modeBtn: { flex: 1, paddingVertical: 10, borderRadius: 10, alignItems: 'center' },
-  modeBtnActive: { backgroundColor: colors.backgroundElevated, borderWidth: 1, borderColor: colors.border },
-  modeText: { ...typography.label, color: colors.textSecondary },
-  modeTextActive: { color: colors.textPrimary },
   title: { ...typography.h1, color: colors.textPrimary, marginBottom: spacing.sm },
   subtitle: { ...typography.body, color: colors.textSecondary, marginBottom: spacing.xl },
   inputRow: { flexDirection: 'row', alignItems: 'center', backgroundColor: colors.backgroundElevated, borderWidth: 1.5, borderColor: colors.border, borderRadius: 14, paddingHorizontal: spacing.md, height: 58 },
