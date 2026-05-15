@@ -72,16 +72,16 @@ export function Hero() {
           {/* Sağ: Ev görseli */}
           <div className="relative flex justify-center lg:justify-end">
             <div className="relative w-full max-w-[520px]">
-              <div className="relative rounded-3xl overflow-hidden" style={{ background: 'radial-gradient(circle at 50% 50%, #1a1a2e 0%, #0a0a14 60%, #000000 100%)' }}>
+              <div className="relative">
                 <Image
                   src="/hero-home.png"
                   alt="Kiram - ev ödeme konsepti"
                   width={520}
                   height={520}
                   className="w-full h-auto"
+                  style={{ mixBlendMode: 'screen' }}
                   priority
                 />
-                <div className="absolute inset-0 rounded-3xl pointer-events-none" style={{ boxShadow: 'inset 0 0 60px 30px rgba(0,0,0,0.3)' }} />
               </div>
               {/* Floating card */}
               <div className="absolute -left-6 bottom-1/4 bg-white rounded-xl p-4 w-52 hidden sm:block border border-border" style={{ boxShadow: '0 16px 40px rgba(50, 50, 93, 0.15)' }}>
