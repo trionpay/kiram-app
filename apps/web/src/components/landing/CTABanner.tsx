@@ -6,44 +6,41 @@ import { TrionPayLogo } from '@/components/ui/TrionPayLogo';
 
 export function CTABanner() {
   return (
-    <section className="bg-gradient-to-br from-primary to-primary/90 py-20">
-      <div className="max-w-4xl mx-auto px-6 text-center">
+    <section
+      className="py-20 relative overflow-hidden"
+      style={{
+        background: 'radial-gradient(circle at 50% 50%, rgba(83,58,253,0.95), rgba(6,27,49,0.98) 70%)',
+      }}
+    >
+      <div className="max-w-4xl mx-auto px-6 text-center relative z-10">
         <FadeIn>
           <div className="flex justify-center mb-6">
             <TrionPayLogo width={210} variant="horizontal-white" />
           </div>
-          <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
-            Ev ödemelerini kolaylaştır
+          <h2 className="text-[32px] font-light text-white mb-4 tracking-[-0.02em] leading-[1.15]">
+            Ev odemelerini kolaylastir
           </h2>
-          <p className="text-white/70 mb-8 max-w-xl mx-auto">
-            Hemen hesap oluştur, kira ve aidat ödemeni kredi kartınla başlat.
+          <p className="text-white/50 mb-8 max-w-xl mx-auto text-sm">
+            Hemen hesap olustur, kira ve aidat odemeni kredi kartinla baslat.
           </p>
           <div className="flex flex-col items-center w-full max-w-md mx-auto">
             <Link
               href="/login"
-              className="inline-flex w-full items-center justify-center gap-2 bg-accent hover:bg-accent-dark text-white font-bold text-base px-8 py-4 rounded-2xl transition-all hover:scale-[1.02] active:scale-[0.98] shadow-lg shadow-accent/30"
+              className="inline-flex w-full items-center justify-center gap-2 bg-white text-deep-violet font-normal text-base px-8 py-4 rounded-[4px] transition-all hover:bg-white/90"
             >
-              Hemen Başla
-              <span aria-hidden>→</span>
+              Hemen Basla
+              <span aria-hidden>&rarr;</span>
             </Link>
-            <div className="w-full border-t border-white/15 mt-8 pt-8 flex flex-col items-center gap-3">
-              <p className="text-white/40 text-xs font-medium uppercase tracking-wider">
-                İstersen uygulamayı indir
+            <div className="w-full border-t border-white/10 mt-8 pt-8 flex flex-col items-center gap-3">
+              <p className="text-white/30 text-xs font-normal uppercase tracking-wider">
+                Istersen uygulamayi indir
               </p>
               <div className="flex flex-wrap items-center justify-center gap-2">
-                <a
-                  href="#"
-                  className="inline-flex items-center gap-1.5 rounded-lg border border-white/25 bg-transparent px-3 py-2 text-xs font-medium text-white/65 transition-colors hover:border-white/40 hover:text-white/85 hover:bg-white/5"
-                >
-                  <AppleIcon />
-                  App Store
+                <a href="#" className="inline-flex items-center gap-1.5 rounded-[4px] border border-white/20 bg-transparent px-3 py-2 text-xs text-white/50 transition-colors hover:border-white/40 hover:text-white/70">
+                  <AppleIcon /> App Store
                 </a>
-                <a
-                  href="#"
-                  className="inline-flex items-center gap-1.5 rounded-lg border border-white/25 bg-transparent px-3 py-2 text-xs font-medium text-white/65 transition-colors hover:border-white/40 hover:text-white/85 hover:bg-white/5"
-                >
-                  <PlayStoreIcon />
-                  Play Store
+                <a href="#" className="inline-flex items-center gap-1.5 rounded-[4px] border border-white/20 bg-transparent px-3 py-2 text-xs text-white/50 transition-colors hover:border-white/40 hover:text-white/70">
+                  <PlayStoreIcon /> Play Store
                 </a>
               </div>
             </div>

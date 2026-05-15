@@ -18,81 +18,59 @@ export function LandingNav() {
     <nav
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
         scrolled
-          ? 'bg-white/95 backdrop-blur-md border-b border-primary/10 shadow-sm'
-          : 'bg-white/88 backdrop-blur-md border-b border-primary/10'
+          ? 'bg-white/95 backdrop-blur-md border-b border-border shadow-sm'
+          : 'bg-white/80 backdrop-blur-md border-b border-transparent'
       }`}
     >
       <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
-        {/* Logo */}
         <Link href="/" className="flex items-center gap-2">
-          <TrionPayLogo width={120} color={scrolled ? '#1E3A5F' : '#FFFFFF'} accentColor="#5FE00B" />
+          <TrionPayLogo width={120} color="#061b31" accentColor="#533afd" />
         </Link>
 
-        {/* Desktop Menu */}
         <div className="hidden md:flex items-center gap-8">
-          <a href="#features" className="text-sm font-medium transition-colors text-text-secondary hover:text-text-primary">
-            Özellikler
+          <a href="#features" className="text-sm font-normal text-text-secondary hover:text-text-primary transition-colors">
+            Ozellikler
           </a>
-          <a href="#how-it-works" className="text-sm font-medium transition-colors text-text-secondary hover:text-text-primary">
-            Nasıl Çalışır
+          <a href="#how-it-works" className="text-sm font-normal text-text-secondary hover:text-text-primary transition-colors">
+            Nasil Calisir
           </a>
-          <a href="#faq" className="text-sm font-medium transition-colors text-text-secondary hover:text-text-primary">
+          <a href="#faq" className="text-sm font-normal text-text-secondary hover:text-text-primary transition-colors">
             SSS
           </a>
         </div>
 
-        {/* CTA Buttons */}
         <div className="hidden md:flex items-center gap-3">
           <Link
             href="/login"
-            className="text-sm font-medium px-4 py-2 rounded-xl transition-colors text-text-secondary hover:text-text-primary"
+            className="text-sm font-normal px-4 py-2 text-text-secondary hover:text-text-primary transition-colors"
           >
-            Giriş Yap
+            Giris Yap
           </Link>
           <Link
             href="/login"
-            className="text-sm font-semibold px-4 py-2 rounded-xl border-2 border-primary/25 text-primary transition-colors hover:bg-primary/5"
+            className="text-sm font-normal px-6 py-2.5 rounded-[4px] bg-deep-violet text-white hover:bg-accent-dark transition-colors"
           >
-            Hemen Başla
+            Hemen Basla
           </Link>
         </div>
 
-        {/* Mobile Menu Button */}
-        <button
-          className="md:hidden p-2"
-          onClick={() => setMenuOpen(!menuOpen)}
-        >
-          <svg
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="#1E3A5F"
-            strokeWidth="2"
-          >
-            {menuOpen ? (
-              <path d="M6 18L18 6M6 6l12 12" />
-            ) : (
-              <path d="M4 6h16M4 12h16M4 18h16" />
-            )}
+        <button className="md:hidden p-2" onClick={() => setMenuOpen(!menuOpen)}>
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#061b31" strokeWidth="2">
+            {menuOpen ? <path d="M6 18L18 6M6 6l12 12" /> : <path d="M4 6h16M4 12h16M4 18h16" />}
           </svg>
         </button>
       </div>
 
-      {/* Mobile Menu */}
       {menuOpen && (
         <div className="md:hidden bg-white border-t border-border">
           <div className="px-6 py-4 space-y-3">
-            <a href="#features" className="block text-text-secondary hover:text-text-primary py-2">Özellikler</a>
-            <a href="#how-it-works" className="block text-text-secondary hover:text-text-primary py-2">Nasıl Çalışır</a>
-            <a href="#faq" className="block text-text-secondary hover:text-text-primary py-2">SSS</a>
+            <a href="#features" className="block text-text-secondary hover:text-text-primary py-2 text-sm">Ozellikler</a>
+            <a href="#how-it-works" className="block text-text-secondary hover:text-text-primary py-2 text-sm">Nasil Calisir</a>
+            <a href="#faq" className="block text-text-secondary hover:text-text-primary py-2 text-sm">SSS</a>
             <div className="pt-3 border-t border-border space-y-2">
-              <Link href="/login" className="block text-center py-2.5 text-text-secondary">Giriş Yap</Link>
-              <Link
-                href="/login"
-                className="block text-center py-2.5 rounded-xl font-semibold border-2 border-accent text-accent hover:bg-accent/5"
-              >
-                Hemen Başla
+              <Link href="/login" className="block text-center py-2.5 text-text-secondary text-sm">Giris Yap</Link>
+              <Link href="/login" className="block text-center py-2.5 rounded-[4px] bg-deep-violet text-white text-sm font-normal">
+                Hemen Basla
               </Link>
             </div>
           </div>

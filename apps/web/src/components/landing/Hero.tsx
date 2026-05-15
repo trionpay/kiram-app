@@ -1,79 +1,67 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 
 export function Hero() {
   return (
-    <section
-      className="relative min-h-screen flex items-center overflow-hidden"
-      style={{
-        background: 'linear-gradient(135deg, #2A4BB5 0%, #2543A5 52%, #1F3A8E 100%)',
-      }}
-    >
-      {/* Dekoratif elementler */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+    <section className="relative min-h-screen flex items-center overflow-hidden bg-background">
+      {/* Abstract gradient background */}
+      <div className="absolute inset-0 pointer-events-none">
         <div
-          className="absolute top-20 right-[10%] w-96 h-96 rounded-full opacity-10"
-          style={{ background: 'radial-gradient(circle, #5FE00B 0%, transparent 70%)' }}
-        />
-        <div
-          className="absolute bottom-32 left-[5%] w-64 h-64 rounded-full opacity-8"
-          style={{ background: 'radial-gradient(circle, #0369A1 0%, transparent 70%)' }}
-        />
-        <div
-          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] rounded-full opacity-5"
-          style={{ background: 'radial-gradient(circle, #FFFFFF 0%, transparent 50%)' }}
+          className="absolute inset-0 opacity-40"
+          style={{
+            background: 'radial-gradient(circle at 70% 40%, rgba(83,58,253,0.12), transparent 55%), radial-gradient(circle at 20% 80%, rgba(128,135,255,0.08), transparent 50%)',
+          }}
         />
       </div>
 
       <div className="relative z-10 max-w-6xl mx-auto px-6 py-32 w-full">
-        <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
-          {/* Sol: İçerik */}
+        <div className="grid lg:grid-cols-2 gap-16 items-center">
+          {/* Sol: Icerik */}
           <div className="text-center lg:text-left">
-            {/* Badge */}
-            <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/15 rounded-full px-4 py-1.5 mb-6">
-              <span className="w-2 h-2 bg-accent rounded-full animate-pulse" />
-              <span className="text-white/85 text-sm font-medium">Kira ve aidat için odaklı ödeme deneyimi</span>
+            <div className="inline-flex items-center gap-2 bg-deep-violet/8 border border-deep-violet/15 rounded-md px-3 py-1.5 mb-6">
+              <span className="w-1.5 h-1.5 bg-deep-violet rounded-full" />
+              <span className="text-text-secondary text-xs font-normal tracking-wide">Kira ve aidat icin odakli odeme deneyimi</span>
             </div>
 
-            {/* Başlık */}
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white leading-tight mb-6">
-              Kira ve aidatı
+            <h1 className="text-5xl sm:text-[56px] lg:text-[56px] font-light text-text-primary leading-[1.07] tracking-[-0.03em] mb-6">
+              Kira ve aidati
               <br />
-              <span className="text-white [text-shadow:0_1px_6px_rgba(0,0,0,0.22)]">kartınla öde,</span> süreci takip et.
+              <span className="text-deep-violet">kartinla ode,</span>
+              <br />
+              sureci takip et.
             </h1>
 
-            {/* Açıklama */}
-            <p className="text-lg text-white/70 max-w-xl mx-auto lg:mx-0 mb-8 leading-relaxed">
-              Ev sahibine kira ve site yönetimine aidat ödemeni tek akışta tamamla; işlem durumunu, dekontlarını ve geçmişini her an kontrol et.
+            <p className="text-lg text-text-secondary max-w-xl mx-auto lg:mx-0 mb-10 leading-relaxed font-light">
+              Ev sahibine kira ve site yonetimine aidat odemeni tek akista tamamla; islem durumunu, dekontlarini ve gecmisini her an kontrol et.
             </p>
 
-            {/* CTA: tek birincil aksiyon (web kayıt); mağaza linkleri ikincil outline */}
             <div className="flex flex-col gap-5 justify-center lg:justify-start">
               <Link
                 href="/login"
-                className="inline-flex items-center justify-center gap-2 self-center lg:self-start bg-accent hover:bg-accent-dark text-white font-bold text-base px-8 py-4 rounded-2xl transition-all hover:scale-[1.02] active:scale-[0.98] shadow-lg shadow-accent/25"
+                className="inline-flex items-center justify-center gap-2 self-center lg:self-start bg-deep-violet hover:bg-accent-dark text-white font-normal text-base px-6 py-4 rounded-[4px] transition-all"
               >
-                Hemen Başla
+                Hemen Basla
                 <span className="text-lg" aria-hidden>
-                  →
+                  &rarr;
                 </span>
               </Link>
               <div className="flex flex-col items-center lg:items-start gap-2">
-                <p className="text-white/45 text-xs font-medium uppercase tracking-wider">
-                  Uygulamayı indir
+                <p className="text-text-tertiary text-xs font-normal uppercase tracking-wider">
+                  Uygulamayi indir
                 </p>
                 <div className="flex flex-wrap items-center justify-center lg:justify-start gap-2">
                   <a
                     href="#"
-                    className="inline-flex items-center gap-2 rounded-xl border-2 border-white/35 bg-transparent px-4 py-2.5 text-sm font-medium text-white/90 transition-colors hover:border-white/55 hover:bg-white/5"
+                    className="inline-flex items-center gap-2 rounded-[4px] border border-washed-violet bg-transparent px-4 py-2.5 text-sm font-normal text-deep-violet transition-colors hover:bg-deep-violet/5"
                   >
                     <AppleIcon />
                     App Store
                   </a>
                   <a
                     href="#"
-                    className="inline-flex items-center gap-2 rounded-xl border-2 border-white/35 bg-transparent px-4 py-2.5 text-sm font-medium text-white/90 transition-colors hover:border-white/55 hover:bg-white/5"
+                    className="inline-flex items-center gap-2 rounded-[4px] border border-washed-violet bg-transparent px-4 py-2.5 text-sm font-normal text-deep-violet transition-colors hover:bg-deep-violet/5"
                   >
                     <PlayStoreIcon />
                     Play Store
@@ -81,123 +69,32 @@ export function Hero() {
                 </div>
               </div>
             </div>
-
           </div>
 
-          {/* Sağ: Mockup / UI Preview */}
-          <div className="relative flex justify-center lg:justify-center xl:justify-end">
-            <div className="relative">
-              {/* Telefon çerçevesi — geniş ve temiz */}
-              <div className="w-[300px] sm:w-[340px] bg-gradient-to-b from-gray-800 to-gray-900 rounded-[3rem] p-3 shadow-2xl shadow-black/50">
-                <div className="bg-background rounded-[2.5rem] overflow-hidden">
-                  {/* Notch */}
-                  <div className="h-8 bg-background flex justify-center items-end pb-1">
-                    <div className="w-28 h-6 bg-gray-900 rounded-full" />
-                  </div>
-                  {/* Ekran içeriği */}
-                  <div className="px-5 pb-8 pt-3 space-y-4">
-                    {/* Mini dashboard header */}
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <p className="text-text-tertiary text-xs">Hoş geldin</p>
-                        <p className="text-text-primary font-bold text-base">Ahmet</p>
-                      </div>
-                      <div className="w-10 h-10 bg-primary rounded-full flex items-center justify-center">
-                        <span className="text-white text-sm font-bold">A</span>
-                      </div>
-                    </div>
-                    {/* Hero card mini */}
-                    <div
-                      className="rounded-2xl p-5"
-                      style={{ background: 'linear-gradient(135deg, #26539B, #173B73)' }}
-                    >
-                      <p className="text-white/50 text-xs mb-1">Toplam ödeme</p>
-                      <p className="text-white font-bold text-2xl">₺14.850</p>
-                      <div className="mt-4 bg-white/20 rounded-xl py-2.5 text-center">
-                        <span className="text-white text-sm font-semibold">Ödeme Yap →</span>
-                      </div>
-                    </div>
-                    {/* Son alıcılar mini */}
-                    <div>
-                      <p className="text-text-tertiary text-xs mb-2">Son Alıcılar</p>
-                      <div className="flex gap-3">
-                        {['🏢', '🏠', '⚡', '💧'].map((emoji, i) => (
-                          <div
-                            key={i}
-                            className="w-12 h-12 rounded-xl bg-surface flex items-center justify-center text-lg"
-                          >
-                            {emoji}
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                    {/* İşlem satırları */}
-                    <div className="space-y-2">
-                      {[
-                        { title: 'Apartman Aidati', amount: '₺850' },
-                        { title: 'Site Aidati', amount: '₺320' },
-                      ].map((tx, i) => (
-                        <div key={i} className="flex items-center justify-between bg-surface rounded-xl px-4 py-3">
-                          <div className="flex items-center gap-3">
-                            <div className="w-8 h-8 bg-border rounded-lg" />
-                            <span className="text-text-primary text-sm font-medium">{tx.title}</span>
-                          </div>
-                          <span className="text-text-primary text-sm font-bold">{tx.amount}</span>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              </div>
-              
-              {/* Floating card - sağda */}
-              <div className="absolute -right-4 top-1/4 bg-white rounded-2xl shadow-xl p-4 w-48 hidden sm:block">
+          {/* Sag: Ev gorseli */}
+          <div className="relative flex justify-center lg:justify-end">
+            <div className="relative w-full max-w-[520px]">
+              <Image
+                src="/hero-home.png"
+                alt="Kiram - ev odeme konsepti"
+                width={520}
+                height={520}
+                className="w-full h-auto drop-shadow-2xl"
+                priority
+              />
+              {/* Floating card */}
+              <div className="absolute -left-4 bottom-1/4 bg-white rounded-[6px] shadow-xl-2 p-4 w-48 hidden sm:block">
                 <div className="flex items-center gap-2 mb-2">
-                  <div className="w-9 h-9 bg-green-100 rounded-full flex items-center justify-center">
-                    <span className="text-green-600 text-base">✓</span>
+                  <div className="w-9 h-9 bg-green-50 rounded-full flex items-center justify-center">
+                    <span className="text-success text-base">&check;</span>
                   </div>
                   <div>
-                    <p className="text-text-primary text-xs font-semibold">Ödeme Başarılı</p>
-                    <p className="text-text-tertiary text-[10px]">Az önce</p>
+                    <p className="text-text-primary text-xs font-normal">Odeme Basarili</p>
+                    <p className="text-text-tertiary text-[10px]">Az once</p>
                   </div>
                 </div>
-                <p className="text-text-primary font-bold text-xl">₺12.000</p>
-                <p className="text-text-tertiary text-xs">Kira ödemesi</p>
-              </div>
-              
-              {/* Floating badge - solda */}
-              <div className="absolute -left-2 bottom-1/4 bg-accent text-white rounded-2xl shadow-xl px-4 py-3 hidden sm:flex items-center gap-2">
-                <span className="text-xl">🔒</span>
-                <div>
-                  <p className="text-xs font-semibold">256-bit SSL</p>
-                  <p className="text-[10px] text-white/70">Güvenli ödeme</p>
-                </div>
-              </div>
-
-              {/* Yaşam tarzı görselleri: kira/aidat ödeme anı hissiyatı */}
-              <div className="absolute -left-56 top-2 hidden xl:flex w-44 h-60 rounded-2xl overflow-hidden border border-white/20 shadow-xl">
-                <div
-                  className="w-full h-full bg-cover bg-center"
-                  style={{
-                    backgroundImage:
-                      "url('https://images.unsplash.com/photo-1556740738-b6a63e27c4df?auto=format&fit=crop&w=900&q=80')",
-                  }}
-                />
-                <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/70 to-transparent p-3">
-                  <p className="text-white text-[11px] font-semibold">Kartla hızlı ödeme</p>
-                </div>
-              </div>
-              <div className="absolute -right-56 bottom-2 hidden xl:flex w-44 h-60 rounded-2xl overflow-hidden border border-white/20 shadow-xl">
-                <div
-                  className="w-full h-full bg-cover bg-center"
-                  style={{
-                    backgroundImage:
-                      "url('https://images.unsplash.com/photo-1563013544-824ae1b704d3?auto=format&fit=crop&w=900&q=80')",
-                  }}
-                />
-                <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/70 to-transparent p-3">
-                  <p className="text-white text-[11px] font-semibold">Online kira takibi</p>
-                </div>
+                <p className="text-text-primary font-normal text-xl">&pound;12.000</p>
+                <p className="text-text-tertiary text-xs">Kira odemesi</p>
               </div>
             </div>
           </div>
@@ -206,8 +103,8 @@ export function Hero() {
 
       {/* Scroll indicator */}
       <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 animate-bounce">
-        <span className="text-white/40 text-xs">Keşfet</span>
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" className="text-white/40">
+        <span className="text-text-tertiary text-xs">Kesfet</span>
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" className="text-text-tertiary">
           <path d="M12 5v14M5 12l7 7 7-7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
         </svg>
       </div>
