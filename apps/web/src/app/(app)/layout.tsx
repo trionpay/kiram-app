@@ -11,7 +11,7 @@ export default async function AppLayout({ children }: { children: React.ReactNod
   }
 
   return (
-    <div className="flex h-screen bg-porcelain overflow-hidden">
+    <div className="flex h-screen bg-porcelain overflow-hidden max-w-[100vw]">
       {/* Sabit sol sidebar */}
       <aside className="hidden lg:flex lg:flex-col lg:w-64 xl:w-72 flex-shrink-0 bg-white border-r border-border overflow-hidden">
         <Suspense fallback={<div className="h-full" />}>
