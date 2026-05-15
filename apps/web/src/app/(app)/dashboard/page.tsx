@@ -110,17 +110,8 @@ const STATUS_BADGE: Record<string, React.ReactNode> = {
 export default function DashboardPage() {
   return (
     <div className="relative space-y-8 pb-2">
-      <div
-        aria-hidden
-        className="pointer-events-none absolute -top-8 -right-6 h-44 w-44 rounded-full bg-primary/[0.08] blur-3xl"
-      />
-      <div
-        aria-hidden
-        className="pointer-events-none absolute top-52 -left-10 h-36 w-36 rounded-full bg-accent/10 blur-3xl"
-      />
-
-      {/* Welcome kartı — daha net CTA hiyerarşisi */}
-      <div className="relative rounded-3xl border border-primary/18 bg-gradient-to-r from-primary/18 via-primary/10 to-accent/12 p-6 sm:p-7 shadow-[0_10px_28px_rgba(36,75,142,0.10)]">
+      {/* Welcome kartı */}
+      <div className="relative rounded-2xl border border-accent/20 bg-gradient-to-r from-accent/12 via-accent/6 to-accent/10 p-6 sm:p-7 shadow-sm">
         <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
           <div className="min-w-0">
             <h1 className="text-2xl font-bold tracking-tight text-text-primary sm:text-3xl">Hoş geldiniz, Ahmet</h1>
@@ -131,13 +122,13 @@ export default function DashboardPage() {
           <div className="flex items-center gap-2">
             <Link
               href="/payment"
-              className="inline-flex items-center justify-center rounded-2xl bg-primary px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-primary-light"
+              className="inline-flex items-center justify-center rounded-lg bg-accent px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-accent-dark"
             >
               Ödeme Yap
             </Link>
             <Link
               href="/history?durum=pending"
-              className="inline-flex items-center justify-center rounded-2xl border border-primary/15 bg-white/85 px-4 py-2.5 text-sm font-semibold text-text-primary transition-colors hover:bg-primary/6"
+              className="inline-flex items-center justify-center rounded-lg border border-accent/20 bg-white px-4 py-2.5 text-sm font-semibold text-text-primary transition-colors hover:bg-accent/5"
             >
               Bekleyenleri Gör
             </Link>
@@ -150,13 +141,7 @@ export default function DashboardPage() {
         {STATS.map((stat, index) => (
           <div
             key={stat.label}
-            className={`rounded-2xl border p-5 shadow-[0_4px_12px_rgba(12,25,41,0.04)] ${
-              index === 0
-                ? 'border-primary/16 bg-primary/[0.07]'
-                : index === 1
-                  ? 'border-accent/20 bg-accent/[0.09]'
-                  : 'border-primary/14 bg-primary/[0.045]'
-            }`}
+            className="rounded-xl border border-border bg-white p-5 shadow-sm"
           >
             <p className="text-xs font-semibold text-text-primary">{stat.label}</p>
             <p className="mt-1 text-[11px] leading-snug text-text-secondary">{stat.hint}</p>
@@ -175,7 +160,7 @@ export default function DashboardPage() {
 
       {/* Hızlı ödeme — giriş yapmış kullanıcı için işlevsel alan (landing sloganı yok) */}
       <section
-        className="rounded-2xl border border-primary/16 bg-primary/[0.055] p-5 sm:p-6 shadow-[0_4px_14px_rgba(12,25,41,0.04)]"
+        className="rounded-xl border border-border bg-white p-5 sm:p-6 shadow-sm"
         aria-labelledby="dashboard-quick-pay-heading"
       >
         <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
@@ -190,7 +175,7 @@ export default function DashboardPage() {
           </div>
           <Link
             href="/payment"
-            className="inline-flex shrink-0 items-center justify-center gap-2 rounded-2xl bg-primary px-5 py-3 text-sm font-semibold text-white transition-colors hover:bg-primary-light active:scale-[0.98]"
+            className="inline-flex shrink-0 items-center justify-center gap-2 rounded-lg bg-accent px-5 py-3 text-sm font-semibold text-white transition-colors hover:bg-accent-dark active:scale-[0.98]"
           >
             Ödeme akışına git <span aria-hidden>→</span>
           </Link>
@@ -204,7 +189,7 @@ export default function DashboardPage() {
               <Link
                 key={r.id}
                 href="/payment"
-                className="inline-flex items-center gap-2 rounded-xl border border-primary/16 bg-white/72 px-3 py-2.5 text-sm font-semibold text-text-primary transition-colors hover:border-primary/35 hover:bg-white/92"
+                className="inline-flex items-center gap-2 rounded-lg border border-border bg-white px-3 py-2.5 text-sm font-semibold text-text-primary transition-colors hover:border-accent/30 hover:bg-accent/5"
               >
                 <span
                   className="flex h-8 w-8 items-center justify-center rounded-lg text-base"
@@ -218,9 +203,9 @@ export default function DashboardPage() {
             ))}
             <Link
               href="/recipients"
-                className="inline-flex items-center gap-2 rounded-xl border border-dashed border-primary/24 bg-primary/[0.03] px-3 py-2.5 text-sm font-medium text-text-secondary transition-colors hover:border-primary/40 hover:text-primary"
+                className="inline-flex items-center gap-2 rounded-lg border border-dashed border-accent/25 bg-accent/[0.03] px-3 py-2.5 text-sm font-medium text-text-secondary transition-colors hover:border-accent/40 hover:text-accent"
             >
-                <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/[0.06] text-text-tertiary" aria-hidden>
+                <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-accent/[0.06] text-text-tertiary" aria-hidden>
                 +
               </span>
               Alıcı yönet
@@ -232,8 +217,8 @@ export default function DashboardPage() {
       {/* İki kolon: Alıcılar + Son işlemler — üst başlıklar aynı grid hizasında */}
       <div className="grid grid-cols-1 items-start gap-6 lg:grid-cols-5">
         {/* Son Alıcılar — dar kolon */}
-        <div className="flex h-full flex-col rounded-2xl border border-primary/16 bg-primary/[0.045] p-5 lg:col-span-2 shadow-[0_4px_12px_rgba(12,25,41,0.04)]">
-          <header className="mb-4 flex min-h-11 shrink-0 items-center justify-between gap-3 border-b border-primary/10 pb-3">
+        <div className="flex h-full flex-col rounded-xl border border-border bg-white p-5 lg:col-span-2 shadow-sm">
+          <header className="mb-4 flex min-h-11 shrink-0 items-center justify-between gap-3 border-b border-border pb-3">
             <h2 className="text-sm font-bold leading-tight text-text-primary">Son Alıcılar</h2>
             <Link href="/recipients" className="shrink-0 text-xs font-semibold text-accent hover:underline">
               Tümünü Gör
@@ -244,7 +229,7 @@ export default function DashboardPage() {
               <Link
                 key={r.id}
                 href="/payment"
-                className="flex items-center gap-3 hover:bg-primary/9 rounded-xl px-2 py-2 -mx-2 transition-colors group"
+                className="flex items-center gap-3 hover:bg-accent/5 rounded-lg px-2 py-2 -mx-2 transition-colors group"
               >
                 <div
                   className="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0 text-base"
@@ -258,9 +243,9 @@ export default function DashboardPage() {
             ))}
             <Link
               href="/recipients"
-              className="flex items-center gap-3 px-2 py-2 -mx-2 hover:bg-primary/9 rounded-xl transition-colors"
+              className="flex items-center gap-3 px-2 py-2 -mx-2 hover:bg-accent/5 rounded-lg transition-colors"
             >
-              <div className="w-9 h-9 rounded-xl bg-primary/[0.06] border border-dashed border-primary/20 flex items-center justify-center flex-shrink-0 text-sm text-text-tertiary">
+              <div className="w-9 h-9 rounded-lg bg-accent/[0.06] border border-dashed border-accent/20 flex items-center justify-center flex-shrink-0 text-sm text-text-tertiary">
                 +
               </div>
               <span className="text-sm text-text-tertiary">Yeni alıcı ekle</span>
@@ -269,14 +254,14 @@ export default function DashboardPage() {
         </div>
 
         {/* Son İşlemler — geniş kolon; durum + tutar sabit sütunlarda hizalı */}
-        <div className="flex h-full flex-col rounded-2xl border border-primary/16 bg-primary/[0.04] p-5 lg:col-span-3 shadow-[0_4px_12px_rgba(12,25,41,0.04)]">
-          <header className="mb-4 flex min-h-11 shrink-0 items-center justify-between gap-3 border-b border-primary/10 pb-3">
+        <div className="flex h-full flex-col rounded-xl border border-border bg-white p-5 lg:col-span-3 shadow-sm">
+          <header className="mb-4 flex min-h-11 shrink-0 items-center justify-between gap-3 border-b border-border pb-3">
             <h2 className="text-sm font-bold leading-tight text-text-primary">Son İşlemler</h2>
             <Link href="/history" className="shrink-0 text-xs font-semibold text-accent hover:underline">
               Tümünü Gör
             </Link>
           </header>
-          <div className="min-w-0 divide-y divide-primary/10">
+          <div className="min-w-0 divide-y divide-border">
             {RECENT_TRANSACTIONS.map(tx => (
               <div
                 key={tx.id}

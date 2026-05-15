@@ -45,16 +45,12 @@ export function Sidebar({ onClose }: SidebarProps) {
 
   const isActive = (href: string) => {
     const [targetPath, targetQuery] = href.split('?');
-
     if (!targetQuery) {
-      // Base payment/history links should not look active when a more specific query-tab is active.
       if (targetPath === '/payment' && searchParams.get('type')) return false;
       if (targetPath === '/history' && searchParams.get('durum')) return false;
       return pathname === targetPath || (targetPath !== '/dashboard' && pathname.startsWith(targetPath));
     }
-
     if (pathname !== targetPath) return false;
-
     const targetParams = new URLSearchParams(targetQuery);
     for (const [key, value] of targetParams.entries()) {
       if (searchParams.get(key) !== value) return false;
@@ -63,17 +59,17 @@ export function Sidebar({ onClose }: SidebarProps) {
   };
 
   return (
-    <div className="flex flex-col h-full">
+    <div className="flex flex-col h-full bg-white">
       {/* Logo */}
-      <div className="px-6 py-6 border-b border-border">
-        <TrionPayLogo width={110} color="#244B8E" accentColor="#2E6FD6" />
+      <div className="px-5 py-4 border-b border-border">
+        <TrionPayLogo width={105} color="#2a4bb5" accentColor="#3458c5" />
       </div>
 
       {/* Nav */}
-      <nav className="flex-1 overflow-y-auto px-3 py-5 space-y-6 bg-gradient-to-b from-primary/[0.025] via-white/70 to-transparent">
+      <nav className="flex-1 overflow-y-auto px-3 py-4 space-y-5">
         {NAV_GROUPS.map(group => (
           <div key={group.label}>
-            <p className="text-primary/65 text-[10px] font-bold tracking-widest uppercase px-3 mb-2">
+            <p className="text-accent/60 text-[10px] font-bold tracking-widest uppercase px-3 mb-2">
               {group.label}
             </p>
             <div className="space-y-0.5">
@@ -83,23 +79,23 @@ export function Sidebar({ onClose }: SidebarProps) {
                   href={item.href}
                   onClick={onClose}
                   className={`
-                    relative flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium border
+                    relative flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium
                     transition-all duration-150
                     ${isActive(item.href)
-                      ? 'bg-gradient-to-r from-primary/14 to-primary/5 text-primary border-primary/20'
-                      : 'text-text-secondary border-transparent hover:text-primary hover:bg-primary/6 hover:border-primary/10'
+                      ? 'bg-accent/10 text-accent border border-accent/20'
+                      : 'text-text-secondary border border-transparent hover:text-accent hover:bg-accent/5'
                     }
                   `}
                 >
-                  {isActive(item.href) ? (
-                    <span className="absolute left-0 top-2 bottom-2 w-1 rounded-r-full bg-primary" aria-hidden />
-                  ) : null}
-                  <span className={`text-base w-5 text-center transition-all ${isActive(item.href) ? 'text-primary' : 'text-primary/60'}`}>
+                  {isActive(item.href) && (
+                    <span className="absolute left-0 top-2 bottom-2 w-1 rounded-r-full bg-accent" aria-hidden />
+                  )}
+                  <span className={`text-base w-5 text-center ${isActive(item.href) ? 'text-accent' : 'text-accent/50'}`}>
                     {item.icon}
                   </span>
                   {item.label}
                   {isActive(item.href) && (
-                    <span className="ml-auto w-1.5 h-1.5 rounded-full bg-primary" />
+                    <span className="ml-auto w-1.5 h-1.5 rounded-full bg-accent" />
                   )}
                 </Link>
               ))}
@@ -109,33 +105,33 @@ export function Sidebar({ onClose }: SidebarProps) {
       </nav>
 
       {/* Alt alan */}
-      <div className="px-3 pb-5 border-t border-primary/10 pt-4 space-y-0.5 bg-gradient-to-b from-primary/[0.02] to-transparent">
+      <div className="px-3 pb-4 border-t border-border pt-3 space-y-0.5">
         {BOTTOM_ITEMS.map(item => (
           <Link
             key={item.href}
             href={item.href}
             onClick={onClose}
             className={`
-              relative flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium border
+              relative flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium
               transition-all duration-150
               ${isActive(item.href)
-                ? 'bg-gradient-to-r from-primary/14 to-primary/5 text-primary border-primary/20'
-                : 'text-text-secondary border-transparent hover:text-primary hover:bg-primary/7 hover:border-primary/12'
+                ? 'bg-accent/10 text-accent border border-accent/20'
+                : 'text-text-secondary border border-transparent hover:text-accent hover:bg-accent/5'
               }
             `}
           >
-            {isActive(item.href) ? (
-              <span className="absolute left-0 top-2 bottom-2 w-1 rounded-r-full bg-primary" aria-hidden />
-            ) : null}
-            <span className={`text-base w-5 text-center ${isActive(item.href) ? 'text-primary' : 'text-primary/60'}`}>{item.icon}</span>
+            {isActive(item.href) && (
+              <span className="absolute left-0 top-2 bottom-2 w-1 rounded-r-full bg-accent" aria-hidden />
+            )}
+            <span className={`text-base w-5 text-center ${isActive(item.href) ? 'text-accent' : 'text-accent/50'}`}>{item.icon}</span>
             {item.label}
           </Link>
         ))}
 
         {/* Kullanıcı kartı */}
-        <div className="mt-3 px-3 py-3 rounded-xl border border-primary/12 bg-gradient-to-r from-primary/[0.07] to-white/90 flex items-center gap-3">
-          <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
-            <span className="text-primary text-xs font-bold">AY</span>
+        <div className="mt-3 px-3 py-3 rounded-lg border border-accent/15 bg-accent/5 flex items-center gap-3">
+          <div className="w-8 h-8 rounded-full bg-accent/15 flex items-center justify-center flex-shrink-0">
+            <span className="text-accent text-xs font-bold">AY</span>
           </div>
           <div className="flex-1 min-w-0">
             <p className="text-text-primary text-xs font-semibold truncate">Ahmet Yılmaz</p>
