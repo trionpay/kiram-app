@@ -67,7 +67,7 @@ TRİONPAY TEKNOLOJİ YAZILIM HİZMETLERİ ANONİM ŞİRKETİ (bundan böyle "Kir
 
 1. Kişisel Verilerinizin İşlenmesine İlişkin İlkeler ve Hukuki Sebepler
 
-Kiramcom; kullanıcıların kira ve/veya aidat ödemelerine ilişkin süreçlerini dijital ortamda yönetebilmelerine, ödeme işlemlerini başlatabilmelerine, işlem durumunu ve geçmişini takip edebilmelerine imkân sağlayan bir platformdur. Kiramcom, sunduğu hizmetler kapsamında haiz olduğu kişisel verileri, 6698 sayılı Kişisel Verilerin Korunması Kanunu ("KVKK") başta olmak üzere 6563 sayılı Elektronik Ticaretin Düzenlenmesi Hakkında Kanun, Türk Ceza Kanunu ve yürürlükteki mevzuata uygun şekilde işlemektedir.
+Kiramcom; kullanıcıların kira ve/veya aidat ödemelerine ilişkin süreçlerini dijital ortamda yönetebilmelerine, ödeme işlemlerini başlatabilmelerine, işlem durumunu ve geçmişini takip edebilmelerine imkân sağlayan bir platformdur. Kiramcom, sunduğu hizmetler kapsamında haiz olduğu kişisel verileri, 6698 sayılı Kişisel Verilerin Korunması Kanunu ("KVKK") başta olmak üzere 6563 sayılı Elektronik Ticaretin Düzenlenmesi Hakkında Kanun, Türk Ceza Kanunu ve yürürlükteki mevzuata uygun şekilde işler.
 
 Kiramcom tarafından işlenen kişisel verileriniz;
 • hukuka ve dürüstlük kuralının öngördüğü biçimde,
@@ -81,7 +81,70 @@ Kişisel verileriniz; KVKK'nın yürürlük tarihinden önce verilmiş rızalar,
 
 1.1. Kişisel Verilerinizi Nasıl İşliyoruz?
 
-Özetle; Kiramcom, kullanıcılarına sunduğu hizmetler kapsamında kişisel verilerinizi, KVKK başta olmak üzere yürürlükteki mevzuata uygun şekilde işler. Kişisel verileriniz; Kiramcom tarafından sunulan hizmetlerden ve Kiramcom'ın hizmet verilmesine aracılık ettiği durumlarda söz konusu hizmetlerden faydalanabilmeniz için yürürlükteki mevzuata uygun sözlü, yazılı ve/veya elektronik şekillerde toplanmakta, saklanmakta ve işlenmektedir.`,
+Özetle; Kiramcom, kullanıcılarına sunduğu hizmetler kapsamında kişisel verilerinizi, KVKK başta olmak üzere yürürlükteki mevzuata uygun şekilde işler. Kişisel verileriniz; Kiramcom tarafından sunulan hizmetlerden ve Kiramcom'ın hizmet verilmesine aracılık ettiği durumlarda söz konusu hizmetlerden faydalanabilmeniz için yürürlükteki mevzuata uygun şekilde sözlü, yazılı ve/veya elektronik şekillerde toplanmakta, saklanmakta ve işlenmektedir.
+
+2. Kişisel Verilerinizin Toplanma Yöntemleri ve Toplanan Kişisel Veriler
+
+Kiramcom tarafından işlenen kişisel veriler; hizmetin niteliğine göre değişebilmektedir. Kullanıcılar tarafından doğrudan sağlanan bilgiler yanında; internet sitesi ve/veya uygulama üzerinden işlem yapılması hâlinde yapılan işleme ilişkin ek bilgiler de Kiramcom tarafından kayıt altına alınabilmektedir.
+
+Kiramcom, kredi kartı bilgilerini kendisine ait sistemlerde kayıt altına almaz.
+
+Bunlara ek olarak Kiramcom; sunduğu hizmetlere ilişkin olarak kullanıcıların bu hizmetlerden faydalanmaları esnasında sistem üzerindeki hareketlerini, hizmetlerin iyileştirilmesi ve istatistiksel amaçlarla işleyebilir. Bu kapsamda; internet sitesi/uygulama kullanımına ilişkin bazı teknik veriler (ör. görüntülenen sayfalar, tıklanan bağlantılar, tarayıcı ve ekran parametreleri gibi) işlenebilmektedir.
+
+Özel nitelikli kişisel verileriniz (din, mezhep, etnik köken, ırk vb.) Kiramcom tarafından açık rızanız bulunmaksızın sizden talep edilmeyecek ve işlenmeyecektir.
+
+2.1. Hangi Kişisel Verilerinizi Nasıl Topluyoruz?
+
+Kiramcom tarafından; hizmetin niteliğine göre ve kullanım senaryonuza bağlı olarak, başlıca aşağıdaki kişisel veriler toplanabilir ve işlenebilir:
+• ad, soyad; e-posta adresi; T.C. Kimlik Numarası gibi kimlik bilgileriniz; telefon numarası, ev veya iş adresi gibi iletişim verileri,
+• kullanıcı hesabı/üyelik kayıtları ve işlem geçmişi,
+• kira ve/veya aidat ödemelerine ilişkin işlem verileri ve ödeme bilgileri,
+• internet sitesi/uygulama kullanımından elde edilen teknik veriler,
+• (varsa) ticari elektronik ileti alınması hâlinde buna ilişkin izin/okunma ve benzeri kayıtlar.
+
+Toplanan kişisel veriler, yalnızca toplama amacına uygun şekilde işlenir.
+
+3. Kişisel Verilerin Güvenliği
+
+Kiramcom, kişisel verilerinizin güvenliğini sağlamak üzere, kişisel bilgilerinizi yetkisiz erişime, kullanıma ve açıklanmaya karşı korumaya yardımcı olacak çeşitli güvenlik teknolojileri ve yöntemleri uygular. Kişisel veriler; denetim altındaki, sınırlı erişime sahip sistemlerde muhafaza edilebilir. Kredi kartı numarası veya parola gibi yüksek gizlilik derecesine sahip veriler internet üzerinden aktarılırken, güvenli giriş katmanı (SSL) benzeri şifreleme yöntemleri kullanılabilir.
+
+Kiramcom; yürürlükteki mevzuat uyarınca kişisel verilerin gizliliğinin ve bütünlüğünün korunması amacıyla gerekli organizasyonu kurmak ve teknik önlemleri almak ve uyarlamak konusunda veri sorumlusu sıfatıyla gerekli sorumlulukları üstlenir.
+
+3.1. Kişisel Verileriniz İçin Hangi Önlemleri Alıyoruz?
+
+Kişisel verilerinizin güvenliği Kiramcom için önemlidir. Kiramcom, çalışanlarını düzenli olarak bilgilendirebilir/eğitebilir; gerekmeyen kişisel verilere erişimin engellenmesi, verilerin şirket dışı kişilerle paylaşılmaması ve veri güvenliği süreçlerinin işletilmesi amacıyla gerekli teknik ve idari önlemleri alır.
+
+4. Kişisel Verilerin Aktarılması
+
+Kiramcom; kişisel verilerin aktarılması konusunda başta KVKK m.8 olmak üzere KVKK'da öngörülen şartlara, Kurul kararlarına ve ilgili düzenlemelere uygun hareket eder. Kişisel verileriniz; KVKK'da belirtilen kurallar ve işbu Aydınlatma Metni'nde belirtilen amaçlar dâhilinde, kural olarak ilgili kişilerin açık rızası bulunmaksızın üçüncü kişilere aktarılmaz.
+
+Bununla birlikte; hizmetin sunumu, teknik altyapının işletilmesi, bilgi güvenliği ve mevzuat yükümlülüklerinin ifası için gerekli hâllerde; kişisel verileriniz, gerekli güvenlik tedbirleri alınmak suretiyle, sınırlı ve ölçülü biçimde, ifa yardımcılarına/iş ortaklarına, teknoloji ve iletişim hizmet sağlayıcılarına, ödeme altyapısı sağlayıcılarına/bankalara ve/veya yetkili kamu kurum ve kuruluşlarına aktarılabilir.
+
+Kişisel bilgilerinizi pazarlama amacıyla üçüncü taraflarla paylaşmayız.
+
+5. Sorumluluğun Belirlenmesi
+
+Kiramcom, Platform'u sağlayan ve işleten şirket olarak; Platform'un işletilmesi, güvenliği, kullanıcı deneyimi ve hizmetin sunulması süreçlerinde veri sorumlusu sıfatıyla gerekli organizasyonu kurmak ve teknik/idari önlemleri almakla yükümlüdür.
+
+6. Kişisel Verilerinize İlişkin Haklarınız ve Başvuru
+
+KVKK m.11 kapsamında;
+• kişisel verilerinizin işlenip işlenmediğini öğrenme,
+• işlenmişse buna ilişkin bilgi talep etme,
+• işlenme amacını ve amaca uygun kullanılıp kullanılmadığını öğrenme,
+• yurt içinde veya yurt dışında aktarıldığı üçüncü kişileri bilme,
+• eksik veya yanlış işlenmişse düzeltilmesini isteme,
+• KVKK'da öngörülen şartlar çerçevesinde silinmesini/yok edilmesini isteme,
+• aktarıldığı üçüncü kişilere bildirilmesini isteme,
+• münhasıran otomatik sistemlerle analiz edilmesi nedeniyle aleyhe bir sonucun ortaya çıkmasına itiraz etme,
+• kanuna aykırı işleme sebebiyle zarara uğramanız hâlinde zararın giderilmesini talep etme
+haklarına sahipsiniz.
+
+Belirtilen bu haklarınızı kullanmak için, bu yöndeki talebinizi KVKK'nın 13. maddesi doğrultusunda, Kiramcom'un aşağıda belirtilen adresine yazılı olarak veya e-posta marifetiyle başvuruda bulunabilirsiniz. Başvurunuz Kiramcom tarafından değerlendirilecek ve otuz gün içinde ücretsiz olarak sonuçlandırılacaktır.
+
+Kiramcom'un adresleri:
+KVKK ile ilgili genel bilgiler için: info@genc.partners
+KVKK'nın 11. maddesi kapsamında başvurular için: Merkezefendi Mah. Mevlana Cad. No: 112/1 Zeytinburnu/İstanbul`,
   },
 };
 
