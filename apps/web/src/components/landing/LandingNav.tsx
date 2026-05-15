@@ -28,29 +28,17 @@ export function LandingNav() {
         </Link>
 
         <div className="hidden md:flex items-center gap-8">
-          <a href="#features" className="text-sm font-normal text-text-secondary hover:text-text-primary transition-colors">
-            Ozellikler
-          </a>
-          <a href="#how-it-works" className="text-sm font-normal text-text-secondary hover:text-text-primary transition-colors">
-            Nasil Calisir
-          </a>
-          <a href="#faq" className="text-sm font-normal text-text-secondary hover:text-text-primary transition-colors">
-            SSS
-          </a>
+          <a href="#features" className="text-sm font-medium text-text-secondary hover:text-text-primary transition-colors">Özellikler</a>
+          <a href="#how-it-works" className="text-sm font-medium text-text-secondary hover:text-text-primary transition-colors">Nasıl Çalışır</a>
+          <a href="#faq" className="text-sm font-medium text-text-secondary hover:text-text-primary transition-colors">SSS</a>
         </div>
 
         <div className="hidden md:flex items-center gap-3">
-          <Link
-            href="/login"
-            className="text-sm font-normal px-4 py-2 text-text-secondary hover:text-text-primary transition-colors"
-          >
-            Giris Yap
+          <Link href="/login" className="text-sm font-medium px-4 py-2 text-text-secondary hover:text-text-primary transition-colors">
+            Giriş Yap
           </Link>
-          <Link
-            href="/login"
-            className="text-sm font-normal px-6 py-2.5 rounded-[4px] bg-deep-violet text-white hover:bg-accent-dark transition-colors"
-          >
-            Hemen Basla
+          <Link href="/login" className="text-sm font-semibold px-6 py-2.5 rounded-lg bg-deep-violet text-white hover:bg-accent-dark transition-colors">
+            Hemen Başla
           </Link>
         </div>
 
@@ -64,14 +52,12 @@ export function LandingNav() {
       {menuOpen && (
         <div className="md:hidden bg-white border-t border-border">
           <div className="px-6 py-4 space-y-3">
-            <a href="#features" className="block text-text-secondary hover:text-text-primary py-2 text-sm">Ozellikler</a>
-            <a href="#how-it-works" className="block text-text-secondary hover:text-text-primary py-2 text-sm">Nasil Calisir</a>
+            <a href="#features" className="block text-text-secondary hover:text-text-primary py-2 text-sm">Özellikler</a>
+            <a href="#how-it-works" className="block text-text-secondary hover:text-text-primary py-2 text-sm">Nasıl Çalışır</a>
             <a href="#faq" className="block text-text-secondary hover:text-text-primary py-2 text-sm">SSS</a>
             <div className="pt-3 border-t border-border space-y-2">
-              <Link href="/login" className="block text-center py-2.5 text-text-secondary text-sm">Giris Yap</Link>
-              <Link href="/login" className="block text-center py-2.5 rounded-[4px] bg-deep-violet text-white text-sm font-normal">
-                Hemen Basla
-              </Link>
+              <Link href="/login" className="block text-center py-2.5 text-text-secondary text-sm">Giriş Yap</Link>
+              <Link href="/login" className="block text-center py-2.5 rounded-lg bg-deep-violet text-white text-sm font-semibold">Hemen Başla</Link>
             </div>
           </div>
         </div>

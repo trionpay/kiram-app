@@ -4,12 +4,12 @@ import { useState } from 'react';
 import { FadeIn } from './FadeIn';
 
 const FAQS = [
-  { q: 'Kiram nedir?', a: 'Kiram, kira ve aidat odemelerinizi kredi kartiyla yapmanizi saglayan bir odeme platformudur. Ev sahibinize veya site yonetimine kolayca odeme yapabilirsiniz.' },
-  { q: 'Hangi kartlarla odeme yapabilirim?', a: 'Tum Visa, Mastercard ve Troy logolu kredi ve banka kartlariyla odeme yapabilirsiniz. Taksit secenegi de mevcuttur.' },
-  { q: 'Odemeler ne kadar surede ulasir?', a: 'Odemeler aninda isleme alinir ve genellikle ayni gun icinde alici hesabina aktarilir.' },
-  { q: 'Hizmet bedeli ne kadar?', a: 'Seffaf ucretlendirme uygulanir, gizli masraf yoktur.' },
-  { q: 'Guvenli mi?', a: 'Evet, tum odemeler 256-bit SSL sifreleme ve 3D Secure ile korunur. PCI-DSS sertifikali altyapimiz banka duzeyinde guvenlik saglar.' },
-  { q: 'Otomatik odeme nasil calisir?', a: 'Belirlediginiz tarihte ve tutarda otomatik odeme talimati olusturabilirsiniz. Kartinizdan otomatik olarak cekim yapilir.' },
+  { q: 'Kiram nedir?', a: 'Kiram, kira ve aidat ödemelerinizi kredi kartıyla yapmanızı sağlayan bir ödeme platformudur. Ev sahibinize veya site yönetimine kolayca ödeme yapabilirsiniz.' },
+  { q: 'Hangi kartlarla ödeme yapabilirim?', a: 'Tüm Visa, Mastercard ve Troy logolu kredi ve banka kartlarıyla ödeme yapabilirsiniz. Taksit seçeneği de mevcuttur.' },
+  { q: 'Ödemeler ne kadar sürede ulaşır?', a: 'Ödemeler anında işleme alınır ve genellikle aynı gün içinde alıcı hesabına aktarılır.' },
+  { q: 'Hizmet bedeli ne kadar?', a: 'Şeffaf ücretlendirme uygulanır, gizli masraf yoktur.' },
+  { q: 'Güvenli mi?', a: 'Evet, tüm ödemeler 256-bit SSL şifreleme ve 3D Secure ile korunur. PCI-DSS sertifikalı altyapımız banka düzeyinde güvenlik sağlar.' },
+  { q: 'Otomatik ödeme nasıl çalışır?', a: 'Belirlediğiniz tarihte ve tutarda otomatik ödeme talimatı oluşturabilirsiniz. Kartınızdan otomatik olarak çekim yapılır.' },
 ];
 
 export function FAQ() {
@@ -20,27 +20,25 @@ export function FAQ() {
       <div className="max-w-3xl mx-auto px-6">
         <FadeIn>
           <div className="text-center mb-12">
-            <h2 className="text-[32px] font-light text-text-primary mb-4 tracking-[-0.02em] leading-[1.15]">
-              Sikca Sorulan Sorular
+            <h2 className="text-3xl md:text-4xl font-bold text-text-primary mb-4">
+              Sıkça Sorulan Sorular
             </h2>
-            <p className="text-text-secondary text-sm">
-              Merak ettikleriniz icin cevaplar.
+            <p className="text-text-secondary">
+              Merak ettikleriniz için cevaplar.
             </p>
           </div>
         </FadeIn>
 
-        <div className="space-y-2">
+        <div className="space-y-3">
           {FAQS.map((faq, i) => (
             <FadeIn key={i} delay={i * 50}>
-              <div className="border border-border rounded-[6px] overflow-hidden">
+              <div className="border border-border rounded-xl overflow-hidden">
                 <button
                   className="w-full px-6 py-4 flex items-center justify-between text-left hover:bg-porcelain transition-colors"
                   onClick={() => setOpen(open === i ? null : i)}
                 >
-                  <span className="text-text-primary text-sm">{faq.q}</span>
-                  <span className={`text-text-tertiary transition-transform text-xs ${open === i ? 'rotate-180' : ''}`}>
-                    &#9660;
-                  </span>
+                  <span className="font-medium text-text-primary">{faq.q}</span>
+                  <span className={`text-text-tertiary transition-transform ${open === i ? 'rotate-180' : ''}`}>▼</span>
                 </button>
                 {open === i && (
                   <div className="px-6 pb-4">
