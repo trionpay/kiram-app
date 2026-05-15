@@ -61,8 +61,8 @@ export function Sidebar({ onClose }: SidebarProps) {
   return (
     <div className="flex flex-col h-full bg-white">
       {/* Logo */}
-      <div className="px-5 py-4 border-b border-border">
-        <TrionPayLogo width={105} color="#2a4bb5" accentColor="#3458c5" />
+      <div className="px-4 py-3 border-b border-border">
+        <TrionPayLogo width={90} color="#2a4bb5" accentColor="#3458c5" />
       </div>
 
       {/* Nav */}
