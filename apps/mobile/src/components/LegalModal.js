@@ -8,24 +8,25 @@ import { colors, typography, spacing, screenPaddingHorizontal } from '../theme';
 export const LEGAL_DOCS = {
   kvkk: {
     title: 'KVKK Aydınlatma Metni',
-    content: `KİŞİSEL VERİLERİN KORUNMASI KANUNU AYDINLATMA METNİ
+    content: `KVKK AYDINLATMA METNİ
 
-Kiram (Trion Pay Ödeme Hizmetleri A.Ş.), 6698 sayılı Kişisel Verilerin Korunması Kanunu ("KVKK") kapsamında veri sorumlusu sıfatıyla aşağıdaki bilgilendirmeyi yapmaktadır.
+TRİONPAY TEKNOLOJİ YAZILIM HİZMETLERİ ANONİM ŞİRKETİ (bundan böyle "Kiramcom" olarak anılacaktır) olarak kişisel verilerinizin korunması ve güvenliği hususuna azami önem vermekteyiz. Kiramcom'a sağladığınız kişisel verileriniz; hizmetlerimizin hızlı, kolay ve güvenilir şekilde sunulması amacıyla işlenmekte ve gerekli olması hâlinde üçüncü kişilere aktarılabilmektedir. Bu kapsamda Kiramcom ile paylaştığınız kişisel veriler; mevzuata uygun şekilde, faaliyet konumuz ve hizmet amaçlarımızla bağlantılı ve ölçülü olarak işlenebilecek, gerekli olması durumunda üçüncü kişilere aktarılabilecek ve mevzuata uygun süreler boyunca saklanabilecektir.
 
-1. İŞLENEN KİŞİSEL VERİLER
-Kimlik bilgileri (ad, soyad, T.C. Kimlik Numarası, doğum tarihi), iletişim bilgileri (telefon numarası, e-posta adresi, şehir), finansal bilgiler (IBAN bilgisi, ödeme geçmişi) ve işlem bilgileri işlenmektedir.
+1. Kişisel Verilerinizin İşlenmesine İlişkin İlkeler ve Hukuki Sebepler
 
-2. KİŞİSEL VERİLERİN İŞLENME AMACI
-Toplanan veriler; hizmet sözleşmesinin ifası, yasal yükümlülüklerin yerine getirilmesi, kimlik doğrulama ve güvenlik süreçlerinin yürütülmesi, müşteri hizmetleri ve destek faaliyetleri amacıyla işlenmektedir.
+Kiramcom; kullanıcıların kira ve/veya aidat ödemelerine ilişkin süreçlerini dijital ortamda yönetebilmelerine, ödeme işlemlerini başlatabilmelerine, işlem durumunu ve geçmişini takip edebilmelerine imkân sağlayan bir platformdur. Kiramcom, sunduğu hizmetler kapsamında haiz olduğu kişisel verileri, 6698 sayılı Kişisel Verilerin Korunması Kanunu ("KVKK") başta olmak üzere 6563 sayılı Elektronik Ticaretin Düzenlenmesi Hakkında Kanun, Türk Ceza Kanunu ve yürürlükteki mevzuata uygun şekilde işlemektedir.
 
-3. KİŞİSEL VERİLERİN AKTARILMASI
-Kişisel verileriniz; BDDK/TCMB lisanslı ödeme kuruluşlarına, yasal zorunluluk kapsamında kamu kurumlarına ve KKB'ye aktarılabilir. Yurt dışına aktarım yapılmamaktadır.
+Kiramcom tarafından işlenen kişisel verileriniz;
+• hukuka ve dürüstlük kuralının öngördüğü biçimde,
+• doğru ve güncel olarak,
+• belirli, açık ve meşru amaçlar için,
+• işlenme amaçları ile bağlantılı, sınırlı ve ölçülü olarak işlenmektedir.
 
-4. KİŞİSEL VERİLERİN SAKLANMA SÜRESİ
-Verileriniz, hizmet ilişkisi süresince ve akabinde yasal yükümlülükler kapsamında belirlenen süreler boyunca saklanmaktadır.
+Kişisel verileriniz; internet sitesi ve/veya mobil uygulama üzerinden sunulan hizmetlerden yararlanabilmeniz için işlenmekte ve muhafaza edilmektedir. Kişisel verileriniz, Kiramcom tarafından sunulan ürün ve hizmete bağlı olarak değişkenlik gösterebilmekle birlikte; otomatik veya otomatik olmayan yöntemlerle, başta internet sitesi ve uygulama olmak üzere, Kiramcom'ın hizmet sunumuna aracılık ettiği hâllerde de çeşitli vasıtalarla sözlü, yazılı ya da elektronik olarak toplanabilmektedir.
 
-5. VERİ SAHİBİNİN HAKLARI
-KVKK'nın 11. maddesi uyarınca; verilerinize erişim, düzeltme, silme, işlemenin kısıtlanması, itiraz etme ve taşınabilirlik haklarına sahipsiniz. Başvurularınızı kvkk@kiram.com adresine iletebilirsiniz.`,
+1.1. Kişisel Verilerinizi Nasıl İşliyoruz?
+
+Özetle; Kiramcom, kullanıcılarına sunduğu hizmetler kapsamında kişisel verilerinizi, KVKK başta olmak üzere yürürlükteki mevzuata uygun şekilde işler. Kişisel verileriniz; Kiramcom tarafından sunulan hizmetlerden ve Kiramcom'ın hizmet verilmesine aracılık ettiği durumlarda söz konusu hizmetlerden faydalanabilmeniz için yürürlükteki mevzuata uygun sözlü, yazılı ve/veya elektronik şekillerde toplanmakta, saklanmakta ve işlenmektedir.`,
   },
 
   terms: {
