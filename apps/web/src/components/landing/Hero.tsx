@@ -72,7 +72,7 @@ export function Hero() {
           {/* Sağ: Ev görseli */}
           <div className="relative flex justify-center lg:justify-end">
             <div className="relative w-full max-w-[520px]">
-              <div className="relative rounded-3xl overflow-hidden">
+              <div className="relative">
                 <Image
                   src="/hero-home.png"
                   alt="Kiram - ev ödeme konsepti"
@@ -80,7 +80,6 @@ export function Hero() {
                   height={520}
                   className="w-full h-auto"
                   priority
-                  style={{ background: 'transparent' }}
                 />
               </div>
               {/* Floating card */}
