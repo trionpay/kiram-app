@@ -84,18 +84,18 @@ export function Hero() {
                 />
               </div>
               {/* Floating card */}
-              <div className="absolute -left-4 bottom-1/4 bg-white rounded-xl shadow-xl-2 p-4 w-48 hidden sm:block border border-border">
+              <div className="absolute -left-4 bottom-1/4 bg-white rounded-xl p-4 w-48 hidden sm:block border border-border" style={{ boxShadow: '0 16px 32px rgba(50, 50, 93, 0.12)' }}>
                 <div className="flex items-center gap-2 mb-2">
                   <div className="w-9 h-9 bg-green-50 rounded-full flex items-center justify-center">
-                    <span className="text-success text-base">✓</span>
+                    <span className="text-success text-base">{'✓'}</span>
                   </div>
                   <div>
-                    <p className="text-text-primary text-xs font-semibold">Ödeme Başarılı</p>
-                    <p className="text-text-tertiary text-[10px]">Az önce</p>
+                    <p className="text-text-primary text-xs font-semibold">{'Ödeme Başarılı'}</p>
+                    <p className="text-text-tertiary text-[10px]">{'Az önce'}</p>
                   </div>
                 </div>
-                <p className="text-text-primary font-bold text-xl">₺12.000</p>
-                <p className="text-text-tertiary text-xs">Kira ödemesi</p>
+                <p className="text-text-primary font-bold text-xl">{'₺12.000'}</p>
+                <p className="text-text-tertiary text-xs">{'Kira ödemesi'}</p>
               </div>
             </div>
           </div>
