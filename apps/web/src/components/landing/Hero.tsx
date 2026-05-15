@@ -72,7 +72,7 @@ export function Hero() {
           {/* Sağ: Ev görseli */}
           <div className="relative flex justify-center lg:justify-end">
             <div className="relative w-full max-w-[520px]">
-              <div className="relative">
+              <div className="relative rounded-3xl overflow-hidden" style={{ background: 'radial-gradient(circle at 50% 50%, #1a1a2e 0%, #0a0a14 60%, #000000 100%)' }}>
                 <Image
                   src="/hero-home.png"
                   alt="Kiram - ev ödeme konsepti"
@@ -81,20 +81,30 @@ export function Hero() {
                   className="w-full h-auto"
                   priority
                 />
+                <div className="absolute inset-0 rounded-3xl pointer-events-none" style={{ boxShadow: 'inset 0 0 60px 30px rgba(0,0,0,0.3)' }} />
               </div>
               {/* Floating card */}
-              <div className="absolute -left-4 bottom-1/4 bg-white rounded-xl p-4 w-48 hidden sm:block border border-border" style={{ boxShadow: '0 16px 32px rgba(50, 50, 93, 0.12)' }}>
-                <div className="flex items-center gap-2 mb-2">
-                  <div className="w-9 h-9 bg-green-50 rounded-full flex items-center justify-center">
-                    <span className="text-success text-base">{'✓'}</span>
+              <div className="absolute -left-6 bottom-1/4 bg-white rounded-xl p-4 w-52 hidden sm:block border border-border" style={{ boxShadow: '0 16px 40px rgba(50, 50, 93, 0.15)' }}>
+                <div className="flex items-center gap-2.5 mb-2">
+                  <div className="w-10 h-10 bg-green-50 rounded-full flex items-center justify-center">
+                    <span className="text-success text-lg">{'✓'}</span>
                   </div>
                   <div>
-                    <p className="text-text-primary text-xs font-semibold">{'Ödeme Başarılı'}</p>
-                    <p className="text-text-tertiary text-[10px]">{'Az önce'}</p>
+                    <p className="text-text-primary text-sm font-semibold">{'Ödeme Başarılı'}</p>
+                    <p className="text-text-tertiary text-xs">{'Az önce'}</p>
                   </div>
                 </div>
-                <p className="text-text-primary font-bold text-xl">{'₺12.000'}</p>
+                <p className="text-text-primary font-bold text-2xl mt-1">{'₺12.000'}</p>
                 <p className="text-text-tertiary text-xs">{'Kira ödemesi'}</p>
+              </div>
+
+              {/* Floating security badge */}
+              <div className="absolute -right-4 top-1/3 bg-deep-violet text-white rounded-xl px-4 py-3 hidden sm:flex items-center gap-2" style={{ boxShadow: '0 12px 32px rgba(83, 58, 253, 0.3)' }}>
+                <span className="text-xl">{'🔒'}</span>
+                <div>
+                  <p className="text-xs font-semibold">{'256-bit SSL'}</p>
+                  <p className="text-[10px] text-white/70">{'Güvenli ödeme'}</p>
+                </div>
               </div>
             </div>
           </div>
