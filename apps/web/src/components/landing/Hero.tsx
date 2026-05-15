@@ -11,7 +11,7 @@ export function Hero() {
         <div
           className="absolute inset-0 opacity-50"
           style={{
-            background: 'radial-gradient(circle at 65% 35%, rgba(83,58,253,0.15), transparent 50%), radial-gradient(circle at 25% 75%, rgba(128,135,255,0.10), transparent 45%), radial-gradient(circle at 80% 80%, rgba(229,237,245,0.6), transparent 40%)',
+            background: 'radial-gradient(circle at 65% 35%, rgba(42,75,181,0.15), transparent 50%), radial-gradient(circle at 25% 75%, rgba(58,94,199,0.10), transparent 45%), radial-gradient(circle at 80% 80%, rgba(229,237,245,0.6), transparent 40%)',
           }}
         />
       </div>
@@ -99,7 +99,7 @@ export function Hero() {
               </div>
 
               {/* Floating security badge */}
-              <div className="absolute -right-4 top-1/3 bg-deep-violet text-white rounded-xl px-4 py-3 hidden sm:flex items-center gap-2" style={{ boxShadow: '0 12px 32px rgba(83, 58, 253, 0.3)' }}>
+              <div className="absolute -right-4 top-1/3 bg-deep-violet text-white rounded-xl px-4 py-3 hidden sm:flex items-center gap-2" style={{ boxShadow: '0 12px 32px rgba(42, 75, 181, 0.3)' }}>
                 <span className="text-xl">{'🔒'}</span>
                 <div>
                   <p className="text-xs font-semibold">{'256-bit SSL'}</p>

@@ -9,7 +9,7 @@ export function CTABanner() {
     <section
       className="py-20 relative overflow-hidden"
       style={{
-        background: 'radial-gradient(circle at 50% 50%, rgba(83,58,253,0.95), rgba(6,27,49,0.98) 70%)',
+        background: 'radial-gradient(circle at 50% 50%, rgba(42,75,181,0.95), rgba(6,27,49,0.98) 70%)',
       }}
     >
       <div className="max-w-4xl mx-auto px-6 text-center relative z-10">

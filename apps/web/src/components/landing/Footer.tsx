@@ -24,7 +24,7 @@ export function Footer() {
       <div className="max-w-6xl mx-auto px-6">
         <div className="mb-10 grid gap-10 sm:gap-12 md:grid-cols-2 lg:grid-cols-12 lg:gap-x-12">
           <div className="md:col-span-2 lg:col-span-5">
-            <TrionPayLogo width={120} color="#061b31" accentColor="#533afd" />
+            <TrionPayLogo width={120} color="#061b31" accentColor="#2a4bb5" />
             <p className="mt-4 max-w-md text-sm leading-relaxed text-text-tertiary">
               Kira ve aidat ödemelerini kredi kartıyla hızlıca tamamla, tüm adımları tek ekrandan takip et.
             </p>

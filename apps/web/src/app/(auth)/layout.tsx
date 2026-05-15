@@ -6,11 +6,11 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
       {/* Sol panel — hero */}
       <div
         className="hidden lg:flex lg:w-[480px] xl:w-[520px] flex-shrink-0 flex-col justify-between p-12 relative overflow-hidden"
-        style={{ background: 'linear-gradient(135deg, #533afd 0%, #3d2ac4 50%, #061b31 100%)' }}
+        style={{ background: 'linear-gradient(135deg, #2a4bb5 0%, #1f3a8e 50%, #061b31 100%)' }}
       >
         <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute top-[-100px] right-[-100px] w-[400px] h-[400px] rounded-full" style={{ background: 'radial-gradient(circle, rgba(128,135,255,0.25), transparent 60%)' }} />
-          <div className="absolute bottom-[-80px] left-[-60px] w-[300px] h-[300px] rounded-full" style={{ background: 'radial-gradient(circle, rgba(83,58,253,0.2), transparent 60%)' }} />
+          <div className="absolute top-[-100px] right-[-100px] w-[400px] h-[400px] rounded-full" style={{ background: 'radial-gradient(circle, rgba(42,75,181,0.3), transparent 60%)' }} />
+          <div className="absolute bottom-[-80px] left-[-60px] w-[300px] h-[300px] rounded-full" style={{ background: 'radial-gradient(circle, rgba(58,94,199,0.25), transparent 60%)' }} />
         </div>
 
         <div className="relative z-10">
@@ -33,19 +33,19 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
       {/* Sağ panel — form */}
       <div className="flex-1 flex items-center justify-center p-6 bg-background relative overflow-hidden">
         <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute top-[10%] right-[15%] w-[500px] h-[500px] rounded-full opacity-60" style={{ background: 'radial-gradient(circle, rgba(83,58,253,0.06), transparent 50%)' }} />
-          <div className="absolute bottom-[5%] left-[10%] w-[400px] h-[400px] rounded-full opacity-50" style={{ background: 'radial-gradient(circle, rgba(128,135,255,0.05), transparent 50%)' }} />
+          <div className="absolute top-[10%] right-[15%] w-[500px] h-[500px] rounded-full opacity-60" style={{ background: 'radial-gradient(circle, rgba(42,75,181,0.06), transparent 50%)' }} />
+          <div className="absolute bottom-[5%] left-[10%] w-[400px] h-[400px] rounded-full opacity-50" style={{ background: 'radial-gradient(circle, rgba(58,94,199,0.05), transparent 50%)' }} />
           <div
             className="absolute inset-0 opacity-[0.03]"
             style={{
-              backgroundImage: 'radial-gradient(circle, rgba(83,58,253,0.4) 1px, transparent 1px)',
+              backgroundImage: 'radial-gradient(circle, rgba(42,75,181,0.4) 1px, transparent 1px)',
               backgroundSize: '32px 32px',
             }}
           />
         </div>
         <div className="w-full max-w-md relative z-10">
           <div className="mb-10 lg:hidden">
-            <TrionPayLogo width={110} color="#061b31" accentColor="#533afd" />
+            <TrionPayLogo width={110} color="#061b31" accentColor="#2a4bb5" />
           </div>
           {children}
         </div>
