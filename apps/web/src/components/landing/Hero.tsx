@@ -5,61 +5,76 @@ import Image from 'next/image';
 
 export function Hero() {
   return (
-    <section className="relative min-h-screen flex items-center overflow-hidden bg-background">
-      {/* Abstract gradient background */}
-      <div className="absolute inset-0 pointer-events-none">
+    <section
+      className="relative min-h-screen flex items-center overflow-hidden"
+      style={{
+        background: 'linear-gradient(135deg, #2A4BB5 0%, #2543A5 52%, #1F3A8E 100%)',
+      }}
+    >
+      {/* Dekoratif elementler */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div
-          className="absolute inset-0 opacity-50"
-          style={{
-            background: 'radial-gradient(circle at 65% 35%, rgba(42,75,181,0.15), transparent 50%), radial-gradient(circle at 25% 75%, rgba(58,94,199,0.10), transparent 45%), radial-gradient(circle at 80% 80%, rgba(229,237,245,0.6), transparent 40%)',
-          }}
+          className="absolute top-20 right-[10%] w-96 h-96 rounded-full opacity-10"
+          style={{ background: 'radial-gradient(circle, #5FE00B 0%, transparent 70%)' }}
+        />
+        <div
+          className="absolute bottom-32 left-[5%] w-64 h-64 rounded-full opacity-8"
+          style={{ background: 'radial-gradient(circle, #0369A1 0%, transparent 70%)' }}
+        />
+        <div
+          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] rounded-full opacity-5"
+          style={{ background: 'radial-gradient(circle, #FFFFFF 0%, transparent 50%)' }}
         />
       </div>
 
       <div className="relative z-10 max-w-6xl mx-auto px-6 py-32 w-full">
-        <div className="grid lg:grid-cols-2 gap-16 items-center">
+        <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
           {/* Sol: İçerik */}
           <div className="text-center lg:text-left">
-            <div className="inline-flex items-center gap-2 bg-deep-violet/8 border border-deep-violet/15 rounded-md px-3 py-1.5 mb-6">
-              <span className="w-1.5 h-1.5 bg-deep-violet rounded-full" />
-              <span className="text-text-secondary text-xs tracking-wide">Kira ve aidat için odaklı ödeme deneyimi</span>
+            {/* Badge */}
+            <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/15 rounded-full px-4 py-1.5 mb-6">
+              <span className="w-2 h-2 bg-accent rounded-full animate-pulse" />
+              <span className="text-white/85 text-sm font-medium">Kira ve aidat için odaklı ödeme deneyimi</span>
             </div>
 
-            <h1 className="text-4xl sm:text-5xl lg:text-[56px] font-semibold text-text-primary leading-[1.1] tracking-[-0.02em] mb-6">
+            {/* Başlık */}
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white leading-tight mb-6">
               Kira ve aidatı
               <br />
-              <span className="text-deep-violet">kartınla öde,</span>
-              <br />
-              süreci takip et.
+              <span className="text-white [text-shadow:0_1px_6px_rgba(0,0,0,0.22)]">kartınla öde,</span> süreci takip et.
             </h1>
 
-            <p className="text-base sm:text-lg text-text-secondary max-w-xl mx-auto lg:mx-0 mb-10 leading-relaxed">
+            {/* Açıklama */}
+            <p className="text-lg text-white/70 max-w-xl mx-auto lg:mx-0 mb-8 leading-relaxed">
               Ev sahibine kira ve site yönetimine aidat ödemeni tek akışta tamamla; işlem durumunu, dekontlarını ve geçmişini her an kontrol et.
             </p>
 
+            {/* CTA: tek birincil aksiyon (web kayıt); mağaza linkleri ikincil outline */}
             <div className="flex flex-col gap-5 justify-center lg:justify-start">
               <Link
                 href="/login"
-                className="inline-flex items-center justify-center gap-2 self-center lg:self-start bg-deep-violet hover:bg-accent-dark text-white font-semibold text-base px-8 py-4 rounded-lg transition-all hover:scale-[1.02] active:scale-[0.98] shadow-lg shadow-deep-violet/25"
+                className="inline-flex items-center justify-center gap-2 self-center lg:self-start bg-accent hover:bg-accent-dark text-white font-bold text-base px-8 py-4 rounded-2xl transition-all hover:scale-[1.02] active:scale-[0.98] shadow-lg shadow-accent/25"
               >
                 Hemen Başla
-                <span className="text-lg" aria-hidden>→</span>
+                <span className="text-lg" aria-hidden>
+                  →
+                </span>
               </Link>
               <div className="flex flex-col items-center lg:items-start gap-2">
-                <p className="text-text-tertiary text-xs font-medium uppercase tracking-wider">
+                <p className="text-white/45 text-xs font-medium uppercase tracking-wider">
                   Uygulamayı indir
                 </p>
                 <div className="flex flex-wrap items-center justify-center lg:justify-start gap-2">
                   <a
                     href="#"
-                    className="inline-flex items-center gap-2 rounded-lg border border-washed-violet bg-transparent px-4 py-2.5 text-sm font-medium text-deep-violet transition-colors hover:bg-deep-violet/5"
+                    className="inline-flex items-center gap-2 rounded-xl border-2 border-white/35 bg-transparent px-4 py-2.5 text-sm font-medium text-white/90 transition-colors hover:border-white/55 hover:bg-white/5"
                   >
                     <AppleIcon />
                     App Store
                   </a>
                   <a
                     href="#"
-                    className="inline-flex items-center gap-2 rounded-lg border border-washed-violet bg-transparent px-4 py-2.5 text-sm font-medium text-deep-violet transition-colors hover:bg-deep-violet/5"
+                    className="inline-flex items-center gap-2 rounded-xl border-2 border-white/35 bg-transparent px-4 py-2.5 text-sm font-medium text-white/90 transition-colors hover:border-white/55 hover:bg-white/5"
                   >
                     <PlayStoreIcon />
                     Play Store
@@ -67,43 +82,44 @@ export function Hero() {
                 </div>
               </div>
             </div>
+
           </div>
 
           {/* Sağ: Ev görseli */}
-          <div className="relative flex justify-center lg:justify-end">
-            <div className="relative w-full max-w-[520px]">
-              <div className="relative">
+          <div className="relative flex justify-center lg:justify-center xl:justify-end">
+            <div className="relative">
+              <div className="w-[320px] sm:w-[420px] lg:w-[480px]">
                 <Image
                   src="/hero-home.png"
                   alt="Kiram - ev ödeme konsepti"
                   width={520}
                   height={520}
-                  className="w-full h-auto rounded-3xl"
-                  style={{ mixBlendMode: 'screen' }}
+                  className="w-full h-auto rounded-3xl drop-shadow-2xl"
                   priority
                 />
               </div>
-              {/* Floating card */}
-              <div className="absolute -left-6 bottom-1/4 bg-white rounded-xl p-4 w-52 hidden sm:block border border-border" style={{ boxShadow: '0 16px 40px rgba(50, 50, 93, 0.15)' }}>
-                <div className="flex items-center gap-2.5 mb-2">
-                  <div className="w-10 h-10 bg-green-50 rounded-full flex items-center justify-center">
-                    <span className="text-success text-lg">{'✓'}</span>
+
+              {/* Floating card - sağda */}
+              <div className="absolute -right-4 top-1/4 bg-white rounded-2xl shadow-xl p-4 w-48 hidden sm:block">
+                <div className="flex items-center gap-2 mb-2">
+                  <div className="w-9 h-9 bg-green-100 rounded-full flex items-center justify-center">
+                    <span className="text-green-600 text-base">✓</span>
                   </div>
                   <div>
-                    <p className="text-text-primary text-sm font-semibold">{'Ödeme Başarılı'}</p>
-                    <p className="text-text-tertiary text-xs">{'Az önce'}</p>
+                    <p className="text-text-primary text-xs font-semibold">Ödeme Başarılı</p>
+                    <p className="text-text-tertiary text-[10px]">Az önce</p>
                   </div>
                 </div>
-                <p className="text-text-primary font-bold text-2xl mt-1">{'₺12.000'}</p>
-                <p className="text-text-tertiary text-xs">{'Kira ödemesi'}</p>
+                <p className="text-text-primary font-bold text-xl">₺12.000</p>
+                <p className="text-text-tertiary text-xs">Kira ödemesi</p>
               </div>
 
-              {/* Floating security badge */}
-              <div className="absolute -right-4 top-1/3 bg-deep-violet text-white rounded-xl px-4 py-3 hidden sm:flex items-center gap-2" style={{ boxShadow: '0 12px 32px rgba(42, 75, 181, 0.3)' }}>
-                <span className="text-xl">{'🔒'}</span>
+              {/* Floating badge - solda */}
+              <div className="absolute -left-2 bottom-1/4 bg-accent text-white rounded-2xl shadow-xl px-4 py-3 hidden sm:flex items-center gap-2">
+                <span className="text-xl">🔒</span>
                 <div>
-                  <p className="text-xs font-semibold">{'256-bit SSL'}</p>
-                  <p className="text-[10px] text-white/70">{'Güvenli ödeme'}</p>
+                  <p className="text-xs font-semibold">256-bit SSL</p>
+                  <p className="text-[10px] text-white/70">Güvenli ödeme</p>
                 </div>
               </div>
             </div>
@@ -113,8 +129,8 @@ export function Hero() {
 
       {/* Scroll indicator */}
       <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 animate-bounce">
-        <span className="text-text-tertiary text-xs">Keşfet</span>
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" className="text-text-tertiary">
+        <span className="text-white/40 text-xs">Keşfet</span>
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" className="text-white/40">
           <path d="M12 5v14M5 12l7 7 7-7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
         </svg>
       </div>

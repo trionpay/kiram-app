@@ -4,12 +4,30 @@ import { useState } from 'react';
 import { FadeIn } from './FadeIn';
 
 const FAQS = [
-  { q: 'Kiram nedir?', a: 'Kiram, kira ve aidat ödemelerinizi kredi kartıyla yapmanızı sağlayan bir ödeme platformudur. Ev sahibinize veya site yönetimine kolayca ödeme yapabilirsiniz.' },
-  { q: 'Hangi kartlarla ödeme yapabilirim?', a: 'Tüm Visa, Mastercard ve Troy logolu kredi ve banka kartlarıyla ödeme yapabilirsiniz. Taksit seçeneği de mevcuttur.' },
-  { q: 'Ödemeler ne kadar sürede ulaşır?', a: 'Ödemeler anında işleme alınır ve genellikle aynı gün içinde alıcı hesabına aktarılır.' },
-  { q: 'Hizmet bedeli ne kadar?', a: 'Şeffaf ücretlendirme uygulanır, gizli masraf yoktur.' },
-  { q: 'Güvenli mi?', a: 'Evet, tüm ödemeler 256-bit SSL şifreleme ve 3D Secure ile korunur. PCI-DSS sertifikalı altyapımız banka düzeyinde güvenlik sağlar.' },
-  { q: 'Otomatik ödeme nasıl çalışır?', a: 'Belirlediğiniz tarihte ve tutarda otomatik ödeme talimatı oluşturabilirsiniz. Kartınızdan otomatik olarak çekim yapılır.' },
+  {
+    q: 'Kiram nedir?',
+    a: 'Kiram, kira ve aidat odemelerinizi kredi kartiyla yapmanizi saglayan bir odeme platformudur. Ev sahibinize veya site yonetimine kolayca odeme yapabilirsiniz.',
+  },
+  {
+    q: 'Hangi kartlarla ödeme yapabilirim?',
+    a: 'Tüm Visa, Mastercard ve Troy logolu kredi ve banka kartlarıyla ödeme yapabilirsiniz. Taksit seçeneği de mevcuttur.',
+  },
+  {
+    q: 'Ödemeler ne kadar sürede ulaşır?',
+    a: 'Ödemeler anında işleme alınır ve genellikle aynı gün içinde alıcı hesabına aktarılır.',
+  },
+  {
+    q: 'Hizmet bedeli ne kadar?',
+    a: 'Şeffaf ücretlendirme uygulanır, gizli masraf yoktur.',
+  },
+  {
+    q: 'Güvenli mi?',
+    a: 'Evet, tüm ödemeler 256-bit SSL şifreleme ve 3D Secure ile korunur. PCI-DSS sertifikalı altyapımız banka düzeyinde güvenlik sağlar.',
+  },
+  {
+    q: 'Otomatik ödeme nasıl çalışır?',
+    a: 'Belirlediğiniz tarihte ve tutarda otomatik ödeme talimatı oluşturabilirsiniz. Kartınızdan otomatik olarak çekim yapılır.',
+  },
 ];
 
 export function FAQ() {
@@ -32,13 +50,15 @@ export function FAQ() {
         <div className="space-y-3">
           {FAQS.map((faq, i) => (
             <FadeIn key={i} delay={i * 50}>
-              <div className="border border-border rounded-xl overflow-hidden">
+              <div className="border border-border rounded-2xl overflow-hidden">
                 <button
-                  className="w-full px-6 py-4 flex items-center justify-between text-left hover:bg-porcelain transition-colors"
+                  className="w-full px-6 py-4 flex items-center justify-between text-left hover:bg-surface transition-colors"
                   onClick={() => setOpen(open === i ? null : i)}
                 >
                   <span className="font-medium text-text-primary">{faq.q}</span>
-                  <span className={`text-text-tertiary transition-transform ${open === i ? 'rotate-180' : ''}`}>▼</span>
+                  <span className={`text-text-tertiary transition-transform ${open === i ? 'rotate-180' : ''}`}>
+                    ▼
+                  </span>
                 </button>
                 {open === i && (
                   <div className="px-6 pb-4">

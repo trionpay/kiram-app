@@ -3,10 +3,30 @@
 import { FadeIn } from './FadeIn';
 
 const STEPS = [
-  { number: '01', icon: '👤', title: 'Hesap Oluştur', description: 'Telefon numaranla 30 saniyede kayıt ol.' },
-  { number: '02', icon: '📝', title: 'Alıcı Ekle', description: 'Ev sahibi veya site yönetimi bilgilerini bir kez kaydet.' },
-  { number: '03', icon: '💳', title: 'Kartla Öde', description: 'Kredi veya banka kartınla güvenli ödeme yap.' },
-  { number: '04', icon: '📊', title: 'Takip Et', description: 'Durum, geçmiş ve dekontları panel üzerinden anında izle.' },
+  {
+    number: '01',
+    icon: '👤',
+    title: 'Hesap Oluştur',
+    description: 'Telefon numaranla 30 saniyede kayıt ol.',
+  },
+  {
+    number: '02',
+    icon: '📝',
+    title: 'Alıcı Ekle',
+    description: 'Ev sahibi veya site yönetimi bilgilerini bir kez kaydet.',
+  },
+  {
+    number: '03',
+    icon: '💳',
+    title: 'Kartla Öde',
+    description: 'Kredi veya banka kartınla güvenli ödeme yap.',
+  },
+  {
+    number: '04',
+    icon: '📊',
+    title: 'Takip Et',
+    description: 'Durum, geçmiş ve dekontları panel üzerinden anında izle.',
+  },
 ];
 
 export function HowItWorks() {
@@ -29,10 +49,10 @@ export function HowItWorks() {
             <FadeIn key={i} delay={i * 150}>
               <div className="text-center">
                 <div className="relative inline-block mb-4">
-                  <div className="w-20 h-20 bg-powder-blue rounded-xl flex items-center justify-center text-4xl">
+                  <div className="w-20 h-20 bg-primary/10 rounded-2xl flex items-center justify-center text-4xl">
                     {step.icon}
                   </div>
-                  <span className="absolute -top-2 -right-2 w-8 h-8 bg-deep-violet text-white text-sm font-bold rounded-full flex items-center justify-center">
+                  <span className="absolute -top-2 -right-2 w-8 h-8 bg-accent text-white text-sm font-bold rounded-full flex items-center justify-center">
                     {step.number}
                   </span>
                 </div>

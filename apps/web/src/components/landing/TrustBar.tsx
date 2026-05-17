@@ -11,16 +11,16 @@ const STATS = [
 
 export function TrustBar() {
   return (
-    <section className="bg-porcelain py-16 border-b border-border">
+    <section className="bg-white py-16 border-b border-border">
       <div className="max-w-6xl mx-auto px-6">
         <FadeIn>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
             {STATS.map((stat, i) => (
               <div key={i} className="text-center">
-                <p className="text-3xl md:text-4xl font-bold text-deep-violet tracking-tight">
+                <p className="text-3xl md:text-4xl font-bold text-primary">
                   {stat.value}
                 </p>
-                <p className="mt-2 text-sm font-medium text-text-secondary">{stat.label}</p>
+                <p className="mt-2 text-sm font-medium text-primary/70">{stat.label}</p>
               </div>
             ))}
           </div>
