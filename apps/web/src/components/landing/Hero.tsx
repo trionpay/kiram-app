@@ -97,7 +97,7 @@ export function Hero() {
                   alt="Kiram - ev ödeme konsepti"
                   width={520}
                   height={520}
-                  className="w-full h-auto drop-shadow-2xl"
+                  className="w-full h-auto drop-shadow-2xl mix-blend-lighten"
                   priority
                 />
               </div>
