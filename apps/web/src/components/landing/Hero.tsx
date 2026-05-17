@@ -88,13 +88,16 @@ export function Hero() {
           {/* Sağ: Ev görseli */}
           <div className="relative flex justify-center lg:justify-center xl:justify-end">
             <div className="relative">
-              <div className="w-[320px] sm:w-[420px] lg:w-[480px]">
+              <div
+                className="w-[320px] sm:w-[420px] lg:w-[480px] rounded-3xl overflow-hidden"
+                style={{ background: 'linear-gradient(135deg, #2A4BB5 0%, #2543A5 52%, #1F3A8E 100%)' }}
+              >
                 <Image
                   src="/hero-home.png"
                   alt="Kiram - ev ödeme konsepti"
                   width={520}
                   height={520}
-                  className="w-full h-auto rounded-3xl drop-shadow-2xl"
+                  className="w-full h-auto drop-shadow-2xl"
                   priority
                 />
               </div>
