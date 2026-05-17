@@ -61,7 +61,7 @@ export function Sidebar({ onClose }: SidebarProps) {
   return (
     <div className="flex flex-col h-full" style={{ background: 'linear-gradient(180deg, #244B8E 0%, #1A3A6E 100%)' }}>
       {/* Logo */}
-      <div className="px-5 py-5 border-b border-white/15">
+      <div className="px-4 h-14 flex items-center border-b border-white/15">
         <TrionPayLogo width={110} variant="horizontal" className="brightness-0 invert" />
       </div>
 
@@ -69,7 +69,7 @@ export function Sidebar({ onClose }: SidebarProps) {
       <nav className="flex-1 overflow-y-auto px-3 py-5 space-y-6">
         {NAV_GROUPS.map(group => (
           <div key={group.label}>
-            <p className="text-white/40 text-[10px] font-bold tracking-widest uppercase px-3 mb-2">
+            <p className="text-white/55 text-[10px] font-bold tracking-widest uppercase px-3 mb-2">
               {group.label}
             </p>
             <div className="space-y-0.5">
@@ -82,15 +82,15 @@ export function Sidebar({ onClose }: SidebarProps) {
                     relative flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium
                     transition-all duration-150
                     ${isActive(item.href)
-                      ? 'bg-white/15 text-white'
-                      : 'text-white/70 hover:text-white hover:bg-white/8'
+                      ? 'bg-white/18 text-white'
+                      : 'text-white/80 hover:text-white hover:bg-white/10'
                     }
                   `}
                 >
                   {isActive(item.href) && (
                     <span className="absolute left-0 top-2 bottom-2 w-1 rounded-r-full bg-accent" aria-hidden />
                   )}
-                  <span className={`text-base w-5 text-center ${isActive(item.href) ? 'text-white' : 'text-white/50'}`}>
+                  <span className={`text-base w-5 text-center ${isActive(item.href) ? 'text-white' : 'text-white/60'}`}>
                     {item.icon}
                   </span>
                   {item.label}
@@ -115,27 +115,27 @@ export function Sidebar({ onClose }: SidebarProps) {
               relative flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium
               transition-all duration-150
               ${isActive(item.href)
-                ? 'bg-white/15 text-white'
-                : 'text-white/70 hover:text-white hover:bg-white/8'
+                ? 'bg-white/18 text-white'
+                : 'text-white/80 hover:text-white hover:bg-white/10'
               }
             `}
           >
             {isActive(item.href) && (
               <span className="absolute left-0 top-2 bottom-2 w-1 rounded-r-full bg-accent" aria-hidden />
             )}
-            <span className={`text-base w-5 text-center ${isActive(item.href) ? 'text-white' : 'text-white/50'}`}>{item.icon}</span>
+            <span className={`text-base w-5 text-center ${isActive(item.href) ? 'text-white' : 'text-white/60'}`}>{item.icon}</span>
             {item.label}
           </Link>
         ))}
 
         {/* Kullanıcı kartı */}
-        <div className="mt-3 px-3 py-3 rounded-xl border border-white/15 bg-white/8 flex items-center gap-3">
-          <div className="w-8 h-8 rounded-full bg-white/15 flex items-center justify-center flex-shrink-0">
+        <div className="mt-3 px-3 py-3 rounded-xl border border-white/20 bg-white/10 flex items-center gap-3">
+          <div className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center flex-shrink-0">
             <span className="text-white text-xs font-bold">AY</span>
           </div>
           <div className="flex-1 min-w-0">
             <p className="text-white text-xs font-semibold truncate">Ahmet Yılmaz</p>
-            <p className="text-white/50 text-xs truncate">+90 555 123 4567</p>
+            <p className="text-white/60 text-xs truncate">+90 555 123 4567</p>
           </div>
         </div>
       </div>
