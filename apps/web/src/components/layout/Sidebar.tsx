@@ -45,16 +45,12 @@ export function Sidebar({ onClose }: SidebarProps) {
 
   const isActive = (href: string) => {
     const [targetPath, targetQuery] = href.split('?');
-
     if (!targetQuery) {
-      // Base payment/history links should not look active when a more specific query-tab is active.
       if (targetPath === '/payment' && searchParams.get('type')) return false;
       if (targetPath === '/history' && searchParams.get('durum')) return false;
       return pathname === targetPath || (targetPath !== '/dashboard' && pathname.startsWith(targetPath));
     }
-
     if (pathname !== targetPath) return false;
-
     const targetParams = new URLSearchParams(targetQuery);
     for (const [key, value] of targetParams.entries()) {
       if (searchParams.get(key) !== value) return false;
@@ -63,17 +59,17 @@ export function Sidebar({ onClose }: SidebarProps) {
   };
 
   return (
-    <div className="flex flex-col h-full">
+    <div className="flex flex-col h-full" style={{ background: 'linear-gradient(180deg, #244B8E 0%, #1A3A6E 100%)' }}>
       {/* Logo */}
-      <div className="px-6 py-6 border-b border-border">
-        <TrionPayLogo width={110} color="#244B8E" accentColor="#2E6FD6" />
+      <div className="px-5 py-5 border-b border-white/15">
+        <TrionPayLogo width={110} variant="horizontal" className="brightness-0 invert" />
       </div>
 
       {/* Nav */}
-      <nav className="flex-1 overflow-y-auto px-3 py-5 space-y-6 bg-gradient-to-b from-primary/[0.025] via-white/70 to-transparent">
+      <nav className="flex-1 overflow-y-auto px-3 py-5 space-y-6">
         {NAV_GROUPS.map(group => (
           <div key={group.label}>
-            <p className="text-primary/65 text-[10px] font-bold tracking-widest uppercase px-3 mb-2">
+            <p className="text-white/40 text-[10px] font-bold tracking-widest uppercase px-3 mb-2">
               {group.label}
             </p>
             <div className="space-y-0.5">
@@ -83,23 +79,23 @@ export function Sidebar({ onClose }: SidebarProps) {
                   href={item.href}
                   onClick={onClose}
                   className={`
-                    relative flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium border
+                    relative flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium
                     transition-all duration-150
                     ${isActive(item.href)
-                      ? 'bg-gradient-to-r from-primary/14 to-primary/5 text-primary border-primary/20'
-                      : 'text-text-secondary border-transparent hover:text-primary hover:bg-primary/6 hover:border-primary/10'
+                      ? 'bg-white/15 text-white'
+                      : 'text-white/70 hover:text-white hover:bg-white/8'
                     }
                   `}
                 >
-                  {isActive(item.href) ? (
-                    <span className="absolute left-0 top-2 bottom-2 w-1 rounded-r-full bg-primary" aria-hidden />
-                  ) : null}
-                  <span className={`text-base w-5 text-center transition-all ${isActive(item.href) ? 'text-primary' : 'text-primary/60'}`}>
+                  {isActive(item.href) && (
+                    <span className="absolute left-0 top-2 bottom-2 w-1 rounded-r-full bg-accent" aria-hidden />
+                  )}
+                  <span className={`text-base w-5 text-center ${isActive(item.href) ? 'text-white' : 'text-white/50'}`}>
                     {item.icon}
                   </span>
                   {item.label}
                   {isActive(item.href) && (
-                    <span className="ml-auto w-1.5 h-1.5 rounded-full bg-primary" />
+                    <span className="ml-auto w-1.5 h-1.5 rounded-full bg-accent" />
                   )}
                 </Link>
               ))}
@@ -109,37 +105,37 @@ export function Sidebar({ onClose }: SidebarProps) {
       </nav>
 
       {/* Alt alan */}
-      <div className="px-3 pb-5 border-t border-primary/10 pt-4 space-y-0.5 bg-gradient-to-b from-primary/[0.02] to-transparent">
+      <div className="px-3 pb-5 border-t border-white/15 pt-4 space-y-0.5">
         {BOTTOM_ITEMS.map(item => (
           <Link
             key={item.href}
             href={item.href}
             onClick={onClose}
             className={`
-              relative flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium border
+              relative flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium
               transition-all duration-150
               ${isActive(item.href)
-                ? 'bg-gradient-to-r from-primary/14 to-primary/5 text-primary border-primary/20'
-                : 'text-text-secondary border-transparent hover:text-primary hover:bg-primary/7 hover:border-primary/12'
+                ? 'bg-white/15 text-white'
+                : 'text-white/70 hover:text-white hover:bg-white/8'
               }
             `}
           >
-            {isActive(item.href) ? (
-              <span className="absolute left-0 top-2 bottom-2 w-1 rounded-r-full bg-primary" aria-hidden />
-            ) : null}
-            <span className={`text-base w-5 text-center ${isActive(item.href) ? 'text-primary' : 'text-primary/60'}`}>{item.icon}</span>
+            {isActive(item.href) && (
+              <span className="absolute left-0 top-2 bottom-2 w-1 rounded-r-full bg-accent" aria-hidden />
+            )}
+            <span className={`text-base w-5 text-center ${isActive(item.href) ? 'text-white' : 'text-white/50'}`}>{item.icon}</span>
             {item.label}
           </Link>
         ))}
 
         {/* Kullanıcı kartı */}
-        <div className="mt-3 px-3 py-3 rounded-xl border border-primary/12 bg-gradient-to-r from-primary/[0.07] to-white/90 flex items-center gap-3">
-          <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
-            <span className="text-primary text-xs font-bold">AY</span>
+        <div className="mt-3 px-3 py-3 rounded-xl border border-white/15 bg-white/8 flex items-center gap-3">
+          <div className="w-8 h-8 rounded-full bg-white/15 flex items-center justify-center flex-shrink-0">
+            <span className="text-white text-xs font-bold">AY</span>
           </div>
           <div className="flex-1 min-w-0">
-            <p className="text-text-primary text-xs font-semibold truncate">Ahmet Yılmaz</p>
-            <p className="text-text-tertiary text-xs truncate">+90 555 123 4567</p>
+            <p className="text-white text-xs font-semibold truncate">Ahmet Yılmaz</p>
+            <p className="text-white/50 text-xs truncate">+90 555 123 4567</p>
           </div>
         </div>
       </div>

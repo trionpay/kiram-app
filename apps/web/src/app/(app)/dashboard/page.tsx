@@ -119,7 +119,7 @@ export default function DashboardPage() {
         className="pointer-events-none absolute top-52 -left-10 h-36 w-36 rounded-full bg-accent/10 blur-3xl"
       />
 
-      {/* Welcome kartı — daha net CTA hiyerarşisi */}
+      {/* Welcome kartı */}
       <div className="relative rounded-3xl border border-primary/18 bg-gradient-to-r from-primary/18 via-primary/10 to-accent/12 p-6 sm:p-7 shadow-[0_10px_28px_rgba(36,75,142,0.10)]">
         <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
           <div className="min-w-0">
@@ -128,21 +128,45 @@ export default function DashboardPage() {
               Bu hafta <strong className="text-text-primary font-semibold">1 bekleyen ödeme</strong> bulunuyor.
             </p>
           </div>
-          <div className="flex items-center gap-2">
-            <Link
-              href="/payment"
-              className="inline-flex items-center justify-center rounded-2xl bg-primary px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-primary-light"
-            >
-              Ödeme Yap
-            </Link>
-            <Link
-              href="/history?durum=pending"
-              className="inline-flex items-center justify-center rounded-2xl border border-primary/15 bg-white/85 px-4 py-2.5 text-sm font-semibold text-text-primary transition-colors hover:bg-primary/6"
-            >
-              Bekleyenleri Gör
-            </Link>
-          </div>
+          <Link
+            href="/history?durum=pending"
+            className="inline-flex items-center justify-center rounded-2xl border border-primary/15 bg-white/85 px-4 py-2.5 text-sm font-semibold text-text-primary transition-colors hover:bg-primary/6"
+          >
+            Bekleyenleri Gör
+          </Link>
         </div>
+      </div>
+
+      {/* Büyük ödeme butonları */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <Link
+          href="/payment?type=rent"
+          className="relative flex items-center gap-5 rounded-2xl p-6 text-white overflow-hidden transition-all hover:scale-[1.01] active:scale-[0.99] shadow-lg"
+          style={{ background: 'linear-gradient(135deg, #2A4BB5 0%, #1F3A8E 100%)' }}
+        >
+          <div className="w-14 h-14 rounded-2xl bg-white/15 flex items-center justify-center flex-shrink-0">
+            <span className="text-3xl">🏠</span>
+          </div>
+          <div>
+            <p className="text-xl font-bold">Kira Öde</p>
+            <p className="text-white/70 text-sm mt-0.5">Ev sahibine hızlıca ödeme yap</p>
+          </div>
+          <span className="absolute right-6 text-white/30 text-3xl font-light">→</span>
+        </Link>
+        <Link
+          href="/payment?type=dues"
+          className="relative flex items-center gap-5 rounded-2xl p-6 text-white overflow-hidden transition-all hover:scale-[1.01] active:scale-[0.99] shadow-lg"
+          style={{ background: 'linear-gradient(135deg, #2E6FD6 0%, #2A4BB5 100%)' }}
+        >
+          <div className="w-14 h-14 rounded-2xl bg-white/15 flex items-center justify-center flex-shrink-0">
+            <span className="text-3xl">🏢</span>
+          </div>
+          <div>
+            <p className="text-xl font-bold">Aidat Öde</p>
+            <p className="text-white/70 text-sm mt-0.5">Site yönetimine aidat öde</p>
+          </div>
+          <span className="absolute right-6 text-white/30 text-3xl font-light">→</span>
+        </Link>
       </div>
 
       {/* Stats — etiket + kısa açıklama; gider artışı yeşil gösterilmez */}
