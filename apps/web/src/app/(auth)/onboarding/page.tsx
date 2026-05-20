@@ -6,6 +6,75 @@ import { Button } from '@/components/ui/Button';
 
 type Step = 1 | 2 | 3 | 4;
 
+const KVKK_TEXT = `KVKK AYDINLATMA METNİ
+
+TRİONPAY TEKNOLOJİ YAZILIM HİZMETLERİ ANONİM ŞİRKETİ (bundan böyle "Kiramcom" olarak anılacaktır) olarak kişisel verilerinizin korunması ve güvenliği hususuna azami önem vermekteyiz.
+
+1. Kişisel Verilerinizin İşlenmesine İlişkin İlkeler
+Kiramcom tarafından işlenen kişisel verileriniz; hukuka ve dürüstlük kuralının öngördüğü biçimde, doğru ve güncel olarak, belirli, açık ve meşru amaçlar için, işlenme amaçları ile bağlantılı, sınırlı ve ölçülü olarak işlenmektedir.
+
+2. Toplanan Kişisel Veriler
+Ad, soyad, e-posta, T.C. Kimlik Numarası, telefon numarası, kullanıcı hesabı/üyelik kayıtları, kira/aidat ödeme verileri ve teknik veriler toplanabilir. Kiramcom, kredi kartı bilgilerini kendisine ait sistemlerde kayıt altına almaz.
+
+3. Kişisel Verilerin Güvenliği
+Kişisel verileriniz SSL şifreleme ile korunur. Denetim altındaki, sınırlı erişime sahip sistemlerde muhafaza edilir.
+
+4. Kişisel Verilerin Aktarılması
+Kişisel verileriniz kural olarak üçüncü kişilere aktarılmaz. Pazarlama amacıyla paylaşılmaz.
+
+5. Haklarınız ve Başvuru
+KVKK m.11 kapsamında; kişisel verilerinizin işlenip işlenmediğini öğrenme, düzeltilmesini ve silinmesini isteme haklarına sahipsiniz.
+
+Başvuru: Merkezefendi Mah. Mevlana Cad. No: 112/1 Zeytinburnu/İstanbul
+E-posta: info@genc.partners`;
+
+const TERMS_TEXT = `KULLANICI SÖZLEŞMESİ
+
+Bu sözleşme, Kiram platformunu kullanan kullanıcılar ile Trion Pay Ödeme Hizmetleri A.Ş. arasındaki hak ve yükümlülükleri düzenlemektedir.
+
+1. TARAFLAR VE KONU
+İşbu sözleşme, kiram.com web sitesi ve Kiram mobil uygulaması üzerinden sunulan dijital ödeme aracılık hizmetlerine ilişkindir.
+
+2. HİZMETİN KAPSAMI
+Platform; kullanıcıların kayıtlı veya manuel girilen IBAN bilgisine sahip alıcılara kredi/banka kartı aracılığıyla ödeme yapmasına imkân tanır. Platform bir ödeme kuruluşu değildir; BDDK/TCMB lisanslı bir ödeme kuruluşuyla entegre çalışmaktadır.
+
+3. KULLANICI YÜKÜMLÜLÜKLERİ
+Kullanıcı; doğru ve güncel bilgi vermekle, hesabının güvenliğini sağlamakla, platformu hukuka aykırı amaçlarla kullanmamakla yükümlüdür.
+
+4. GİZLİLİK
+Kullanıcı bilgileri KVKK Aydınlatma Metni kapsamında işlenir. Kart bilgileri PCI-DSS standartlarında korunur ve Kiram sunucularında saklanmaz.
+
+5. ÜCRETLER VE KOMİSYON
+Her işlem için işlem tutarı üzerinden %1,5 hizmet bedeli tahsil edilir.
+
+6. SORUMLULUK SINIRLAMASI
+Platform, üçüncü taraf ödeme altyapısından kaynaklanabilecek gecikmeler, hatalar veya kesintilerden sorumlu tutulamaz.
+
+7. SÖZLEŞMENİN FESHİ
+Kullanıcı dilediği zaman hesabını silebilir.`;
+
+const PRIVACY_TEXT = `GİZLİLİK POLİTİKASI
+
+Kiram olarak kullanıcılarımızın gizliliğine büyük önem veriyoruz.
+
+1. TOPLANAN VERİLER
+Hesap oluşturma sırasında verdiğiniz kimlik ve iletişim bilgileri, uygulama kullanımı sırasında oluşan işlem verileri ve teknik veriler toplanmaktadır.
+
+2. VERİLERİN KULLANIMI
+Topladığımız veriler; hizmet sunumu, kimlik doğrulama, güvenlik, müşteri desteği, yasal yükümlülükler ve ürün geliştirme amacıyla kullanılmaktadır.
+
+3. ÇEREZLER VE İZLEME
+Web platformumuzda oturum yönetimi için zorunlu çerezler kullanılmaktadır. Üçüncü taraf reklam veya analitik çerezleri kullanılmamaktadır.
+
+4. VERİ GÜVENLİĞİ
+Verileriniz 256-bit SSL/TLS şifreleme ile aktarılmakta, kart bilgileri PCI-DSS standartlarında saklanmaktadır.
+
+5. ÜÇÜNCÜ TARAFLARLA PAYLAŞIM
+Verileriniz reklam veya pazarlama amacıyla üçüncü taraflarla paylaşılmaz.
+
+6. VERİLERİNİZİN KONTROLÜ
+Hesap silme talebi ilettiğinizde, yasal saklama süreleri haricindeki verileriniz silinir. Detaylı bilgi için kvkk@kiram.com adresine başvurabilirsiniz.`;
+
 const CITIES = [
   'Adana','Adıyaman','Afyonkarahisar','Ağrı','Aksaray','Amasya','Ankara','Antalya',
   'Ardahan','Artvin','Aydın','Balıkesir','Bartın','Batman','Bayburt','Bilecik',
@@ -81,6 +150,14 @@ export default function OnboardingPage() {
   const [purposes, setPurposes] = useState<string[]>([]);
 
   const [agreed, setAgreed] = useState(false);
+  const [legalModal, setLegalModal] = useState<'terms' | 'kvkk' | 'privacy' | null>(null);
+  const [viewed, setViewed] = useState<Set<string>>(new Set());
+
+  const openLegal = (key: 'terms' | 'kvkk' | 'privacy') => {
+    setLegalModal(key);
+    setViewed(prev => new Set(prev).add(key));
+  };
+  const allViewed = viewed.has('terms') && viewed.has('kvkk') && viewed.has('privacy');
 
   const tcknValid = validateTCKN(tckn);
   const birthValid = birthDate.length === 10;
@@ -340,28 +417,65 @@ export default function OnboardingPage() {
         ))}
       </div>
 
-      <label className="flex items-start gap-3 cursor-pointer">
-        <button
-          onClick={() => setAgreed(!agreed)}
-          className={`w-5 h-5 rounded-md border-2 flex items-center justify-center flex-shrink-0 mt-0.5 transition-colors ${agreed ? 'bg-accent border-accent' : 'border-border'}`}
-        >
-          {agreed && <span className="text-white text-[10px] font-bold">✓</span>}
-        </button>
-        <span className="text-text-secondary text-xs leading-relaxed">
-          <span className="text-accent font-semibold cursor-pointer">Kullanıcı Sözleşmesi</span>,{' '}
-          <span className="text-accent font-semibold cursor-pointer">KVKK Aydınlatma Metni</span> ve{' '}
-          <span className="text-accent font-semibold cursor-pointer">Gizlilik Politikası</span>&apos;nı okudum, kabul ediyorum.
-        </span>
-      </label>
+      <div className="space-y-2">
+        <p className="text-text-secondary text-xs">Devam etmeden önce aşağıdaki belgeleri incelemeniz gerekmektedir:</p>
+        <div className="flex flex-wrap gap-2">
+          <button onClick={() => openLegal('terms')} className={`text-xs px-3 py-1.5 rounded-lg border transition-colors ${viewed.has('terms') ? 'border-success/30 bg-success/5 text-success' : 'border-accent/30 bg-accent/5 text-accent'}`}>
+            {viewed.has('terms') ? '✓ ' : ''}Kullanıcı Sözleşmesi
+          </button>
+          <button onClick={() => openLegal('kvkk')} className={`text-xs px-3 py-1.5 rounded-lg border transition-colors ${viewed.has('kvkk') ? 'border-success/30 bg-success/5 text-success' : 'border-accent/30 bg-accent/5 text-accent'}`}>
+            {viewed.has('kvkk') ? '✓ ' : ''}KVKK Aydınlatma Metni
+          </button>
+          <button onClick={() => openLegal('privacy')} className={`text-xs px-3 py-1.5 rounded-lg border transition-colors ${viewed.has('privacy') ? 'border-success/30 bg-success/5 text-success' : 'border-accent/30 bg-accent/5 text-accent'}`}>
+            {viewed.has('privacy') ? '✓ ' : ''}Gizlilik Politikası
+          </button>
+        </div>
+        {!allViewed && <p className="text-text-tertiary text-[11px]">Tüm belgeleri inceledikten sonra onay verebilirsiniz.</p>}
+      </div>
+
+      {allViewed && (
+        <label className="flex items-start gap-3 cursor-pointer">
+          <button
+            onClick={() => setAgreed(!agreed)}
+            className={`w-5 h-5 rounded-md border-2 flex items-center justify-center flex-shrink-0 mt-0.5 transition-colors ${agreed ? 'bg-accent border-accent' : 'border-border'}`}
+          >
+            {agreed && <span className="text-white text-[10px] font-bold">✓</span>}
+          </button>
+          <span className="text-text-secondary text-xs leading-relaxed">
+            Kullanıcı Sözleşmesi, KVKK Aydınlatma Metni ve Gizlilik Politikası&apos;nı okudum, kabul ediyorum.
+          </span>
+        </label>
+      )}
 
       <div className="flex gap-3">
         <Button variant="secondary" className="flex-1" onClick={() => setStep(3)}>
           Geri
         </Button>
-        <Button className="flex-1" onClick={handleConfirm} disabled={!agreed} loading={loading}>
+        <Button className="flex-1" onClick={handleConfirm} disabled={!agreed || !allViewed} loading={loading}>
           Hesabımı Onayla
         </Button>
       </div>
+
+      {legalModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm" onClick={() => setLegalModal(null)}>
+          <div className="bg-white rounded-2xl w-full max-w-lg shadow-2xl flex flex-col max-h-[80vh]" onClick={e => e.stopPropagation()}>
+            <div className="flex items-center justify-between px-6 py-4 border-b border-border">
+              <h3 className="font-bold text-text-primary">
+                {legalModal === 'terms' ? 'Kullanıcı Sözleşmesi' : legalModal === 'kvkk' ? 'KVKK Aydınlatma Metni' : 'Gizlilik Politikası'}
+              </h3>
+              <button onClick={() => setLegalModal(null)} className="text-text-tertiary hover:text-text-primary text-xl w-8 h-8 flex items-center justify-center rounded-lg hover:bg-surface">✕</button>
+            </div>
+            <div className="overflow-y-auto flex-1 px-6 py-4">
+              <p className="text-text-secondary text-sm leading-relaxed whitespace-pre-line">
+                {legalModal === 'kvkk' ? KVKK_TEXT : legalModal === 'terms' ? TERMS_TEXT : PRIVACY_TEXT}
+              </p>
+            </div>
+            <div className="px-6 py-3 border-t border-border">
+              <Button className="w-full" onClick={() => setLegalModal(null)}>Okudum, Kapat</Button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
