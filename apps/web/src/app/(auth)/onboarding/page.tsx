@@ -417,20 +417,40 @@ export default function OnboardingPage() {
         ))}
       </div>
 
-      <div className="space-y-2">
-        <p className="text-text-secondary text-xs">Devam etmeden önce aşağıdaki belgeleri incelemeniz gerekmektedir:</p>
-        <div className="flex flex-wrap gap-2">
-          <button onClick={() => openLegal('terms')} className={`text-xs px-3 py-1.5 rounded-lg border transition-colors ${viewed.has('terms') ? 'border-success/30 bg-success/5 text-success' : 'border-accent/30 bg-accent/5 text-accent'}`}>
-            {viewed.has('terms') ? '✓ ' : ''}Kullanıcı Sözleşmesi
-          </button>
-          <button onClick={() => openLegal('kvkk')} className={`text-xs px-3 py-1.5 rounded-lg border transition-colors ${viewed.has('kvkk') ? 'border-success/30 bg-success/5 text-success' : 'border-accent/30 bg-accent/5 text-accent'}`}>
-            {viewed.has('kvkk') ? '✓ ' : ''}KVKK Aydınlatma Metni
-          </button>
-          <button onClick={() => openLegal('privacy')} className={`text-xs px-3 py-1.5 rounded-lg border transition-colors ${viewed.has('privacy') ? 'border-success/30 bg-success/5 text-success' : 'border-accent/30 bg-accent/5 text-accent'}`}>
-            {viewed.has('privacy') ? '✓ ' : ''}Gizlilik Politikası
-          </button>
+      <div className="rounded-xl border border-border bg-surface p-4 space-y-3">
+        <p className="text-text-primary text-sm font-semibold">Sözleşmeleri okuyun ve onaylayın</p>
+        <div className="space-y-2">
+          {([
+            { key: 'terms' as const, label: 'Kullanıcı Sözleşmesi' },
+            { key: 'kvkk' as const, label: 'KVKK Aydınlatma Metni' },
+            { key: 'privacy' as const, label: 'Gizlilik Politikası' },
+          ]).map(doc => (
+            <button
+              key={doc.key}
+              onClick={() => openLegal(doc.key)}
+              className={`w-full flex items-center justify-between px-4 py-3 rounded-lg border text-sm transition-all ${
+                viewed.has(doc.key)
+                  ? 'border-success/30 bg-white text-text-primary'
+                  : 'border-accent/25 bg-white text-accent hover:border-accent/50 hover:shadow-sm'
+              }`}
+            >
+              <span className="flex items-center gap-2.5">
+                {viewed.has(doc.key) ? (
+                  <span className="w-5 h-5 rounded-full bg-success flex items-center justify-center flex-shrink-0">
+                    <span className="text-white text-[10px] font-bold">✓</span>
+                  </span>
+                ) : (
+                  <span className="w-5 h-5 rounded-full border-2 border-accent/40 flex-shrink-0" />
+                )}
+                {doc.label}
+              </span>
+              <span className={`text-xs ${viewed.has(doc.key) ? 'text-success' : 'text-accent'}`}>
+                {viewed.has(doc.key) ? 'Okundu' : 'Oku →'}
+              </span>
+            </button>
+          ))}
         </div>
-        {!allViewed && <p className="text-text-tertiary text-[11px]">Tüm belgeleri inceledikten sonra onay verebilirsiniz.</p>}
+        {!allViewed && <p className="text-text-tertiary text-xs text-center">Tüm belgeleri okuduktan sonra onay verebilirsiniz.</p>}
       </div>
 
       {allViewed && (
