@@ -1,5 +1,6 @@
 {
   "expo": {
+    "owner": "kiram-app",
     "name": "Kiram",
     "slug": "kiram",
     "version": "1.0.0",
@@ -13,7 +14,10 @@
     },
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.kiram.app"
+      "bundleIdentifier": "com.kiram.app",
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
+      }
     },
     "android": {
       "adaptiveIcon": {
@@ -28,6 +32,11 @@
     },
     "plugins": [
       "expo-font"
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "b7d14e85-56f3-4ae1-9c2a-b9f377dab67e"
+      }
+    }
   }
 }
